@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react-swc';
 import { cwd } from 'node:process';
 
 export default defineConfig(({ mode }) => {
@@ -38,9 +38,14 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react(), glsl()],
     test: {
-      setupFiles: ['./tests/setup.ts'],
+      clearMocks: true,
       globals: true,
       environment: 'jsdom',
+      setupFiles: ['./tests/setup.ts'],
+      alias: {
+        '@': cwd() + '/src',
+        '@tests': cwd() + '/tests',
+      },
       coverage: {
         all: true,
         provider: 'v8',
