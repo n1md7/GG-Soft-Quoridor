@@ -1,4 +1,4 @@
-name: Publish to GitHub Pages
+name: Publish to GitHub Pages on Release
 
 on:
   release:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Use Bun runtime
-      - uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.1.24 # or "latest", "canary", <sha>
       - name: Install dependencies
