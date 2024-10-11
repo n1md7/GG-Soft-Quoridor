@@ -19,8 +19,9 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        '@': cwd() + '/src',
+        '@styles': cwd() + '/styles',
         '@tests': cwd() + '/tests',
+        '@src': cwd() + '/src',
       },
     },
     base: './',
@@ -43,8 +44,9 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       setupFiles: ['./tests/setup.ts'],
       alias: {
-        '@': cwd() + '/src',
+        '@styles': cwd() + '/src/styles',
         '@tests': cwd() + '/tests',
+        '@src': cwd() + '/src',
       },
       coverage: {
         all: true,

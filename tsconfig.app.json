@@ -26,13 +26,15 @@
     "allowJs": true,
     "checkJs": true,
     "paths": {
-      "/src/*": ["src/*"],
-      "/public/*": ["public/*"]
+      "@src/*": ["src/*"],
+      "@public/*": ["public/*"],
+      "@styles/*": ["styles/*"],
+      "@tests/*": ["tests/*"]
     },
     "noImplicitOverride": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["vitest/globals", "vitest", "node"]
   },
-  "include": ["src", "tests", "public"]
+  "include": ["src", "tests", "public", "styles"]
 }

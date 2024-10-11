@@ -1,10 +1,16 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+import { Gameplay } from '@src/views/GamePlay.tsx';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import '@styles/main.scss';
 
-createRoot(document.getElementById("root")!).render(
+const documentRoot = document.getElementById('root');
+
+if (documentRoot === null) {
+  throw new Error(`The root element is not found by the id "root"`);
+}
+
+createRoot(documentRoot).render(
   <StrictMode>
-    <App />
+    <Gameplay />
   </StrictMode>,
 );
