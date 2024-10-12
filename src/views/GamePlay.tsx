@@ -1,10 +1,13 @@
+import { type PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Canvas } from '@react-three/fiber';
 import { Box } from '@src/components/game/Box';
 import { Fox } from '@src/components/game/Fox';
 import { Hamburger } from '@src/components/game/Hamburger';
+import { Show } from '@src/components/utils/Show.tsx';
+import { useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
-import { OrbitControls } from '@react-three/drei';
+import { Environment, OrbitControls } from '@react-three/drei';
 
 import '@styles/gameplay-view.scss';
 
@@ -12,12 +15,31 @@ type Props = {
   back: () => void;
 };
 export function Gameplay(props: Props) {
+  const { environment } = useControls({
+    environment: {
+      options: [
+        'night',
+        'apartment',
+        'city',
+        'dawn',
+        'forest',
+        'lobby',
+        'park',
+        'studio',
+        'sunset',
+        'warehouse',
+      ] as PresetsType[],
+    },
+  });
+
   return (
     <>
       <Canvas>
         <OrbitControls />
         <Perf openByDefault trackGPU={true} position="bottom-right" />
-        {/*<Environment preset="warehouse" background />*/}
+        <Show when={!!environment}>
+          <Environment preset={environment} background />
+        </Show>
         <ambientLight intensity={Math.PI / 2} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
