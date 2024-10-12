@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { Box } from '@src/components/game/Box';
 import { Fox } from '@src/components/game/Fox';
 import { Hamburger } from '@src/components/game/Hamburger';
+import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
 import '@styles/gameplay-view.scss';
 
@@ -12,6 +13,7 @@ export function Gameplay(props: Props) {
   return (
     <>
       <Canvas>
+        <Perf openByDefault trackGPU={true} position="bottom-right" />
         {/*<Environment preset="warehouse" background />*/}
         <ambientLight intensity={Math.PI / 2} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />

@@ -1,7 +1,8 @@
 import AssetUrl from '@assets/3D/fox/Fox.gltf?url';
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { useFrame, useGraph } from '@react-three/fiber';
-import { MutableRefObject, useMemo, useRef } from 'react';
+import { useControls } from 'leva';
+import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTF, SkeletonUtils } from 'three-stdlib';
 
@@ -27,21 +28,26 @@ export function Fox(props: JSX.IntrinsicElements['group']) {
   const { scene, animations } = useGLTF(AssetUrl);
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone) as GLTFResult;
-  const { actions, mixer, names } = useAnimations(animations, group);
-  const animationIdx = useRef(0);
-  const rotateAnimation = () => {
-    const action = names[animationIdx.current];
-    actions[action]!.stop().reset().getMixer().stopAllAction();
-    animationIdx.current = (animationIdx.current + 1) % names.length;
-    actions[action]!.play();
-  };
+  const { actions, names } = useAnimations(animations, group);
 
-  useFrame((_state, delta) => {
-    mixer.update(delta);
+  const { foxAction } = useControls({
+    foxAction: { options: names },
   });
 
+  useEffect(() => {
+    const action = actions[foxAction];
+
+    if (!action) return;
+
+    action.reset().fadeIn(0.5).play();
+
+    return () => {
+      action.fadeOut(0.5);
+    };
+  }, [actions, foxAction]);
+
   return (
-    <group ref={group} {...props} dispose={null} onClick={rotateAnimation}>
+    <group ref={group} {...props} dispose={null}>
       <group>
         <group name="root" userData={{ name: 'root' }}>
           <primitive object={nodes._rootJoint} />
