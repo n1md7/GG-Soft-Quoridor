@@ -1,4 +1,4 @@
-import { Gameplay } from '@src/views/GamePlay.tsx';
+import { App } from '@src/App.tsx';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@styles/main.scss';
@@ -11,6 +11,6 @@ if (documentRoot === null) {
 
 createRoot(documentRoot).render(
   <StrictMode>
-    <Gameplay />
+    <App />
   </StrictMode>,
 );

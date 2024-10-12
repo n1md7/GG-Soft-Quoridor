@@ -13,6 +13,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,
@@ -29,6 +30,7 @@
       "@src/*": ["src/*"],
       "@public/*": ["public/*"],
       "@styles/*": ["styles/*"],
+      "@assets/*": ["assets/*"],
       "@tests/*": ["tests/*"]
     },
     "noImplicitOverride": true,
@@ -36,5 +38,5 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["vitest/globals", "vitest", "node"]
   },
-  "include": ["src", "tests", "public", "styles"]
+  "include": ["src", "tests", "public", "styles", "assets", "src/**/*.d.ts"]
 }

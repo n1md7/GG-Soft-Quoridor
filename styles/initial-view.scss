@@ -1,0 +1,105 @@
+.initial-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+
+  .title {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 2.5rem;
+    color: #333;
+  }
+
+  div.logo {
+    margin-top: 2rem;
+    width: 10rem;
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 6rem;
+      height: 6rem;
+    }
+  }
+
+  .description {
+    font-family: 'Inter', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.5rem;
+    color: #666;
+    max-width: 40rem;
+    text-align: center;
+  }
+
+  .progress {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #ddd;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    height: 4.5rem;
+
+    .bar {
+      transition: width 0.2s;
+      width: 0;
+      height: 2.5rem;
+      background-color: #333;
+      position: relative;
+      text-align: center;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-optical-sizing: auto;
+      vertical-align: middle;
+      line-height: 2.5rem;
+    }
+
+    .info {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      text-align: center;
+      width: 100%;
+      font-size: 10px;
+    }
+
+    .errors {
+      padding: 8px;
+      font-family: 'Inter', sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-style: normal;
+      color: #ff0000;
+    }
+  }
+
+  .play-button {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    background-color: #333;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #444;
+    }
+  }
+}
