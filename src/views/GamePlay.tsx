@@ -4,6 +4,8 @@ import { Fox } from '@src/components/game/Fox';
 import { Hamburger } from '@src/components/game/Hamburger';
 import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
+import { OrbitControls } from '@react-three/drei';
+
 import '@styles/gameplay-view.scss';
 
 type Props = {
@@ -13,6 +15,7 @@ export function Gameplay(props: Props) {
   return (
     <>
       <Canvas>
+        <OrbitControls />
         <Perf openByDefault trackGPU={true} position="bottom-right" />
         {/*<Environment preset="warehouse" background />*/}
         <ambientLight intensity={Math.PI / 2} />

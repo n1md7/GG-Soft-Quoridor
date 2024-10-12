@@ -1,6 +1,6 @@
 import AssetUrl from '@assets/3D/fox/Fox.gltf?url';
 import { useAnimations, useGLTF } from '@react-three/drei';
-import { useFrame, useGraph } from '@react-three/fiber';
+import { useGraph } from '@react-three/fiber';
 import { useControls } from 'leva';
 import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
