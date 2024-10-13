@@ -94,7 +94,7 @@ type GLTFResult = GLTF & {
 
 // TODO: requires optimization, geometries & materials can be reused
 export function Board(props: JSX.IntrinsicElements['group']) {
-  const { nodes, materials } = useGLTF('/board.glb') as GLTFResult;
+  const { nodes, materials } = useGLTF('./board.glb') as GLTFResult;
 
   return (
     <group {...props} dispose={null} onPointerOver={(e) => console.info(e)}>
@@ -758,4 +758,4 @@ export function Board(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload('/board.glb');
+useGLTF.preload('./board.glb');
