@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@styles': cwd() + '/styles',
+        '@assets': cwd() + '/assets',
         '@tests': cwd() + '/tests',
         '@src': cwd() + '/src',
       },
@@ -45,6 +46,7 @@ export default defineConfig(({ mode }) => {
       setupFiles: ['./tests/setup.ts'],
       alias: {
         '@styles': cwd() + '/src/styles',
+        '@assets': cwd() + '/assets',
         '@tests': cwd() + '/tests',
         '@src': cwd() + '/src',
       },
