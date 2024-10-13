@@ -1,4 +1,3 @@
-import AssetUrl from '@assets/3D/fox/Fox.gltf?url';
 import { useAnimations, useGLTF } from '@react-three/drei';
 import { useGraph } from '@react-three/fiber';
 import { useControls } from 'leva';
@@ -25,7 +24,7 @@ type GLTFResult = GLTF & {
 
 export function Fox(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>() as MutableRefObject<THREE.Group>;
-  const { scene, animations } = useGLTF(AssetUrl);
+  const { scene, animations } = useGLTF('3D/fox/Fox.gltf');
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone) as GLTFResult;
   const { actions, names } = useAnimations(animations, group);
@@ -64,4 +63,4 @@ export function Fox(props: JSX.IntrinsicElements['group']) {
   );
 }
 
-useGLTF.preload(AssetUrl);
+useGLTF.preload('3D/fox/Fox.gltf');

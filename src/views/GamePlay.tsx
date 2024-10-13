@@ -7,6 +7,7 @@ import { Show } from '@src/components/utils/Show.tsx';
 import { useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
+import { Board } from '@src/components/game/Board';
 import { Environment, OrbitControls } from '@react-three/drei';
 
 import '@styles/gameplay-view.scss';
@@ -34,8 +35,16 @@ export function Gameplay(props: Props) {
 
   return (
     <>
-      <Canvas>
-        <OrbitControls />
+      <Canvas
+        shadows
+        camera={{
+          fov: 45,
+          near: 0.1,
+          far: 200,
+          position: [2.5, 4, 6],
+        }}
+      >
+        <OrbitControls enableDamping enablePan />
         <Perf openByDefault trackGPU={true} position="bottom-right" />
         <Show when={!!environment}>
           <Environment preset={environment} background />
@@ -47,6 +56,7 @@ export function Gameplay(props: Props) {
           <Hamburger scale={0.2} position={[0, -0.2, 0]} />
           <Box position={[2.5, 0.5, 0]} />
           <Fox scale={0.02} position-x={-3} />
+          <Board />
         </Suspense>
       </Canvas>
       <div className="canvas-overlay">
