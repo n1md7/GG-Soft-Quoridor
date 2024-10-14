@@ -7,7 +7,7 @@ import { Show } from '@src/components/utils/Show.tsx';
 import { useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
-import { Board } from '@src/components/game/Board';
+import * as Board from '@src/components/game/Board';
 import { Environment, OrbitControls } from '@react-three/drei';
 
 import '@styles/gameplay-view.scss';
@@ -56,7 +56,7 @@ export function Gameplay(props: Props) {
           <Hamburger scale={0.2} position={[0, -0.2, 0]} />
           <Box position={[2.5, 0.5, 0]} />
           <Fox scale={0.02} position-x={-3} />
-          <Board />
+          <Board.Model />
         </Suspense>
       </Canvas>
       <div className="canvas-overlay">
