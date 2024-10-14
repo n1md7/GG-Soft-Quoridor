@@ -1,5 +1,5 @@
-import { BufferGeometry, Material } from 'three';
-import { useState } from 'react';
+import { BufferGeometry, Material, MeshStandardMaterial } from 'three';
+import { useRef } from 'react';
 
 type Props = {
   geometry: BufferGeometry;
@@ -11,15 +11,16 @@ type Props = {
 };
 
 const defaultColor = 'gray';
-export function Block({ geometry, position, name, castShadow = false, receiveShadow = false }: Props) {
-  const [color, setColor] = useState(defaultColor);
 
-  const hoverMap = {
+export function Block({ geometry, position, name, castShadow = false, receiveShadow = false }: Props) {
+  const colorRef = useRef<MeshStandardMaterial>(null!);
+  const colorMap = useRef({
     10: 'red', // Top face id
     11: 'green', // Left face id
     12: 'blue', // Bottom face id
     13: 'purple', // Right face id
-  };
+  });
+  console.info('yoo');
 
   return (
     <mesh
@@ -27,13 +28,13 @@ export function Block({ geometry, position, name, castShadow = false, receiveSha
       castShadow={castShadow}
       receiveShadow={receiveShadow}
       onPointerMove={(e) => {
-        setColor(hoverMap[e.faceIndex] || defaultColor);
+        colorRef.current.color.setColorName(colorMap.current[e.faceIndex] || defaultColor);
       }}
-      onPointerOut={() => setColor(defaultColor)}
+      onPointerOut={() => colorRef.current.color.setColorName(defaultColor)}
       geometry={geometry}
       position={position}
     >
-      <meshStandardMaterial color={color} />
+      <meshStandardMaterial ref={colorRef} color={defaultColor} />
     </mesh>
   );
 }
