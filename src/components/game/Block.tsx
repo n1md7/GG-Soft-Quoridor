@@ -20,7 +20,6 @@ export function Block({ geometry, position, name, castShadow = false, receiveSha
     12: 'blue', // Bottom face id
     13: 'purple', // Right face id
   });
-  console.info('yoo');
 
   return (
     <mesh
