@@ -14,7 +14,7 @@ const defaultColor = 'gray';
 
 export function Block({ geometry, position, name, castShadow = false, receiveShadow = false }: Props) {
   const colorRef = useRef<MeshStandardMaterial>(null!);
-  const colorMap = useRef({
+  const colorMap = useRef<Record<number, string>>({
     10: 'red', // Top face id
     11: 'green', // Left face id
     12: 'blue', // Bottom face id
@@ -26,8 +26,9 @@ export function Block({ geometry, position, name, castShadow = false, receiveSha
       name={name}
       castShadow={castShadow}
       receiveShadow={receiveShadow}
-      onPointerMove={(e) => {
-        colorRef.current.color.setColorName(colorMap.current[e.faceIndex] || defaultColor);
+      onPointerMove={({ faceIndex }) => {
+        if (!faceIndex) return;
+        colorRef.current.color.setColorName(colorMap.current[faceIndex] || defaultColor);
       }}
       onPointerOut={() => colorRef.current.color.setColorName(defaultColor)}
       geometry={geometry}
