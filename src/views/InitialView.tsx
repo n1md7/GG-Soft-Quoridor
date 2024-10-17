@@ -1,5 +1,5 @@
 import '@styles/initial-view.scss';
-import LogoImg from '@assets/react.svg';
+import LogoImg from '@assets/quoridor-logo.png';
 import { useProgress } from '@react-three/drei';
 import { ProgressBar } from '@src/components/ui/ProgressBar.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
@@ -12,7 +12,6 @@ export function InitialView({ next }: Props) {
 
   return (
     <div className="initial-view">
-      <h1 className="title">Quoridor 3D</h1>
       <div className="logo">
         <img src={LogoImg} alt="Quoridor 3D" />
       </div>
