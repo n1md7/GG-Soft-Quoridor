@@ -2,7 +2,7 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
-  content: ['./src/js/*.js', './*.html', './styles/*.?css'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}', './*.html', './styles/*.?css'],
   theme: {
     fontFamily: {
       display: ['Kanit', 'sans-serif'],

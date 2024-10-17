@@ -29,7 +29,6 @@ export function Block({ geometry, position, name, scale }: Props) {
       castShadow={true}
       receiveShadow={true}
       onPointerMove={({ faceIndex }) => {
-        console.info(faceIndex);
         if (!faceIndex) return;
         colorRef.current.color.setColorName(colorMap.current[faceIndex] || defaultColor);
       }}
