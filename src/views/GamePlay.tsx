@@ -3,11 +3,11 @@ import { Canvas } from '@react-three/fiber';
 import { Box } from '@src/components/game/Box';
 import { Fox } from '@src/components/game/Fox';
 import { Hamburger } from '@src/components/game/Hamburger';
-import { Show } from '@src/components/utils/Show.tsx';
+import { Show } from '@src/components/utils/Show';
 import { useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
-import { Board } from '@src/components/game/Board';
+import * as Board from '@src/components/game/Board';
 import { Environment, OrbitControls } from '@react-three/drei';
 
 import '@styles/gameplay-view.scss';
@@ -53,10 +53,10 @@ export function Gameplay(props: Props) {
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
         <Suspense>
-          <Hamburger scale={0.2} position={[0, -0.2, 0]} />
-          <Box position={[2.5, 0.5, 0]} />
-          <Fox scale={0.02} position-x={-3} />
-          <Board />
+          <Hamburger scale={0.2} position={[0, 0.5, 0]} />
+          <Box position={[2.5, 2.0, 0]} />
+          <Fox scale={0.02} position={[-3, 0.5, 0]} />
+          <Board.Model />
         </Suspense>
       </Canvas>
       <div className="canvas-overlay">
