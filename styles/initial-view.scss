@@ -25,30 +25,40 @@
   .container {
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
   .description {
     font-family: 'Inter', sans-serif;
     font-optical-sizing: auto;
     font-size: 1rem;
-    color: #666;
     text-align: center;
+    color: #d7d7d7;
   }
-  .progress {
+  .progress-container {
+    height: 4rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    width: 100%;
+  }
+  .progress-count {
+    margin: 10px 0;
+    color: #d7d7d7;
+    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+  }
+  .progress {
+    width: 100%;
     background-color: #ddd;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    height: 4.5rem;
+    border-radius: 10px;
+    height: 1rem;
     .bar {
       transition: width 0.2s;
-      width: 0;
-      height: 2.5rem;
-      background-color: #333;
+      height: 1rem;
+      background: rgb(138, 76, 255);
+      background: linear-gradient(0deg, rgba(138, 76, 255, 1) 0%, rgba(138, 76, 255, 1) 20%, rgba(51, 80, 184, 1) 100%);
       position: relative;
       text-align: center;
       color: #fff;
@@ -56,14 +66,15 @@
       font-optical-sizing: auto;
       vertical-align: middle;
       line-height: 2.5rem;
+      border-radius: 10px;
     }
     .info {
       font-family: 'Inter', sans-serif;
-      font-weight: 400;
       font-style: normal;
       text-align: center;
       width: 100%;
-      font-size: 10px;
+      margin: 10px 0;
+      color: #d7d7d7;
     }
     .errors {
       padding: 8px;
@@ -76,16 +87,21 @@
   }
   .play-button {
     margin-top: 2rem;
-    padding: 1rem 2rem;
-    background-color: #333;
+    padding: 15px;
+    background-color: #db1f48;
     color: #fff;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Caprasimo', sans-serif;
     font-optical-sizing: auto;
-    font-weight: 600;
-    font-style: normal;
-    border-radius: 0.5rem;
+    font-size: 20px;
+    border-radius: 13px;
     cursor: pointer;
     transition: background-color 0.2s;
+    box-shadow:
+      0px 8px 0px #a00034,
+      0px 12px 4px rgba(0, 0, 0, 0.5);
+    outline: none;
+    background: linear-gradient(145deg, #db1f48, #db1f48);
+    width: 10rem;
     &:hover {
       background-color: #444;
     }
