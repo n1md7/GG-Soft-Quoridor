@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { Block } from '@src/components/game/Block.tsx';
 
-type GLTFResult = GLTF & {
+export type GLTFResult = GLTF & {
   nodes: {
     Platform: THREE.Mesh;
     Block000: THREE.Mesh;

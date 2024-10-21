@@ -1,38 +1,14 @@
-import { type PresetsType } from '@react-three/drei/helpers/environment-assets';
+import { AdaptiveDpr } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Box } from '@src/components/game/Box';
-import { Fox } from '@src/components/game/Fox';
-import { Hamburger } from '@src/components/game/Hamburger';
-import { Show } from '@src/components/utils/Show';
-import { useControls } from 'leva';
-import { Perf } from 'r3f-perf';
-import { Suspense } from 'react';
-import * as Board from '@src/components/game/Board';
-import { Environment, OrbitControls } from '@react-three/drei';
+import { Experience } from '@src/components/game/Experience.tsx';
 
 import '@styles/gameplay-view.scss';
 
 type Props = {
   back: () => void;
 };
-export function Gameplay(props: Props) {
-  const { environment } = useControls({
-    environment: {
-      options: [
-        'night',
-        'apartment',
-        'city',
-        'dawn',
-        'forest',
-        'lobby',
-        'park',
-        'studio',
-        'sunset',
-        'warehouse',
-      ] as PresetsType[],
-    },
-  });
 
+export function Gameplay(props: Props) {
   return (
     <>
       <Canvas
@@ -44,20 +20,11 @@ export function Gameplay(props: Props) {
           position: [2.5, 4, 6],
         }}
       >
-        <OrbitControls enableDamping enablePan />
-        <Perf openByDefault trackGPU={true} position="bottom-right" />
-        <Show when={!!environment}>
-          <Environment preset={environment} background />
-        </Show>
-        <ambientLight intensity={Math.PI / 2} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-        <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-        <Suspense>
-          <Hamburger scale={0.2} position={[0, 0.5, 0]} />
-          <Box position={[2.5, 2.0, 0]} />
-          <Fox scale={0.02} position={[-3, 0.5, 0]} />
-          <Board.Model />
-        </Suspense>
+        <AdaptiveDpr pixelated />
+
+        {/*<Sky azimuth={1} inclination={0.6} distance={1000} />*/}
+        {/*<fog attach="fog" args={['#f0f0f0', 0, 40]} />*/}
+        <Experience />
       </Canvas>
       <div className="canvas-overlay">
         <div className="action">
