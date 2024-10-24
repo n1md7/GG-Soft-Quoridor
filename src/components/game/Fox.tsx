@@ -29,8 +29,16 @@ export function Fox(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials } = useGraph(clone) as GLTFResult;
   const { actions, names } = useAnimations(animations, group);
 
-  const { foxAction } = useControls({
+  const { foxAction } = useControls('Environment', {
     foxAction: { options: names },
+    wireframe: {
+      value: false,
+      label: 'Wireframe',
+      options: [true, false],
+      onChange: (value: boolean) => {
+        materials.fox_material.wireframe = value;
+      },
+    },
   });
 
   useEffect(() => {
