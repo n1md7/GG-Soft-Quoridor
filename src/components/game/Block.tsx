@@ -5,12 +5,12 @@ import { Vector3 } from '@react-three/fiber';
 type Props = {
   geometry: BufferGeometry;
   position: Vector3;
+  wireframe: boolean;
   castShadow?: boolean;
   receiveShadow?: boolean;
   name?: string;
   material?: Material | Material[];
   scale?: Vector3;
-  wireframe?: boolean;
 };
 
 const defaultColor = 'gray';
@@ -18,10 +18,10 @@ const defaultColor = 'gray';
 export function Block({ geometry, position, name, scale, wireframe = false }: Props) {
   const colorRef = useRef<MeshStandardMaterial>(null!);
   const colorMap = useRef<Record<number, string>>({
-    11: 'red', // Top face id
-    13: 'green', // Left face id
-    15: 'blue', // Bottom face id
-    17: 'purple', // Right face id
+    8: 'red', // Top face id
+    9: 'green', // Left face id
+    10: 'blue', // Bottom face id
+    11: 'purple', // Right face id
   });
 
   useEffect(() => {
