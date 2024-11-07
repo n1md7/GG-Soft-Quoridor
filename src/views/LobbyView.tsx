@@ -8,8 +8,8 @@ export function LobbyView({ next }: Props) {
     <div className="lobby-view">
       <div className="main-lobby-container">
         <div className="main-container">
-          <div className="container">
-            <div className="container-border"></div>
+          <div className="wrapper">
+            <div className="wrapper-border"></div>
           </div>
           <div className="main-trapezoid">
             <div className="trapezoid settings"></div>
@@ -24,8 +24,8 @@ export function LobbyView({ next }: Props) {
           </div>
         </div>
         <div className="main-container">
-          <div className="container">
-            <div className="container-border"></div>
+          <div className="wrapper">
+            <div className="wrapper-border"></div>
           </div>
           <div className="main-trapezoid for-leaderboard">
             <div className="trapezoid leaderboard"></div>
