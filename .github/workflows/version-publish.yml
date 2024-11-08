@@ -1,0 +1,63 @@
+name: Generate and Deploy Static Files
+
+on:
+  push:
+    branches:
+      - master
+      - 'release/*'
+      - 'feature/*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Bun runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.24 # or "latest", "canary", <sha>
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build static files
+        run: bun run build:github
+
+      - name: Determine folder path
+        id: determine_path
+        run: |
+          echo "GITHUB_REF=${GITHUB_REF}"
+          # Define the folder path based on branch or release
+          if [[ "${GITHUB_REF}" == refs/heads/feature/* ]]; then
+            folder="feature/${GITHUB_REF_NAME}"
+          elif [[ "${GITHUB_REF}" == refs/heads/release/* ]]; then
+            version="${GITHUB_REF_NAME#release/}"
+            folder="v.${version}"
+          else
+            folder="misc/${GITHUB_REF_NAME}"
+          fi
+          echo "folder=${folder}" >> $GITHUB_ENV
+
+      - name: Push to branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Switch to the specific branch for deployment
+          git fetch origin static-files
+          git checkout -B static-files origin/static-files
+
+          ls -la
+          mkdir -p ${folder}
+          mv dist ${folder}
+          ls -la
+
+          # Add the generated files and push to the static-files branch
+          git add ${folder}
+          git commit -m "Deploy static files to ${folder}"
+          git push origin static-files
