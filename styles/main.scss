@@ -55,3 +55,31 @@ input[type='number']::-webkit-inner-spin-button {
 ::selection {
   background-color: transparent;
 }
+
+.play-button {
+  margin-top: 2rem;
+  padding: 15px;
+  background-color: #db1f48;
+  color: #fff;
+  font-family: 'Caprasimo', sans-serif;
+  font-optical-sizing: auto;
+  font-size: 20px;
+  border-radius: 13px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background-color 0.2s;
+  outline: 2px solid #e9e9e9;
+  background: linear-gradient(145deg, #db1f48, #db1f48);
+  width: 10rem;
+  background-image: url('assets/button-bg.png');
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 0 1px #e9e9e9;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 0 0 1px #e9e9e9;
+  }
+}
