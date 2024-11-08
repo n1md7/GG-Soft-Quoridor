@@ -38,6 +38,7 @@ jobs:
             mv dist ${{ github.event.release.tag_name }}
             echo "publish_path=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           else
+            mv dist ${{ github.ref_name }}
             echo "publish_path=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
       - name: Deploy to GitHub Pages
@@ -45,5 +46,5 @@ jobs:
         with:
           keep_files: 'true'
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ env.publish_path }}
+          publish_dir: .
           publish_branch: github-static-files
