@@ -144,7 +144,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         materials.WallBlackMaterial.wireframe = value;
         materials.PawnWhiteMaterial.wireframe = value;
         materials.PawnBlackMaterial.wireframe = value;
+        // @ts-ignore
         nodes.Plate000.material.wireframe = value;
+        // @ts-ignore
         nodes.Plate001.material.wireframe = value;
       },
     },

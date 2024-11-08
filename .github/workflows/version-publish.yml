@@ -1,0 +1,50 @@
+name: Publish to GitHub Pages on Release or Branch Update
+
+on:
+  release:
+    types: [created]
+  push:
+    branches:
+      - '*' # Match all branches to enable versioning for each branch
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Bun runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.24 # or "latest", "canary", <sha>
+      - name: Install dependencies
+        run: bun install
+      - name: Set VITE_RELEASE_VERSION Environment Variable
+        run: |
+          if [ "${{ github.event_name }}" == "release" ]; then
+            echo "VITE_RELEASE_VERSION=v${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          else
+            echo "VITE_RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+      - name: Build static files
+        env:
+          VITE_RELEASE_VERSION: ${{ env.VITE_RELEASE_VERSION }}
+        run: bun run build:github
+      - name: Set Publish Directory
+        id: publish_dir
+        run: |
+          # Rename the publish directory based on the event type
+          if [ "${{ github.event_name }}" == "release" ]; then
+            mv dist ${{ github.event.release.tag_name }}
+            echo "publish_path=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          else
+            mv dist ${{ github.ref_name }}
+            echo "publish_path=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          keep_files: 'true'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: github-static-files
