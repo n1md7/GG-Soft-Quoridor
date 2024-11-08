@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@styles': cwd() + '/styles',
         '@assets': cwd() + '/assets',
+        '@public': cwd() + '/public',
         '@tests': cwd() + '/tests',
         '@src': cwd() + '/src',
       },

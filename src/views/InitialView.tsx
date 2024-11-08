@@ -1,5 +1,5 @@
 import '@styles/initial-view.scss';
-import LogoImg from '@assets/quoridor-logo.png';
+import LogoImg from '@public/quoridor-logo.png';
 import { useProgress } from '@react-three/drei';
 import { ProgressBar } from '@src/components/ui/ProgressBar.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
