@@ -1,63 +1,48 @@
-name: Generate and Deploy Static Files
+name: Publish to GitHub Pages on Release or Branch Update
 
 on:
+  release:
+    types: [created]
   push:
     branches:
-      - master
-      - 'release/*'
-      - 'feature/*'
+      - '*' # Match all branches to enable versioning for each branch
 
 jobs:
-  build-and-deploy:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
       - name: Use Bun runtime
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.1.24 # or "latest", "canary", <sha>
-
       - name: Install dependencies
         run: bun install
-
-      - name: Build static files
-        run: bun run build:github
-
-      - name: Determine folder path
-        id: determine_path
+      - name: Set VITE_RELEASE_VERSION Environment Variable
         run: |
-          echo "GITHUB_REF=${GITHUB_REF}"
-          # Define the folder path based on branch or release
-          if [[ "${GITHUB_REF}" == refs/heads/feature/* ]]; then
-            folder="feature/${GITHUB_REF_NAME}"
-          elif [[ "${GITHUB_REF}" == refs/heads/release/* ]]; then
-            version="${GITHUB_REF_NAME#release/}"
-            folder="v.${version}"
+          if [ "${{ github.event_name }}" == "release" ]; then
+            echo "VITE_RELEASE_VERSION=v${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           else
-            folder="misc/${GITHUB_REF_NAME}"
+            echo "VITE_RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
-          echo "folder=${folder}" >> $GITHUB_ENV
-
-      - name: Push to branch
+      - name: Build static files
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VITE_RELEASE_VERSION: ${{ env.VITE_RELEASE_VERSION }}
+        run: bun run build:github
+      - name: Set Publish Directory
+        id: publish_dir
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Switch to the specific branch for deployment
-          git fetch origin static-files
-          git checkout -B static-files origin/static-files
-
-          ls -la
-          mkdir -p ${folder}
-          mv dist ${folder}
-          ls -la
-
-          # Add the generated files and push to the static-files branch
-          git add ${folder}
-          git commit -m "Deploy static files to ${folder}"
-          git push origin static-files
+          # Rename the publish directory based on the event type
+          if [ "${{ github.event_name }}" == "release" ]; then
+            mv dist ${{ github.event.release.tag_name }}
+            echo "publish_path=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          else
+            echo "publish_path=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ env.publish_path }}
+          publish_branch: static-files
