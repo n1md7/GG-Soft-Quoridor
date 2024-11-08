@@ -1,0 +1,57 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: unset;
+}
+
+/* Tailwind Directives */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Google Fonts Imports */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
+.inter-regular {
+  font-family: 'Inter', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Tailwind Component Layer */
+
+@layer components {
+  /* Custom component styles */
+}
+
+/* Global Styles */
+
+body {
+  background-image: url('/assets/Background.jpg');
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
+}
+
+.radio-label {
+  @apply flex cursor-pointer select-none items-center justify-center text-center text-default-gray300;
+}
+
+/* Custom CSS */
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+::selection {
+  background-color: transparent;
+}
