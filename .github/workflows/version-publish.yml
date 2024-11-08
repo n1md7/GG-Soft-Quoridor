@@ -22,9 +22,9 @@ jobs:
       - name: Set VITE_RELEASE_VERSION Environment Variable
         run: |
           if [ "${{ github.event_name }}" == "release" ]; then
-            echo "VITE_RELEASE_VERSION=v${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            echo "VITE_RELEASE_VERSION=v${{ github.event.release.tag_name }}/" >> $GITHUB_ENV
           else
-            echo "VITE_RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+            echo "VITE_RELEASE_VERSION=${{ github.ref_name }}/" >> $GITHUB_ENV
           fi
       - name: Build static files
         env:
