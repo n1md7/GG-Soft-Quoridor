@@ -34,13 +34,7 @@ jobs:
         id: publish_dir
         run: |
           # Rename the publish directory based on the event type
-          if [ "${{ github.event_name }}" == "release" ]; then
-            mv dist ${{ github.event.release.tag_name }}
-            echo "publish_path=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          else
-            mv dist ${{ github.ref_name }}
-            echo "publish_path=${{ github.ref_name }}" >> $GITHUB_ENV
-          fi
+          mv dist ${{ env.VITE_RELEASE_VERSION }}
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
