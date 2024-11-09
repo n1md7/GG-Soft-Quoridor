@@ -1,4 +1,5 @@
-name: Publish to GitHub Pages on Release or Branch Update
+name: Publish to GitHub with Versioning
+description: Build and deploy static files to GitHub Pages with branch versioning. It will create a new directory for each branch and release.
 
 on:
   release:
@@ -22,7 +23,7 @@ jobs:
       - name: Set VITE_RELEASE_VERSION Environment Variable
         run: |
           if [ "${{ github.event_name }}" == "release" ]; then
-            echo "VITE_RELEASE_VERSION=v${{ github.event.release.tag_name }}/" >> $GITHUB_ENV
+            echo "VITE_RELEASE_VERSION=${{ github.event.release.tag_name }}/" >> $GITHUB_ENV
           else
             echo "VITE_RELEASE_VERSION=${{ github.ref_name }}/" >> $GITHUB_ENV
           fi
@@ -33,7 +34,6 @@ jobs:
       - name: Set Publish Directory
         id: publish_dir
         run: |
-          # Rename the publish directory based on the event type
           mv dist ${{ env.VITE_RELEASE_VERSION }}
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
