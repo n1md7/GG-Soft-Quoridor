@@ -7,7 +7,7 @@
   .main-lobby-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 70px;
   }
   .main-container {
     height: 500px;
@@ -30,7 +30,9 @@
     background-color: #121625;
     width: 100%;
     border: 4px solid #d5d5d5;
-    box-shadow: inset 0px 10px 0px rgba(0, 0, 0, 0.3);
+    box-shadow:
+      inset 0px 10px 0px rgba(0, 0, 0, 0.3),
+      0px 16px 0px rgba(0, 0, 0, 0.3);
     height: 100%;
   }
   .trapezoid {
@@ -106,14 +108,14 @@
     overflow: hidden;
   }
   .lens-container.top {
-    top: 10px;
+    top: 9px;
   }
   .lens-container.top > .eclipse {
     top: -5px;
   }
   .lens-container.top > .lens {
-    left: calc(60% - 20vmin);
-    top: calc(155% - 22vmin);
+    left: 100px;
+    top: -60px;
     width: 70px;
     height: 100px;
   }
@@ -127,10 +129,19 @@
     clip-path: ellipse(32% 10% at 50% 50%);
   }
   .lens-container.bottom > .lens {
-    left: calc(100% - 20vmin);
-    top: calc(215% - 22vmin);
+    right: 140px;
+    bottom: 0px;
     width: 30px;
     height: 100px;
+    background: radial-gradient(
+      closest-side circle at center,
+      hsl(207.69, 100%, 50%) 0%,
+      #00c2ff 15%,
+      hsl(200.34, 50%, 83.05%) 30%,
+      hsla(4, 0%, 0%, 0.3) 15%,
+      hsl(0deg 0% 100% / 98%) 50%,
+      transparent 0%
+    );
   }
   .lens-container.bottom > .lens::before {
     width: 110px;
@@ -144,11 +155,11 @@
     background: radial-gradient(
       closest-side circle at center,
       hsl(254.77, 100%, 98.28%) 0%,
-      hsl(4, 5%, 100%) 15%,
-      hsl(200.34, 100%, 83.05%) 30%,
-      hsla(4, 0%, 50%, 0.3) 55%,
-      hsl(235.9deg 100% 80.64% / 98%) 75%,
-      transparent 99%
+      hsl(4, 5%, 100%) 0%,
+      hsl(200.34, 100%, 83.05%) 0%,
+      hsla(4, 0%, 50%, 0.3) 75%,
+      hsla(235.9, 100%, 80.64%, 0.98) 60%,
+      transparent 80%
     );
     filter: blur(8px);
     z-index: 1;

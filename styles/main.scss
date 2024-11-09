@@ -31,7 +31,7 @@ body,
 /* Global Styles */
 
 body {
-  background-image: url('/public/Background.jpg');
+  background-image: url('/public/background.jpg');
   height: 100vh;
   background-size: cover;
   background-position: center;
@@ -57,7 +57,7 @@ input[type='number']::-webkit-inner-spin-button {
 }
 
 .play-button {
-  margin-top: 2rem;
+  margin-top: 7rem;
   padding: 15px;
   background-color: #db1f48;
   color: #fff;
