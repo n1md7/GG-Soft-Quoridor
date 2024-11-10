@@ -20,7 +20,7 @@ export function LobbyView({ next }: Props) {
           </div>
           <div className="main-trapezoid">
             <div className="trapezoid settings">
-              <span>Settings</span>
+              <span className="header">Settings</span>
             </div>
           </div>
           <div className="sides-container">
@@ -51,7 +51,7 @@ export function LobbyView({ next }: Props) {
 
           <div className="main-trapezoid for-leaderboard">
             <div className="trapezoid leaderboard">
-              <span>Leaderboard</span>
+              <span className="header">Leaderboard</span>
             </div>
             <div className="minis">
               <div className="mini-trapezoid"></div>

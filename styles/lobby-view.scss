@@ -36,7 +36,7 @@
     height: 100%;
   }
   .trapezoid {
-    width: 250px;
+    width: 270px;
     height: 50px;
     clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
   }
@@ -55,17 +55,24 @@
     position: relative;
     background: linear-gradient(to right, #bb77fb, #7e4cf5, #3850bc);
     top: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
   }
   .leaderboard {
     position: relative;
     background: linear-gradient(to right, #b2f1e8, #f7ffec);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .minis {
     display: flex;
     justify-content: space-between;
     position: relative;
     top: -20px;
-    width: 320px;
+    width: 350px;
   }
   .sides-container {
     display: flex;
@@ -194,5 +201,10 @@
     padding: 10px;
     border: 1px solid rgb(55, 88, 93);
     border-radius: 10px;
+  }
+  .header {
+    font-family: 'Corporation-Italic', sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
   }
 }

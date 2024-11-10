@@ -14,7 +14,26 @@ body,
 /* Google Fonts Imports */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
+@font-face {
+  font-family: 'Caprasimo';
+  src: url('/public/fonts/caprasimo-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Bebas';
+  src: url('/public/fonts/bebasneue-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Corporation-Regular';
+  src: url('/public/fonts/corporation-games-straight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Corporation-Italic';
+  src: url('/public/fonts/corporation-games.otf') format('opentype');
+}
+
 .inter-regular {
   font-family: 'Inter', sans-serif;
   font-optical-sizing: auto;
