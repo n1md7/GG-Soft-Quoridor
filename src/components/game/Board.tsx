@@ -1,9 +1,12 @@
-import { useControls } from 'leva';
-import { ForwardedRef, forwardRef, useImperativeHandle } from 'react';
-import * as THREE from 'three';
 import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { Block, ForwardedBlock, BlockName } from '@src/components/game/Block.tsx';
+import { ForwardedWall, WallName, Wall } from '@src/components/game/Wall.tsx';
+import { useControls } from 'leva';
+import { useEffect, useRef } from 'react';
+import { Mesh } from 'three';
+import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
-import { Block } from '@src/components/game/Block.tsx';
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -126,10 +129,42 @@ export type GLTFResult = GLTF & {
     PawnBlackMaterial: THREE.MeshStandardMaterial;
   };
 };
-export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: ForwardedRef<GLTFResult['nodes']>) => {
+export type Nodes = GLTFResult['nodes'];
+export type Props = {
+  a?: number;
+};
+
+export const Model = (props: Props) => {
   const { nodes, materials } = useGLTF('./3D/board-v1.4.glb') as GLTFResult;
 
-  useImperativeHandle(ref, () => nodes, [nodes]);
+  const indexedBlocks = useRef<Record<BlockName, ForwardedBlock>>({} as Record<BlockName, ForwardedBlock>);
+  const arrayOfBlocks = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
+  const blocksRefCallback = (block: ForwardedBlock) => {
+    indexedBlocks.current[block.name] = block;
+    arrayOfBlocks.current.push(block);
+  };
+
+  const indexedWalls = useRef<Record<WallName, ForwardedWall>>({} as Record<WallName, ForwardedWall>);
+  const arrayOfWalls = useRef<ForwardedWall[]>([] as ForwardedWall[]);
+  const wallsRefCallback = (wall: ForwardedWall) => {
+    indexedWalls.current[wall.name] = wall;
+    arrayOfWalls.current.push(wall);
+  };
+
+  const floatBlock = ({ mesh }: ForwardedBlock, time: number) => {
+    // mesh.position.y = Math.cos(time) * 0.1 + 0.3;
+    mesh.position.y = Math.cos(time + Math.PI) * 0.1 + 0.6;
+  };
+
+  const floatBlocks = (time: number) => {
+    arrayOfBlocks.current.forEach((block) => floatBlock(block, time));
+  };
+
+  const getEdgePositionOf = (mesh: Mesh) => {
+    const position = mesh.position.clone();
+
+    return position;
+  };
 
   const { wireframe } = useControls('Board', {
     wireframe: {
@@ -152,6 +187,35 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
     },
   });
 
+  useEffect(() => {
+    indexedBlocks.current.Block000.mesh.position.y = 2.6;
+    console.info(indexedBlocks);
+
+    arrayOfWalls.current.forEach((wall, idx) => {
+      wall.moveTo(arrayOfBlocks.current[idx * 3].mesh.position, 'Horizontal');
+    });
+
+    setTimeout(() => {
+      indexedBlocks.current.Block000.changeColor('RED');
+
+      // const position = getEdgePositionOf(indexedBlocks.current.Block000.mesh);
+      // indexedWalls.current.Wall019.moveTo(position, 'Horizontal');
+    }, 2000);
+  }, []);
+
+  useFrame((state) => {
+    if (!indexedBlocks.current.Block000) return;
+    // board.current.rotation.y -= 0.001;
+
+    const time = state.clock.getElapsedTime();
+
+    // for (let i = 0; i < 81; i++) {
+    //   board.current.blocks[`Block${String(i).padStart(3, '0')}`].position.y = Math.sin(time) * 0.1 + 0.6;
+    // }
+
+    floatBlocks(time);
+  });
+
   return (
     <group {...props} dispose={null}>
       <mesh
@@ -164,6 +228,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[6, 0.25, 6]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block000"
         geometry={nodes.Block000.geometry}
@@ -172,6 +237,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block001"
         geometry={nodes.Block000.geometry}
@@ -180,6 +246,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block002"
         geometry={nodes.Block000.geometry}
@@ -188,6 +255,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block003"
         geometry={nodes.Block000.geometry}
@@ -196,6 +264,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block004"
         geometry={nodes.Block000.geometry}
@@ -204,6 +273,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block005"
         geometry={nodes.Block000.geometry}
@@ -212,6 +282,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block006"
         geometry={nodes.Block000.geometry}
@@ -220,6 +291,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block007"
         geometry={nodes.Block000.geometry}
@@ -228,6 +300,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block008"
         geometry={nodes.Block000.geometry}
@@ -236,6 +309,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block009"
         geometry={nodes.Block000.geometry}
@@ -244,6 +318,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block010"
         geometry={nodes.Block000.geometry}
@@ -252,6 +327,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block011"
         geometry={nodes.Block000.geometry}
@@ -260,6 +336,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block012"
         geometry={nodes.Block000.geometry}
@@ -268,6 +345,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block013"
         geometry={nodes.Block000.geometry}
@@ -276,6 +354,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block014"
         geometry={nodes.Block000.geometry}
@@ -284,6 +363,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block015"
         geometry={nodes.Block000.geometry}
@@ -292,6 +372,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block016"
         geometry={nodes.Block000.geometry}
@@ -300,6 +381,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block017"
         geometry={nodes.Block000.geometry}
@@ -308,6 +390,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block018"
         geometry={nodes.Block000.geometry}
@@ -316,6 +399,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block019"
         geometry={nodes.Block000.geometry}
@@ -324,6 +408,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block020"
         geometry={nodes.Block000.geometry}
@@ -332,6 +417,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block021"
         geometry={nodes.Block000.geometry}
@@ -340,6 +426,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block022"
         geometry={nodes.Block000.geometry}
@@ -348,6 +435,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block023"
         geometry={nodes.Block000.geometry}
@@ -356,6 +444,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block024"
         geometry={nodes.Block000.geometry}
@@ -364,6 +453,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block025"
         geometry={nodes.Block000.geometry}
@@ -372,6 +462,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block026"
         geometry={nodes.Block000.geometry}
@@ -380,6 +471,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block027"
         geometry={nodes.Block000.geometry}
@@ -388,6 +480,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block028"
         geometry={nodes.Block000.geometry}
@@ -396,6 +489,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block029"
         geometry={nodes.Block000.geometry}
@@ -404,6 +498,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block030"
         geometry={nodes.Block000.geometry}
@@ -412,6 +507,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block031"
         geometry={nodes.Block000.geometry}
@@ -420,6 +516,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block032"
         geometry={nodes.Block000.geometry}
@@ -428,6 +525,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block033"
         geometry={nodes.Block000.geometry}
@@ -436,6 +534,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block034"
         geometry={nodes.Block000.geometry}
@@ -444,6 +543,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block035"
         geometry={nodes.Block000.geometry}
@@ -452,6 +552,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block036"
         geometry={nodes.Block000.geometry}
@@ -460,6 +561,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block037"
         geometry={nodes.Block000.geometry}
@@ -468,6 +570,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block038"
         geometry={nodes.Block000.geometry}
@@ -476,6 +579,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block039"
         geometry={nodes.Block000.geometry}
@@ -484,6 +588,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block040"
         geometry={nodes.Block000.geometry}
@@ -492,6 +597,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block041"
         geometry={nodes.Block000.geometry}
@@ -500,6 +606,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block042"
         geometry={nodes.Block000.geometry}
@@ -508,6 +615,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block043"
         geometry={nodes.Block000.geometry}
@@ -516,6 +624,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block044"
         geometry={nodes.Block000.geometry}
@@ -524,6 +633,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block045"
         geometry={nodes.Block000.geometry}
@@ -532,6 +642,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block046"
         geometry={nodes.Block000.geometry}
@@ -540,6 +651,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block047"
         geometry={nodes.Block000.geometry}
@@ -548,6 +660,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block048"
         geometry={nodes.Block000.geometry}
@@ -556,6 +669,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block049"
         geometry={nodes.Block000.geometry}
@@ -564,6 +678,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block050"
         geometry={nodes.Block000.geometry}
@@ -572,6 +687,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block051"
         geometry={nodes.Block000.geometry}
@@ -580,6 +696,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block052"
         geometry={nodes.Block000.geometry}
@@ -588,6 +705,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block053"
         geometry={nodes.Block000.geometry}
@@ -596,6 +714,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block054"
         geometry={nodes.Block000.geometry}
@@ -604,6 +723,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block055"
         geometry={nodes.Block000.geometry}
@@ -612,6 +732,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block056"
         geometry={nodes.Block000.geometry}
@@ -620,6 +741,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block057"
         geometry={nodes.Block000.geometry}
@@ -628,6 +750,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block058"
         geometry={nodes.Block000.geometry}
@@ -636,6 +759,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block059"
         geometry={nodes.Block000.geometry}
@@ -644,6 +768,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block060"
         geometry={nodes.Block000.geometry}
@@ -652,6 +777,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block061"
         geometry={nodes.Block000.geometry}
@@ -660,6 +786,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block062"
         geometry={nodes.Block000.geometry}
@@ -668,6 +795,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block063"
         geometry={nodes.Block000.geometry}
@@ -676,6 +804,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block064"
         geometry={nodes.Block000.geometry}
@@ -684,6 +813,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block065"
         geometry={nodes.Block000.geometry}
@@ -692,6 +822,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block066"
         geometry={nodes.Block000.geometry}
@@ -700,6 +831,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block067"
         geometry={nodes.Block000.geometry}
@@ -708,6 +840,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block068"
         geometry={nodes.Block000.geometry}
@@ -716,6 +849,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block069"
         geometry={nodes.Block000.geometry}
@@ -724,6 +858,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block070"
         geometry={nodes.Block000.geometry}
@@ -732,6 +867,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block071"
         geometry={nodes.Block000.geometry}
@@ -740,6 +876,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block072"
         geometry={nodes.Block000.geometry}
@@ -748,6 +885,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block073"
         geometry={nodes.Block000.geometry}
@@ -756,6 +894,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block074"
         geometry={nodes.Block000.geometry}
@@ -764,6 +903,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block075"
         geometry={nodes.Block000.geometry}
@@ -772,6 +912,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block076"
         geometry={nodes.Block000.geometry}
@@ -780,6 +921,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block077"
         geometry={nodes.Block000.geometry}
@@ -788,6 +930,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block078"
         geometry={nodes.Block000.geometry}
@@ -796,6 +939,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block079"
         geometry={nodes.Block000.geometry}
@@ -804,6 +948,7 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         scale={[0.5, 0.15, 0.5]}
       />
       <Block
+        ref={blocksRefCallback}
         wireframe={wireframe}
         name="Block080"
         geometry={nodes.Block000.geometry}
@@ -811,7 +956,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         position={[4.8, 0.55, -4.8]}
         scale={[0.5, 0.15, 0.5]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall000"
         castShadow
         receiveShadow
@@ -830,7 +977,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         position={[6.029, -0.001, -1.3]}
         scale={[1.6, 0.25, 1.25]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall001"
         castShadow
         receiveShadow
@@ -840,7 +989,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall002"
         castShadow
         receiveShadow
@@ -850,7 +1001,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall003"
         castShadow
         receiveShadow
@@ -860,7 +1013,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall004"
         castShadow
         receiveShadow
@@ -870,7 +1025,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall005"
         castShadow
         receiveShadow
@@ -880,7 +1037,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall006"
         castShadow
         receiveShadow
@@ -890,7 +1049,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall007"
         castShadow
         receiveShadow
@@ -900,7 +1061,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall008"
         castShadow
         receiveShadow
@@ -910,7 +1073,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall009"
         castShadow
         receiveShadow
@@ -920,7 +1085,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall010"
         castShadow
         receiveShadow
@@ -939,7 +1106,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         position={[6.029, -0.001, 1.3]}
         scale={[1.6, 0.25, 1.25]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall011"
         castShadow
         receiveShadow
@@ -949,7 +1118,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall012"
         castShadow
         receiveShadow
@@ -959,7 +1130,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall013"
         castShadow
         receiveShadow
@@ -969,7 +1142,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall014"
         castShadow
         receiveShadow
@@ -979,7 +1154,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall015"
         castShadow
         receiveShadow
@@ -989,7 +1166,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall016"
         castShadow
         receiveShadow
@@ -999,7 +1178,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall017"
         castShadow
         receiveShadow
@@ -1009,7 +1190,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall018"
         castShadow
         receiveShadow
@@ -1019,7 +1202,9 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
-      <mesh
+      <Wall
+        ref={wallsRefCallback}
+        wireframe={wireframe}
         name="Wall019"
         castShadow
         receiveShadow
@@ -1067,6 +1252,6 @@ export const Model = forwardRef((props: JSX.IntrinsicElements['group'], ref: For
       />
     </group>
   );
-});
+};
 
 useGLTF.preload('./3D/board-v1.4.glb');

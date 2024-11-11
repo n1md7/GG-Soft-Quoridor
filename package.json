@@ -17,6 +17,7 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@react-three/drei": "^9.114.3",
     "@react-three/fiber": "^8.17.9",
+    "@tweenjs/tween.js": "^25.0.0",
     "jotai": "^2.10.0",
     "leva": "^0.9.35",
     "r3f-perf": "^7.2.2",
