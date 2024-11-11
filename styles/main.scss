@@ -78,7 +78,7 @@ input[type='number']::-webkit-inner-spin-button {
 .play-button {
   margin-top: 7rem;
   padding: 15px;
-  background-color: #db1f48;
+  background: #db1f48;
   color: #fff;
   font-family: 'Caprasimo', sans-serif;
   font-optical-sizing: auto;
@@ -90,9 +90,8 @@ input[type='number']::-webkit-inner-spin-button {
     box-shadow 0.2s,
     background-color 0.2s;
   outline: 2px solid #e9e9e9;
-  background: linear-gradient(145deg, #db1f48, #db1f48);
   width: 10rem;
-  background-image: url('../public/button-bg.png');
+  background-image: url('../public/button-bg.svg');
   background-size: cover;
   background-position: center;
   box-shadow: inset 0 0 0 1px #e9e9e9;
@@ -101,4 +100,69 @@ input[type='number']::-webkit-inner-spin-button {
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
     box-shadow: inset 0 0 0 1px #e9e9e9;
   }
+}
+
+.input-name {
+  border-radius: 30px;
+  height: 35px;
+  box-shadow:
+    inset 0px 5px 0px 0px rgb(22 22 22 / 30%),
+    0px 4px 0px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to right, #bb77fb, #7e4cf5, #3850bc);
+  z-index: 1;
+  font-family: 'Caprasimo', sans-serif;
+  text-align: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  gap: 15px;
+  > label {
+    position: relative;
+  }
+  > .input-mode {
+    z-index: 1;
+  }
+}
+
+.input-mode {
+  height: 40px;
+  width: 120px;
+  background: #2c3c51;
+  border-radius: 10px;
+  border: 2px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Caprasimo', sans-serif;
+  background-image: url('../public/button-bg.svg');
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  &::after {
+    content: '';
+    width: 5px;
+    height: 60%;
+    background: #db1f48;
+    position: absolute;
+    left: -5px;
+    border-radius: 3px 0 0 3px;
+  }
+  &::before {
+    content: '';
+    width: 5px;
+    height: 60%;
+    background: #db1f48;
+    position: absolute;
+    right: -5px;
+    border-radius: 0 3px 3px 0;
+  }
+}
+
+//todo
+input[type='radio']:checked > .input-name {
+  background: #4caf50;
 }
