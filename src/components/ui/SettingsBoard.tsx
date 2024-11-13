@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { BoardElements } from '@src/components/ui/BoardElements';
 import { Parallelogram } from './Parallelogram';
 
@@ -6,11 +6,11 @@ export function SettingsBoard() {
   const [inputValue, setInputValue] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleRadioChange = (e) => {
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(e.target.value);
   };
 
