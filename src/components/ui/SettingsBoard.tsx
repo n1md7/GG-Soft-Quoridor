@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BoardElements } from '@src/components/ui/BoardElements';
 import { Parallelogram } from './Parallelogram';
 
@@ -47,7 +47,7 @@ export function SettingsBoard() {
                     value="easy"
                     checked={selectedOption === 'easy'}
                     onChange={handleRadioChange}
-                    className="hidden"
+                    className="radio-mode hidden"
                   />
                   <div className="input-mode">Easy</div>
                 </label>
@@ -59,7 +59,7 @@ export function SettingsBoard() {
                     value="normal"
                     checked={selectedOption === 'normal'}
                     onChange={handleRadioChange}
-                    className="hidden"
+                    className="radio-mode hidden"
                   />
                   <div className="input-mode">Normal</div>
                 </label>
@@ -71,7 +71,7 @@ export function SettingsBoard() {
                     value="intense"
                     checked={selectedOption === 'intense'}
                     onChange={handleRadioChange}
-                    className="hidden"
+                    className="radio-mode hidden"
                   />
                   <div className="input-mode">Intense</div>
                 </label>

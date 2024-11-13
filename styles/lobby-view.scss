@@ -62,7 +62,7 @@
     clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
     &.settings {
       position: relative;
-      background: linear-gradient(to right, #bb77fb, #7e4cf5, #3850bc);
+      background: linear-gradient(to right, #bb77fb 1%, #7e4cf5 30%, #3850bc 80%);
       top: 35px;
       display: flex;
       align-items: center;
