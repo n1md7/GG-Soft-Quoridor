@@ -142,6 +142,9 @@ input[type='number']::-webkit-inner-spin-button {
   background-size: cover;
   background-position: center;
   cursor: pointer;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
   &::after {
     content: '';
     width: 5px;
@@ -167,4 +170,11 @@ input[type='radio']:checked + .input-mode {
   background: url('../public/button-bg.svg'), linear-gradient(to right, #8a4cff, #3850bc);
   background-size: cover;
   background-position: center;
+  transform: scale(1.05);
+  &::after {
+    background: #83ff00;
+  }
+  &::before {
+    background: #83ff00;
+  }
 }
