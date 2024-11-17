@@ -17,13 +17,22 @@ jobs:
 
     steps:
       - name: Comment on Pull Request
+        id: commentLiveUrl
         if: ${{ github.event_name == 'pull_request' }}
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         with:
+          edit-mode: replace
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             Live view is available at [Live](https://n1md7.github.io/GG-Soft-Quoridor/${{ github.head_ref }}/)
+      - name: Add reaction to comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          reactions: eyes
+          comment-id: ${{ steps.commentLiveUrl.outputs.comment-id }}
 
   publish:
     runs-on: ubuntu-latest
