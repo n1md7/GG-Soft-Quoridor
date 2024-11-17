@@ -16,22 +16,22 @@ body,
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @font-face {
   font-family: 'Caprasimo';
-  src: url('/public/fonts/caprasimo-regular.ttf') format('truetype');
+  src: url('./fonts/caprasimo-regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Bebas';
-  src: url('/public/fonts/bebasneue-regular.ttf') format('truetype');
+  src: url('./fonts/bebasneue-regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Corporation-Regular';
-  src: url('/public/fonts/corporation-games-straight.otf') format('opentype');
+  src: url('./fonts/corporation-games-straight.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Corporation-Italic';
-  src: url('/public/fonts/corporation-games.otf') format('opentype');
+  src: url('./fonts/corporation-games.otf') format('opentype');
 }
 
 .inter-regular {
@@ -50,7 +50,7 @@ body,
 /* Global Styles */
 
 body {
-  background-image: url('/public/background.jpg');
+  background-image: url('./background.jpg');
   height: 100vh;
   background-size: cover;
   background-position: center;
@@ -91,7 +91,7 @@ input[type='number']::-webkit-inner-spin-button {
     background-color 0.2s;
   outline: 2px solid #e9e9e9;
   width: 10rem;
-  background-image: url('../public/button-bg.svg');
+  background-image: url('./button-bg.svg');
   background-size: cover;
   background-position: center;
   box-shadow: inset 0 0 0 1px #e9e9e9;
@@ -138,7 +138,7 @@ input[type='number']::-webkit-inner-spin-button {
   justify-content: center;
   align-items: center;
   font-family: 'Caprasimo', sans-serif;
-  background-image: url('../public/button-bg.svg');
+  background-image: url('./button-bg.svg');
   background-size: cover;
   background-position: center;
   cursor: pointer;
@@ -167,7 +167,7 @@ input[type='number']::-webkit-inner-spin-button {
 
 //todo
 input[type='radio']:checked + .input-mode {
-  background: url('../public/button-bg.svg'), linear-gradient(to right, #8a4cff, #3850bc);
+  background: url('./button-bg.svg'), linear-gradient(to right, #8a4cff, #3850bc);
   background-size: cover;
   background-position: center;
   transform: scale(1.05);
