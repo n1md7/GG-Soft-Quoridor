@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    plugins: [react(), glsl()],
+    plugins: [react(), glsl({ watch: true })],
     test: {
       clearMocks: true,
       globals: true,
