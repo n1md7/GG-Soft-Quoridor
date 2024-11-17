@@ -4,14 +4,27 @@ description: Build and deploy static files to GitHub Pages with branch versionin
 on:
   release:
     types: [created]
-  #  push:
-  #    branches:
-  #      - '*' # Match all branches to enable versioning for each branch
+    push:
+      branches:
+        - '*' # Match all branches to enable versioning for each branch
   pull_request:
     branches:
       - '*' # Also run on pull requests
 
 jobs:
+  comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Comment on Pull Request
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Live view is available at [Live](https://n1md7.github.io/GG-Soft-Quoridor/${{ github.ref_name }}/)
+
   publish:
     runs-on: ubuntu-latest
 
@@ -45,11 +58,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
           publish_branch: github-static-files
-      - name: Comment on Pull Request
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: peter-evans/create-or-update-comment@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Live view is available at [Live](https://n1md7.github.io/GG-Soft-Quoridor/${{ github.ref_name }}/)
