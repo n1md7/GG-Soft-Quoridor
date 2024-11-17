@@ -31,6 +31,9 @@ export const usePosition = (options: Options = {}) => {
       position.z = Math.min(max, min + (coords.row / 2) * step);
       position.y = 0.9;
 
+      position.z += coords.pos === 'TOP' ? -step : 0;
+      position.x += coords.pos === 'LEFT' ? -step : 0;
+
       return {
         position,
         rotation,

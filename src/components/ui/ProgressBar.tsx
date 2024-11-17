@@ -1,6 +1,5 @@
 import { useProgress } from '@react-three/drei';
 import { Show } from '@src/components/utils/Show.tsx';
-//import { div } from 'three/webgpu';
 
 export function ProgressBar() {
   const { progress, loaded, total, errors } = useProgress();
@@ -12,7 +11,9 @@ export function ProgressBar() {
         <div className="bar" style={{ width: progress + '%' }}></div>
         <div className="info">
           <p>
-            Downloading assets {loaded} of {total}
+            <Show when={loaded !== total} fallback="Click Enter so start">
+              Downloading assets {loaded} of {total}
+            </Show>
           </p>
         </div>
         <Show when={errors.length > 0}>
