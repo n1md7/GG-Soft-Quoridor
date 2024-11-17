@@ -4,22 +4,29 @@ import { Show } from '@src/components/utils/Show.tsx';
 import { useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
+import { Vector3 } from 'three';
 import * as Board from './Board.tsx';
 
 export function Experience() {
-  const { gridSize, ...gridConfig } = useControls('Grid', {
-    gridSize: [10.5, 10.5],
-    cellSize: { value: 0.6, min: 0, max: 10, step: 0.1 },
-    cellThickness: { value: 1, min: 0, max: 5, step: 0.1 },
-    cellColor: '#6f6f6f',
-    sectionSize: { value: 3.3, min: 0, max: 10, step: 0.1 },
-    sectionThickness: { value: 1.5, min: 0, max: 5, step: 0.1 },
-    sectionColor: '#9d4b4b',
-    fadeDistance: { value: 25, min: 0, max: 100, step: 1 },
-    fadeStrength: { value: 1, min: 0, max: 1, step: 0.1 },
-    followCamera: false,
-    infiniteGrid: true,
-  });
+  const { gridSize, ...gridConfig } = useControls(
+    'Grid',
+    {
+      gridSize: [10.5, 10.5],
+      cellSize: { value: 0.6, min: 0, max: 10, step: 0.1 },
+      cellThickness: { value: 1, min: 0, max: 5, step: 0.1 },
+      cellColor: '#6f6f6f',
+      sectionSize: { value: 3.3, min: 0, max: 10, step: 0.1 },
+      sectionThickness: { value: 1.5, min: 0, max: 5, step: 0.1 },
+      sectionColor: '#9d4b4b',
+      fadeDistance: { value: 25, min: 0, max: 100, step: 1 },
+      fadeStrength: { value: 1, min: 0, max: 1, step: 0.1 },
+      followCamera: false,
+      infiniteGrid: true,
+    },
+    {
+      collapsed: true,
+    },
+  );
 
   const { envMap } = useControls('Environment', {
     envMap: {
@@ -40,7 +47,7 @@ export function Experience() {
 
   return (
     <>
-      <OrbitControls enableDamping enablePan />
+      <OrbitControls enableDamping enablePan target={new Vector3()} />
       <Perf openByDefault trackGPU={true} position="bottom-right" />
       <Grid position={[0, -0.01, 0]} args={gridSize} {...gridConfig} />
       <Show when={!!envMap}>

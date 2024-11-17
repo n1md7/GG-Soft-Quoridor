@@ -2,22 +2,23 @@ import { useFrame } from '@react-three/fiber';
 import { Nodes } from '@src/components/game/Board.tsx';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
-import { ForwardedRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import { Box3, BufferGeometry, Euler, Material, Mesh, MeshStandardMaterial, Vector3 } from 'three';
+import { useControls } from 'leva';
+import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
+import { BufferGeometry, Euler, Material, Mesh, Vector3 } from 'three';
 
 type Props = {
   geometry: BufferGeometry;
   position: [number, number, number];
   material: Material;
   rotation: [number, number, number];
-  wireframe: boolean;
+  wireframe?: boolean;
   castShadow?: boolean;
   receiveShadow?: boolean;
   name: string;
   scale: [number, number, number];
 };
 
-type PositionType = 'Horizontal' | 'Vertical';
+export type PositionType = 'Horizontal' | 'Vertical';
 const PositionMap: Record<PositionType, Euler> = {
   Horizontal: new Euler(0, Math.PI / 2, 0, 'XYZ'),
   Vertical: new Euler(0, 0, 0, 'XYZ'),
@@ -31,45 +32,43 @@ export type ForwardedWall = {
 };
 
 export const Wall = forwardRef(
-  ({ geometry, position, name, scale, material, wireframe = false }: Props, ref: ForwardedRef<ForwardedWall>) => {
+  ({ geometry, position, name, scale, material }: Props, ref: ForwardedRef<ForwardedWall>) => {
+    const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const mesh = useRef<Mesh>(null!);
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
     const rotateByAnimation = useRef<Tween<Euler>>(null!);
 
-    const getSize = () => new Box3().setFromObject(mesh.current).getSize(new Vector3());
-    const getTop = (position: Vector3) => {
-      const size = getSize();
-      console.info('size', size);
-
-      return new Vector3(position.x + size.x / 2, position.y + size.y / 2, position.z);
-    };
-
     const moveTo = (position: Vector3, rotation: PositionType) => {
-      moveToAnimation.current = new Tween(mesh.current.position)
-        .to(getTop(position))
-        .duration(1000)
+      moveUpAnimation.current = new Tween(mesh.current.position)
+        .to({ y: 1.5 })
+        .duration(300)
         .easing(Easing.Exponential.InOut)
         .onComplete(() => {
-          moveToAnimation.current.remove();
-          moveToAnimation.current = null!;
+          moveUpAnimation.current.remove();
+          moveUpAnimation.current = null!;
+
+          moveToAnimation.current = new Tween(mesh.current.position)
+            .to(position)
+            .duration(1000)
+            .easing(Easing.Exponential.InOut)
+            .onComplete(() => {
+              moveToAnimation.current.remove();
+              moveToAnimation.current = null!;
+            })
+            .start();
+
+          rotateByAnimation.current = new Tween(mesh.current.rotation)
+            .to({ y: PositionMap[rotation].y })
+            .duration(1000)
+            .easing(Easing.Exponential.InOut)
+            .onComplete(() => {
+              rotateByAnimation.current.remove();
+              rotateByAnimation.current = null!;
+            })
+            .start();
         })
         .start();
-
-      // rotateByAnimation.current = new Tween(mesh.current.rotation)
-      //   .to(PositionMap[rotation])
-      //   .duration(1000)
-      //   .easing(Easing.Exponential.InOut)
-      //   .onComplete(() => {
-      //     rotateByAnimation.current.remove();
-      //     rotateByAnimation.current = null!;
-      //   })
-      //   .start();
-      mesh.current.rotation.copy(PositionMap[rotation]);
     };
-
-    useEffect(() => {
-      if (mesh.current) (mesh.current.material as MeshStandardMaterial).wireframe = wireframe;
-    }, [material, mesh, wireframe]);
 
     useImperativeHandle(ref, () => {
       return {
@@ -79,9 +78,25 @@ export const Wall = forwardRef(
       };
     }, []);
 
+    useControls(
+      'Walls',
+      {
+        [name]: {
+          transient: false,
+          value: position,
+          step: 0.1,
+          onChange: ([x, y, z]: [number, number, number]) => {
+            mesh.current.position.set(x, y, z);
+          },
+        },
+      },
+      { collapsed: true },
+    );
+
     useFrame(() => {
       if (moveToAnimation.current) moveToAnimation.current.update();
       if (rotateByAnimation.current) rotateByAnimation.current.update();
+      if (moveUpAnimation.current) moveUpAnimation.current.update();
     });
 
     return (
