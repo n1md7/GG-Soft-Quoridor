@@ -31,7 +31,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
-          reactions: [eyes, rocket]
+          reactions: rocket
           comment-id: ${{ steps.commentLiveUrl.outputs.comment-id }}
 
   publish:
@@ -60,6 +60,7 @@ jobs:
       - name: Set Publish Directory
         id: publish_dir
         run: |
+          mkdir -p ${{ env.VITE_RELEASE_VERSION }}
           mv dist ${{ env.VITE_RELEASE_VERSION }}
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
