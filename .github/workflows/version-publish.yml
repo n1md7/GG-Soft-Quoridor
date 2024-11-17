@@ -30,6 +30,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        if: ${{ github.event_name == 'pull_request' }}
       - name: Use Bun runtime
         uses: oven-sh/setup-bun@v2
         with:
@@ -41,7 +42,7 @@ jobs:
           if [ "${{ github.event_name }}" == "release" ]; then
             echo "VITE_RELEASE_VERSION=${{ github.event.release.tag_name }}/" >> $GITHUB_ENV
           else
-            echo "VITE_RELEASE_VERSION=${{ github.ref_name }}/" >> $GITHUB_ENV
+            echo "VITE_RELEASE_VERSION=${{ github.head_ref }}/" >> $GITHUB_ENV
           fi
       - name: Build static files
         env:
