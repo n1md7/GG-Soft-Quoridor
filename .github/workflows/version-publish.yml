@@ -4,16 +4,42 @@ description: Build and deploy static files to GitHub Pages with branch versionin
 on:
   release:
     types: [created]
-  push:
+    push:
+      branches:
+        - '*' # Match all branches to enable versioning for each branch
+  pull_request:
     branches:
-      - '*' # Match all branches to enable versioning for each branch
+      - '*' # Also run on pull requests
 
 jobs:
+  comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Comment on Pull Request
+        id: commentLiveUrl
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          edit-mode: replace
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Live view is available at [Live](https://n1md7.github.io/GG-Soft-Quoridor/${{ github.head_ref }}/)
+      - name: Add reaction to comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          reactions: [eyes, rocket]
+          comment-id: ${{ steps.commentLiveUrl.outputs.comment-id }}
+
   publish:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+        if: ${{ github.event_name == 'pull_request' }}
       - name: Use Bun runtime
         uses: oven-sh/setup-bun@v2
         with:
@@ -25,7 +51,7 @@ jobs:
           if [ "${{ github.event_name }}" == "release" ]; then
             echo "VITE_RELEASE_VERSION=${{ github.event.release.tag_name }}/" >> $GITHUB_ENV
           else
-            echo "VITE_RELEASE_VERSION=${{ github.ref_name }}/" >> $GITHUB_ENV
+            echo "VITE_RELEASE_VERSION=${{ github.head_ref }}/" >> $GITHUB_ENV
           fi
       - name: Build static files
         env:
