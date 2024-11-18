@@ -86,7 +86,6 @@ jobs:
       - name: Build static files
         env:
           VITE_RELEASE_VERSION: ${{ env.VITE_RELEASE_VERSION }}
-          VITE_VERSION: ${{ env.VITE_RELEASE_VERSION }}
         run: bun run build:github
       - name: Copy files to release and root directory
         run: |

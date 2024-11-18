@@ -4,14 +4,10 @@ import glsl from 'vite-plugin-glsl';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from 'tailwindcss';
 import { cwd, env } from 'node:process';
-import { version } from './package.json';
 
 export default defineConfig(({ mode }) => {
   console.info(`Running in "${mode}" mode`);
   console.info(`Release version: ${env.VITE_RELEASE_VERSION}`);
-  console.info(`Package version: ${version}`);
-
-  env.VITE_VERSION = version;
 
   return {
     publicDir: 'public',
