@@ -25,12 +25,13 @@ bun run build:github # Builds the project for GitHub pages
 bun run preview      # Opens the project in the browser for the generated files
 ```
 
-You can run also `bun run buld` to build the project for production. This assumes that the root directory is the content
+You can run also `bun run build` to build the project for production. This assumes that the root directory is the
+content
 of the `dist` folder. While in GitHub pages, the root directory is the name of the repository.
 
 ## Release
 
-To release a new version you need to do the following:
+To release a new version, you need to do the following:
 
 1. Go to the releases and create a new tag.
 2. The tag should be in the format `vX.Y.Z` where `X.Y.Z` is the version number.
@@ -38,7 +39,8 @@ To release a new version you need to do the following:
 4. Select the tag you just created.
 5. Publish the release.
 6. The release will be automatically deployed to GitHub pages and will be available at
-   https://n1md7.github.io/GG-Soft-Quoridor/master.
+   https://n1md7.github.io/GG-Soft-Quoridor. However, the specific release will be available
+   at https://n1md7.github.io/GG-Soft-Quoridor/releases/vX.Y.Z.
 
 ## Contributing
 
