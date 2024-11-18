@@ -1,5 +1,4 @@
 name: Publish to GitHub with Versioning
-description: Build and deploy static files to GitHub Pages with branch versioning. It will create a new directory for each branch and release.
 
 on:
   release:
@@ -93,7 +92,7 @@ jobs:
         run: |
           mkdir -p ${{ env.VITE_RELEASE_VERSION }}
           cp -R dist/* ${{ env.VITE_RELEASE_VERSION }}
-          rm -rf master
+          mkdir master
           cp -R dist/* master/
           rm -rf dist
       - name: Deploy to GitHub Pages
