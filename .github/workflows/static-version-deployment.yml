@@ -92,8 +92,7 @@ jobs:
         run: |
           mkdir -p ${{ env.VITE_RELEASE_VERSION }}
           cp -R dist/* ${{ env.VITE_RELEASE_VERSION }}
-          mkdir master
-          cp -R dist/* master/
+          cp -R dist/* ./
           rm -rf dist
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
