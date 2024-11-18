@@ -83,15 +83,20 @@ jobs:
       - name: Set VITE_RELEASE_VERSION Environment Variable
         run: |
           echo "VITE_RELEASE_VERSION=${{ github.event.release.tag_name }}/" >> $GITHUB_ENV
-      - name: Build static files
+      - name: Build static files for release
         env:
           VITE_RELEASE_VERSION: ${{ env.VITE_RELEASE_VERSION }}
         run: bun run build:github
-      - name: Set Publish Directory
-        id: publish_dir
+      - name: Copy files to release directory
         run: |
           mkdir -p ${{ env.VITE_RELEASE_VERSION }}
           cp -R dist/* ${{ env.VITE_RELEASE_VERSION }}
+      - name: Build static files for master
+        env:
+          VITE_RELEASE_VERSION: '' # Empty string for master
+        run: bun run build:github
+      - name: Copy files to root directory
+        run: |
           cp -R dist/* ./
           rm -rf dist
       - name: Deploy to GitHub Pages
