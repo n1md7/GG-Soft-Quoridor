@@ -1,50 +1,53 @@
-# React + TypeScript + Vite
+# Quoridor 3d
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+This is a 3D version of the game Quoridor. The game is played 9x9 board with 3D walls. The goal of the game is to reach
+the other side of the board. The player can move in 3D space and place walls to block the opponent.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Development
 
-## Expanding the ESLint configuration
+### How to setup
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+We are using a Bun runtime for this project. To install the required dependencies, run the following command:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+bun install # Installs the dependencies
+bun run dev # Automatically starts the server
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Deployment
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+The project is deployed on GitHub pages. To deploy the project, run the following command:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+bun run build:github # Builds the project for GitHub pages
+bun run preview      # Opens the project in the browser for the generated files
 ```
+
+You can run also `bun run buld` to build the project for production. This assumes that the root directory is the content
+of the `dist` folder. While in GitHub pages, the root directory is the name of the repository.
+
+## Release
+
+To release a new version you need to do the following:
+
+1. Go to the releases and create a new tag.
+2. The tag should be in the format `vX.Y.Z` where `X.Y.Z` is the version number.
+3. The release should have a title and a description.
+4. Select the tag you just created.
+5. Publish the release.
+6. The release will be automatically deployed to GitHub pages and will be available at
+   https://n1md7.github.io/GG-Soft-Quoridor/master.
+
+## Contributing
+
+To contribute to the project, you need to do the following:
+
+1. Find the issue you want to work on.
+2. Ask if you can work on it.
+3. Take the issue and create a new branch.
+4. Work on the issue.
+5. Create a pull request.
+6. Wait for the pull request to be reviewed.
+7. Merge the pull request.
