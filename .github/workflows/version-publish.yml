@@ -62,7 +62,7 @@ jobs:
         with:
           keep_files: 'true'
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ env.VITE_RELEASE_VERSION }}
+          publish_dir: .
           publish_branch: github-static-files
 
   publish-release-version:
