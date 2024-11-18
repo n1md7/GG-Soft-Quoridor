@@ -57,12 +57,13 @@ jobs:
           mkdir -p ${{ env.VITE_RELEASE_VERSION }}
           mv dist ${{ env.VITE_RELEASE_VERSION }}
           ls -la
+          ls -la ${{ env.VITE_RELEASE_VERSION }}
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           keep_files: 'true'
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: ${{ env.VITE_RELEASE_VERSION }}
           publish_branch: github-static-files
 
   publish-release-version:
