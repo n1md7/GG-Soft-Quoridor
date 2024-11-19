@@ -29,12 +29,17 @@ export type Props = {
   material?: Material | Material[];
   scale?: Vector3;
   handleClick: (coords: CoordsWitPosType) => void;
+  handleOver: (coords: CoordsWitPosType) => void;
+  handleOut: () => void;
 };
 
 const defaultColor = 'GRAY';
 
 export const Block = forwardRef(
-  ({ geometry, position, name, scale, handleClick }: Props, ref: ForwardedRef<ForwardedBlock>) => {
+  (
+    { geometry, position, name, scale, handleClick, handleOver, handleOut }: Props,
+    ref: ForwardedRef<ForwardedBlock>,
+  ) => {
     const { getCoordinatesByBlockName } = useGrid();
     const { row, col } = useMemo(() => getCoordinatesByBlockName(name), [getCoordinatesByBlockName, name]);
 
@@ -89,8 +94,12 @@ export const Block = forwardRef(
           if (hoveredFace.current === faceIndex) return;
           hoveredFace.current = faceIndex;
           colorRef.current.color.setColorName(colorMap.current[faceIndex] || defaultColor);
+          handleOver({ row, col, pos: faceIdPositionMap.current[faceIndex] });
         }}
-        onPointerOut={() => colorRef.current.color.setColorName(defaultColor)}
+        onPointerOut={() => {
+          colorRef.current.color.setColorName(defaultColor);
+          handleOut();
+        }}
         geometry={geometry}
         position={position}
         scale={scale}
