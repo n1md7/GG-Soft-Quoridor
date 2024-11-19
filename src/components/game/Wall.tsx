@@ -19,7 +19,11 @@ type Props = {
 };
 
 export type PositionType = 'Horizontal' | 'Vertical';
-const PositionMap: Record<PositionType, Euler> = {
+export type MoveToParams = {
+  position: Vector3;
+  rotation: PositionType;
+};
+export const PositionMap: Record<PositionType, Euler> = {
   Horizontal: new Euler(0, Math.PI / 2, 0, 'XYZ'),
   Vertical: new Euler(0, 0, 0, 'XYZ'),
 };
@@ -28,7 +32,8 @@ export type WallName = keyof ExtractPropertiesStartingWith<Nodes, 'Wall'>;
 export type ForwardedWall = {
   mesh: Mesh;
   name: WallName;
-  moveTo: (position: Vector3, rotation: PositionType) => void;
+  scale: Vector3;
+  moveTo: (params: MoveToParams) => void;
 };
 
 export const Wall = forwardRef(
@@ -38,7 +43,7 @@ export const Wall = forwardRef(
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
     const rotateByAnimation = useRef<Tween<Euler>>(null!);
 
-    const moveTo = (position: Vector3, rotation: PositionType) => {
+    const moveTo = ({ position, rotation }: MoveToParams) => {
       moveUpAnimation.current = new Tween(mesh.current.position)
         .to({ y: 1.5 })
         .duration(300)
@@ -74,6 +79,7 @@ export const Wall = forwardRef(
       return {
         mesh: mesh.current,
         name: mesh.current.name as WallName,
+        scale: mesh.current.scale,
         moveTo,
       };
     }, []);
