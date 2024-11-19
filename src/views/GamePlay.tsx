@@ -9,9 +9,8 @@ type Props = {
   back: () => void;
 };
 
-export function Gameplay(props: Props) {
+export function Gameplay(props: Readonly<Props>) {
   const { ErrorBoundary } = useErrorBoundary();
-
   return (
     <ErrorBoundary>
       <Canvas

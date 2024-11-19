@@ -3,15 +3,17 @@ import LogoImg from '@assets/quoridor-logo.png';
 import { useProgress } from '@react-three/drei';
 import { ProgressBar } from '@src/components/ui/ProgressBar.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
+import GameSettingButtons from '@src/components/ui/GameSettingButtons.tsx';
 
 type Props = {
   next: () => void;
 };
-export function InitialView({ next }: Props) {
+export function InitialView({ next }: Readonly<Props>) {
   const { loaded, total } = useProgress();
 
   return (
     <div className="initial-view">
+      <GameSettingButtons />
       <div className="logo">
         <img src={LogoImg} alt="Quoridor 3D" />
       </div>

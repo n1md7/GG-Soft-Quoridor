@@ -5,7 +5,7 @@ import { LeaderBoard } from '@src/components/ui/LeaderBoard';
 type Props = {
   next: () => void;
 };
-export function LobbyView({ next }: Props) {
+export function LobbyView({ next }: Readonly<Props>) {
   return (
     <div className="lobby-view">
       <div className="main-lobby-container">
