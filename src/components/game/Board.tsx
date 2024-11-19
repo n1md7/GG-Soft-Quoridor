@@ -193,8 +193,6 @@ export const Model = (props: Props) => {
   }, []);
 
   const handleBlockClick = (coords: CoordsWitPosType) => {
-    console.info('Block clicked', coords);
-
     const wall = arrayOfWalls.current.shift();
     if (!wall) return console.info('Out of walls');
 
@@ -207,8 +205,6 @@ export const Model = (props: Props) => {
   };
 
   const handleBlockOver = (coords: CoordsWitPosType) => {
-    console.info('Block highlighted', coords);
-
     const targetBlock = grid[coords.row][coords.col];
     if (!targetBlock) {
       throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
@@ -234,7 +230,6 @@ export const Model = (props: Props) => {
   });
 
   useEffect(() => {
-    console.info(grid);
     if (placeholder.current) {
       placeholder.current.mesh.scale.copy(indexedWalls.current.Wall000.scale);
     }
