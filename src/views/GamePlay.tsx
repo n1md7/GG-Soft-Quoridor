@@ -1,7 +1,6 @@
 import { AdaptiveDpr } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Experience } from '@src/components/game/Experience.tsx';
-import { useErrorBoundary } from 'use-error-boundary';
 
 import '@styles/gameplay-view.scss';
 
@@ -9,11 +8,9 @@ type Props = {
   back: () => void;
 };
 
-export function Gameplay(props: Props) {
-  const { ErrorBoundary } = useErrorBoundary();
-
+export function Gameplay(props: Readonly<Props>) {
   return (
-    <ErrorBoundary>
+    <>
       <Canvas
         shadows
         camera={{
@@ -36,6 +33,6 @@ export function Gameplay(props: Props) {
           </button>
         </div>
       </div>
-    </ErrorBoundary>
+    </>
   );
 }

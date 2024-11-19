@@ -1,18 +1,17 @@
+import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import { Block, BlockName, CoordsWitPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
-import { ForwardedPlaceholder, Placeholder } from '@src/components/game/Placeholder.tsx';
 import { ForwardedWall, Wall, WallName } from '@src/components/game/Wall.tsx';
 import { useAnimation } from '@src/components/hooks/useAnimation.ts';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
 import { usePosition } from '@src/components/hooks/usePosition.ts';
 import { setWireframe } from '@src/components/utils/material.util.ts';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
-import { useCallback, useEffect, useRef } from 'react';
-import { useGLTF } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
 import { useControls } from 'leva';
-import { GLTF } from 'three-stdlib';
+import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Mesh } from 'three';
+import { GLTF } from 'three-stdlib';
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -99,6 +98,7 @@ export type GLTFResult = GLTF & {
     Block079: THREE.Mesh;
     Block080: THREE.Mesh;
     Wall000: THREE.Mesh;
+    Container000: THREE.Mesh;
     Wall001: THREE.Mesh;
     Wall002: THREE.Mesh;
     Wall003: THREE.Mesh;
@@ -109,6 +109,7 @@ export type GLTFResult = GLTF & {
     Wall008: THREE.Mesh;
     Wall009: THREE.Mesh;
     Wall010: THREE.Mesh;
+    Container001: THREE.Mesh;
     Wall011: THREE.Mesh;
     Wall012: THREE.Mesh;
     Wall013: THREE.Mesh;
@@ -122,8 +123,6 @@ export type GLTFResult = GLTF & {
     Plate000: THREE.Mesh;
     Pawn000: THREE.Mesh;
     Pawn001: THREE.Mesh;
-    Container000: THREE.Mesh;
-    Container001: THREE.Mesh;
   };
   materials: {
     PlatformMaterial: THREE.MeshStandardMaterial;
@@ -147,8 +146,6 @@ export const Model = (props: Props) => {
 
   const { grid, mapByName } = useGrid();
   const { floatOneByCos } = useAnimation();
-
-  const placeholder = useRef<ForwardedPlaceholder>(null!);
 
   const indexedPawns = useRef<Record<PawnNames, Mesh>>({} as Record<PawnNames, Mesh>);
   const arrayOfPawns = useRef<Mesh[]>([] as Mesh[]);
@@ -193,6 +190,8 @@ export const Model = (props: Props) => {
   }, []);
 
   const handleBlockClick = (coords: CoordsWitPosType) => {
+    console.info('Block clicked', coords);
+
     const wall = arrayOfWalls.current.shift();
     if (!wall) return console.info('Out of walls');
 
@@ -201,21 +200,8 @@ export const Model = (props: Props) => {
       throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
     }
 
-    wall.moveTo(getDestinationFromCoords(coords));
-  };
-
-  const handleBlockOver = (coords: CoordsWitPosType) => {
-    const targetBlock = grid[coords.row][coords.col];
-    if (!targetBlock) {
-      throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
-    }
-
-    placeholder.current.mesh.visible = true;
-    placeholder.current.moveTo(getDestinationFromCoords(coords));
-  };
-
-  const handleBlockOut = () => {
-    placeholder.current.mesh.visible = false;
+    const destination = getDestinationFromCoords(coords);
+    wall.moveTo(destination.position, destination.rotation);
   };
 
   useControls('Board', {
@@ -230,10 +216,8 @@ export const Model = (props: Props) => {
   });
 
   useEffect(() => {
-    if (placeholder.current) {
-      placeholder.current.mesh.scale.copy(indexedWalls.current.Wall000.scale);
-    }
-  }, [placeholder]);
+    console.info(grid);
+  }, []);
 
   useFrame((state) => {
     if (!indexedBlocks.current.Block000) return;
@@ -246,7 +230,6 @@ export const Model = (props: Props) => {
 
   return (
     <group {...props} dispose={null}>
-      <Placeholder ref={placeholder} />
       <mesh
         name="Platform"
         castShadow
@@ -259,8 +242,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block000"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -270,8 +251,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block001"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -281,8 +260,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block002"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -292,8 +269,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block003"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -303,8 +278,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block004"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -314,8 +287,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block005"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -325,8 +296,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block006"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -336,8 +305,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block007"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -347,8 +314,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block008"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -358,8 +323,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block009"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -369,8 +332,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block010"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -380,8 +341,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block011"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -391,8 +350,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block012"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -402,8 +359,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block013"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -413,8 +368,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block014"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -424,8 +377,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block015"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -435,8 +386,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block016"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -446,8 +395,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block017"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -457,8 +404,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block018"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -468,8 +413,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block019"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -479,8 +422,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block020"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -490,8 +431,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block021"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -501,8 +440,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block022"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -512,8 +449,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block023"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -523,8 +458,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block024"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -534,8 +467,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block025"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -545,8 +476,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block026"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -556,8 +485,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block027"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -567,8 +494,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block028"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -578,8 +503,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block029"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -589,8 +512,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block030"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -600,8 +521,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block031"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -611,8 +530,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block032"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -622,8 +539,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block033"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -633,8 +548,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block034"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -644,8 +557,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block035"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -655,8 +566,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block036"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -666,8 +575,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block037"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -677,8 +584,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block038"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -688,8 +593,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block039"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -699,8 +602,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block040"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -710,8 +611,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block041"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -721,8 +620,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block042"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -732,8 +629,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block043"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -743,8 +638,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block044"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -754,8 +647,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block045"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -765,8 +656,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block046"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -776,8 +665,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block047"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -787,8 +674,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block048"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -798,8 +683,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block049"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -809,8 +692,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block050"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -820,8 +701,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block051"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -831,8 +710,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block052"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -842,8 +719,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block053"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -853,8 +728,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block054"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -864,8 +737,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block055"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -875,8 +746,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block056"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -886,8 +755,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block057"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -897,8 +764,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block058"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -908,8 +773,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block059"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -919,8 +782,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block060"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -930,8 +791,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block061"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -941,8 +800,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block062"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -952,8 +809,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block063"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -963,8 +818,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block064"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -974,8 +827,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block065"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -985,8 +836,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block066"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -996,8 +845,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block067"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1007,8 +854,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block068"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1018,8 +863,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block069"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1029,8 +872,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block070"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1040,8 +881,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block071"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1051,8 +890,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block072"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1062,8 +899,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block073"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1073,8 +908,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block074"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1084,8 +917,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block075"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1095,8 +926,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block076"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1106,8 +935,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block077"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1117,8 +944,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block078"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1128,8 +953,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block079"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
@@ -1139,8 +962,6 @@ export const Model = (props: Props) => {
       <Block
         ref={blocksRefCallback}
         handleClick={handleBlockClick}
-        handleOver={handleBlockOver}
-        handleOut={handleBlockOut}
         name="Block080"
         geometry={nodes.Block000.geometry}
         material={materials.BlockMaterial}
