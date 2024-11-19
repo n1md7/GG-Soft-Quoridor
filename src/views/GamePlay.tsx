@@ -8,7 +8,7 @@ type Props = {
   back: () => void;
 };
 
-export function Gameplay(props: Props) {
+export function Gameplay(props: Readonly<Props>) {
   return (
     <>
       <Canvas
