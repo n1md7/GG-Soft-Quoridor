@@ -40,7 +40,7 @@ To release a new version, you need to do the following:
 5. Publish the release.
 6. The release will be automatically deployed to GitHub pages and will be available at
    https://n1md7.github.io/GG-Soft-Quoridor. However, the specific release will be available
-   at https://n1md7.github.io/GG-Soft-Quoridor/releases/vX.Y.Z.
+   at https://n1md7.github.io/GG-Soft-Quoridor/vX.Y.Z.
 
 ## Contributing
 
