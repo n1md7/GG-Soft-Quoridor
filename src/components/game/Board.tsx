@@ -145,7 +145,7 @@ export const Model = (props: Props) => {
   const { getDestinationFromCoords } = usePosition();
   const { nodes, materials } = useGLTF('./3D/board-v1.4.glb') as GLTFResult;
 
-  const { grid, mapByName } = useGrid();
+  const { grid, mapByName, canAddWall, addWallByCoords } = useGrid();
   const { floatOneByCos } = useAnimation();
 
   const placeholder = useRef<ForwardedPlaceholder>(null!);
@@ -192,31 +192,44 @@ export const Model = (props: Props) => {
     arrayOfBlocks.current.forEach((block) => setWireframe(value, block.material));
   }, []);
 
-  const handleBlockClick = (coords: CoordsWitPosType) => {
-    const wall = arrayOfWalls.current.shift();
-    if (!wall) return console.info('Out of walls');
+  const handleBlockClick = useCallback(
+    (coords: CoordsWitPosType) => {
+      console.info(coords);
+      const wall = arrayOfWalls.current.shift();
+      if (!wall) return console.info('Out of walls');
 
-    const targetBlock = grid[coords.row][coords.col];
-    if (!targetBlock) {
-      throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
-    }
+      const targetBlock = grid[coords.row][coords.col];
+      if (!targetBlock) {
+        throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
+      }
 
-    wall.moveTo(getDestinationFromCoords(coords));
-  };
+      if (!canAddWall(coords)) return console.info('Cannot add wall to the edge');
 
-  const handleBlockOver = (coords: CoordsWitPosType) => {
-    const targetBlock = grid[coords.row][coords.col];
-    if (!targetBlock) {
-      throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
-    }
+      addWallByCoords(wall, coords);
+      console.info(grid);
+      wall.moveTo(getDestinationFromCoords(coords));
+    },
+    [arrayOfWalls, getDestinationFromCoords, grid],
+  );
 
-    placeholder.current.mesh.visible = true;
-    placeholder.current.moveTo(getDestinationFromCoords(coords));
-  };
+  const handleBlockOver = useCallback(
+    (coords: CoordsWitPosType) => {
+      const targetBlock = grid[coords.row][coords.col];
+      if (!targetBlock) {
+        throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
+      }
 
-  const handleBlockOut = () => {
-    placeholder.current.mesh.visible = false;
-  };
+      canAddWall(coords) ? placeholder.current.colorDefault() : placeholder.current.colorDanger();
+
+      placeholder.current.show();
+      placeholder.current.moveTo(getDestinationFromCoords(coords));
+    },
+    [grid, placeholder],
+  );
+
+  const handleBlockOut = useCallback(() => {
+    placeholder.current.hide();
+  }, [placeholder]);
 
   useControls('Board', {
     wireframe: {
@@ -246,7 +259,7 @@ export const Model = (props: Props) => {
 
   return (
     <group {...props} dispose={null}>
-      <Placeholder ref={placeholder} />
+      <Placeholder ref={placeholder} defaultColor={new THREE.Color(0xffff00)} dangerColor={new THREE.Color(0xff0000)} />
       <mesh
         name="Platform"
         castShadow
