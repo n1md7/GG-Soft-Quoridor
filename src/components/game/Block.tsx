@@ -40,10 +40,9 @@ export const Block = forwardRef(
     { geometry, position, name, scale, handleClick, handleOver, handleOut }: Props,
     ref: ForwardedRef<ForwardedBlock>,
   ) => {
-    const { getCoordinatesByBlockName } = useGrid();
-    const { row, col } = useMemo(() => getCoordinatesByBlockName(name), [getCoordinatesByBlockName, name]);
+    const { getCoordinatesByName } = useGrid();
+    const { row, col } = useMemo(() => getCoordinatesByName(name), [getCoordinatesByName, name]);
 
-    const hoveredFace = useRef<number>(null!);
     const colorRef = useRef<MeshStandardMaterial>(null!);
     const colorMap = useRef<Record<number, Colors>>({
       8: 'RED',
@@ -66,11 +65,11 @@ export const Block = forwardRef(
         material: colorRef.current,
         name: mesh.current.name as BlockName,
         getCoordinates: () => ({ row, col }),
-        changeColor: (color: 'RED' | 'GREEN' | 'BLUE' | 'PURPLE') => {
+        changeColor: (color: Colors) => {
           colorRef.current.color.setColorName(color);
         },
       };
-    }, []);
+    }, [col, row]);
 
     return (
       <mesh
@@ -78,8 +77,10 @@ export const Block = forwardRef(
         name={name}
         castShadow={true}
         receiveShadow={true}
-        onClick={() => {
-          const pos = faceIdPositionMap.current[hoveredFace.current];
+        onClick={({ faceIndex }) => {
+          if (!faceIndex) return;
+
+          const pos = faceIdPositionMap.current[faceIndex];
 
           if (!pos) return; // Not a valid face, we don't care side faces
 
@@ -91,10 +92,13 @@ export const Block = forwardRef(
         }}
         onPointerMove={({ faceIndex }) => {
           if (!faceIndex) return;
-          if (hoveredFace.current === faceIndex) return;
-          hoveredFace.current = faceIndex;
+
+          const pos = faceIdPositionMap.current[faceIndex];
+
+          if (!pos) return; // Not a valid face, we don't care side faces
+          // Fixme: here
           colorRef.current.color.setColorName(colorMap.current[faceIndex] || defaultColor);
-          handleOver({ row, col, pos: faceIdPositionMap.current[faceIndex] });
+          handleOver({ row, col, pos });
         }}
         onPointerOut={() => {
           colorRef.current.color.setColorName(defaultColor);
