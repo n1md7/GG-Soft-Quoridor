@@ -3,18 +3,28 @@ import { Show } from '@src/components/utils/Show.tsx';
 
 export function ProgressBar() {
   const { progress, loaded, total, errors } = useProgress();
-
   return (
     <div className="progress-container">
-      <div className="progress-count">{progress.toFixed(2)}%</div>
+      <div className="progress-count">
+        <Show when={loaded !== total} fallback={'Done'}>
+          {progress.toFixed(2)}%
+        </Show>
+      </div>
       <div className="progress">
         <div className="bar" style={{ width: progress + '%' }}></div>
         <div className="info">
-          <p>
-            <Show when={loaded !== total} fallback="Click Enter so start">
+          <Show
+            when={loaded !== total}
+            fallback={
+              <p className="blink-text">
+                Click <b>Enter</b> to start
+              </p>
+            }
+          >
+            <p>
               Downloading assets {loaded} of {total}
-            </Show>
-          </p>
+            </p>
+          </Show>
         </div>
         <Show when={errors.length > 0}>
           <div className="errors">
