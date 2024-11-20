@@ -95,6 +95,7 @@ input[type='number']::-webkit-inner-spin-button {
   background-size: cover;
   background-position: center;
   box-shadow: inset 0 0 0 1px #e9e9e9;
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: inset 0 0 0 1px #e9e9e9;
@@ -119,9 +120,11 @@ input[type='number']::-webkit-inner-spin-button {
   align-items: center;
   color: white;
   gap: 15px;
+
   > label {
     position: relative;
   }
+
   > .input-mode {
     z-index: 1;
   }
@@ -144,6 +147,7 @@ input[type='number']::-webkit-inner-spin-button {
   transition:
     background 0.3s ease,
     transform 0.3s ease;
+
   &::after {
     content: '';
     width: 5px;
@@ -153,6 +157,7 @@ input[type='number']::-webkit-inner-spin-button {
     left: -5px;
     border-radius: 3px 0 0 3px;
   }
+
   &::before {
     content: '';
     width: 5px;
@@ -169,9 +174,11 @@ input[type='radio']:checked + .input-mode {
   background-size: cover;
   background-position: center;
   transform: scale(1.05);
+
   &::after {
     background: #83ff00;
   }
+
   &::before {
     background: #83ff00;
   }

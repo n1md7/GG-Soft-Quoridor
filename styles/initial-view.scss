@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
+
   .title {
     font-family: 'Kanit', sans-serif;
     font-weight: 700;
@@ -11,22 +12,26 @@
     font-size: 2.5rem;
     color: #333;
   }
+
   div.logo {
     margin-top: 2rem;
     height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
+
     img {
       width: 20rem;
       height: auto;
     }
   }
+
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .description {
     font-family: 'Inter', sans-serif;
     font-optical-sizing: auto;
@@ -34,6 +39,7 @@
     text-align: center;
     color: #d7d7d7;
   }
+
   .progress-container {
     height: 4rem;
     margin-top: 2rem;
@@ -43,17 +49,20 @@
     align-items: center;
     width: 100%;
   }
+
   .progress-count {
     margin: 10px 0;
     color: #d7d7d7;
     font-weight: bold;
     font-family: 'Inter', sans-serif;
   }
+
   .progress {
     width: 100%;
     background-color: #ddd;
     border-radius: 10px;
     height: 1rem;
+
     .bar {
       height: 1rem;
       background: rgb(138, 76, 255);
@@ -67,6 +76,7 @@
       line-height: 2.5rem;
       border-radius: 10px;
     }
+
     .info {
       font-family: 'Inter', sans-serif;
       font-style: normal;
@@ -75,6 +85,7 @@
       margin: 10px 0;
       color: #d7d7d7;
     }
+
     .errors {
       padding: 8px;
       font-family: 'Inter', sans-serif;
@@ -84,6 +95,7 @@
       color: #ff0000;
     }
   }
+
   .game-settings-container {
     display: flex;
     align-items: center;
@@ -115,16 +127,34 @@
           box-shadow 0.2s,
           background-color 0.2s;
       }
+
       .game-settings {
         background-image: url('@assets/game-settings-icon.svg');
         background-size: 100%;
         background-position: left;
       }
+
       .volume-settings {
         background-image: url('@assets/volume-icons.svg');
         background-size: 200%;
         background-position: right;
       }
     }
+  }
+}
+
+.blink-text {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }

@@ -4,11 +4,13 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
+
   .main-lobby-container {
     display: flex;
     flex-wrap: wrap;
     gap: 70px;
   }
+
   .main-container {
     height: 500px;
     min-width: 420px;
@@ -16,16 +18,19 @@
     position: relative;
     display: flex;
     align-items: flex-start;
+
     &.setting-board {
       .input-container:first-of-type {
         position: relative;
         top: 50px;
       }
+
       .parallelograms:first-of-type {
         position: absolute;
         top: 35px;
         padding: 15px;
         height: max-content;
+
         .item {
           width: 40px;
           height: 20px;
@@ -33,10 +38,12 @@
       }
     }
   }
+
   .wrapper-outline {
     padding: 10px;
     border: 1px solid rgb(55, 88, 93);
     border-radius: 10px;
+
     > .wrapper {
       height: 500px;
       min-width: 420px;
@@ -47,6 +54,7 @@
       clip-path: polygon(0 0, 100% 0, 100% 100%, 68% 100%, 65% 96%, 34% 96%, 30% 100%, 0 100%);
     }
   }
+
   .wrapper-border {
     background-color: #121625;
     width: 100%;
@@ -56,10 +64,12 @@
       0 16px 0 rgba(0, 0, 0, 0.3);
     height: 100%;
   }
+
   .trapezoid {
     width: 270px;
     height: 50px;
     clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
+
     &.settings {
       position: relative;
       background: linear-gradient(to right, #bb77fb 1%, #7e4cf5 30%, #3850bc 80%);
@@ -69,6 +79,7 @@
       justify-content: center;
       color: white;
     }
+
     &.leaderboard {
       position: relative;
       background: linear-gradient(to right, #b2f1e8, #f7ffec);
@@ -77,21 +88,25 @@
       justify-content: center;
     }
   }
+
   .main-trapezoid {
     justify-items: center;
     position: absolute;
     width: 100%;
     z-index: 1;
+
     &.for-leaderboard {
       top: -40px;
     }
   }
+
   .minis {
     display: flex;
     justify-content: space-between;
     position: relative;
     top: -20px;
     width: 350px;
+
     > .mini-trapezoid {
       width: 70px;
       height: 20px;
@@ -99,6 +114,7 @@
       background: #00e0ea;
     }
   }
+
   .sides-container {
     display: flex;
     justify-content: space-between;
@@ -107,15 +123,18 @@
     width: 100%;
     padding: 5px 30px;
   }
+
   .side {
     width: 40px;
     height: 75px;
     clip-path: polygon(0% 0%, 100% 30%, 100% 100%, 0% 100%);
     background: #8a4cff;
   }
+
   .flip {
     transform: scaleX(-1);
   }
+
   .parallelograms {
     position: absolute;
     bottom: 0;
@@ -123,6 +142,7 @@
     justify-content: space-between;
     width: 100%;
     padding: 10px 75px;
+
     > .item {
       background-image: url('@assets/parallelogram.svg');
       width: 60px;
@@ -130,16 +150,20 @@
       background-repeat: no-repeat;
     }
   }
+
   .lens-container {
     height: 90px;
     min-width: 100%;
     position: absolute;
     overflow: hidden;
+
     &.top {
       top: 9px;
+
       > .eclipse {
         top: -5px;
       }
+
       > .lens {
         left: 100px;
         top: -60px;
@@ -147,14 +171,17 @@
         height: 100px;
       }
     }
+
     &.bottom {
       bottom: 0;
       overflow: visible;
+
       > .eclipse {
         bottom: 40px;
         min-width: 100%;
         clip-path: ellipse(32% 10% at 50% 50%);
       }
+
       > .lens {
         right: 140px;
         bottom: 0;
@@ -169,6 +196,7 @@
           hsl(0deg 0% 100% / 98%) 50%,
           transparent 0%
         );
+
         &::before {
           width: 110px;
           height: 100px;
@@ -178,6 +206,7 @@
       }
     }
   }
+
   .lens {
     position: absolute;
     border-radius: 100%;
@@ -192,6 +221,7 @@
     );
     filter: blur(8px);
     z-index: 1;
+
     &::before {
       content: '';
       display: block;
@@ -205,6 +235,7 @@
       z-index: 1;
     }
   }
+
   .eclipse {
     height: 15px;
     min-width: 100%;
@@ -219,30 +250,36 @@
     z-index: 15;
     position: absolute;
   }
+
   .header {
     font-family: 'Corporation-Italic', sans-serif;
     font-size: 24px;
     text-transform: uppercase;
   }
+
   .leaderboard {
     padding: 20px;
   }
+
   .leaderboard-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 3px solid #1f2941;
     padding: 5px 0;
+
     div.title {
       color: #00e0ea;
       font-size: 9px;
       text-transform: uppercase;
       letter-spacing: 2px;
     }
+
     > .player-container {
       display: flex;
       align-items: center;
       gap: 5px;
+
       > .rank {
         background-image: url('@assets/rank-icons.svg');
         width: 35px;
@@ -255,6 +292,7 @@
         font-size: 15px;
         font-weight: bold;
       }
+
       > .player-icon {
         display: flex;
         justify-content: center;
@@ -264,9 +302,11 @@
         background-repeat: no-repeat;
         background-size: 200%;
       }
+
       > .name-details {
         display: flex;
         flex-direction: column;
+
         > .player-name {
           color: #fff;
           font-weight: 900;
@@ -275,10 +315,12 @@
         }
       }
     }
+
     > .score-container {
       display: flex;
       flex-direction: row;
       align-items: center;
+
       > .arrow {
         height: 10px;
         width: 10px;
@@ -286,10 +328,12 @@
         clip-path: polygon(0 0, 0% 100%, 100% 50%);
         margin: 15px 5px 0 0;
       }
+
       > .score-details {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+
         > .player-score {
           color: #fff;
           font-family: 'Caprasimo', sans-serif;
@@ -299,9 +343,11 @@
       }
     }
   }
+
   .top {
     background-position: left;
   }
+
   .low {
     background-position: right;
   }
