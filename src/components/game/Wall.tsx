@@ -38,8 +38,8 @@ export type ForwardedWall = {
 
 export const Wall = forwardRef(
   ({ geometry, position, name, scale, material }: Props, ref: ForwardedRef<ForwardedWall>) => {
-    const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const mesh = useRef<Mesh>(null!);
+    const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
     const rotateByAnimation = useRef<Tween<Euler>>(null!);
 
