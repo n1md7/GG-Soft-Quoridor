@@ -1,18 +1,19 @@
-import { Block, BlockName, CoordsWitPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
+import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { Block, BlockName, CoordsWithPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
+import { ForwardedPawn, Pawn, PawnName } from '@src/components/game/Pawn.tsx';
 import { ForwardedPlaceholder, Placeholder } from '@src/components/game/Placeholder.tsx';
 import { ForwardedWall, Wall, WallName } from '@src/components/game/Wall.tsx';
 import { useAnimation } from '@src/components/hooks/useAnimation.ts';
+import { useClickMode } from '@src/components/hooks/useClickMode.ts';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
-import { usePosition } from '@src/components/hooks/usePosition.ts';
+import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
+import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
 import { setWireframe } from '@src/components/utils/material.util.ts';
-import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
-import { useCallback, useEffect, useRef } from 'react';
-import { useGLTF } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
 import { useControls } from 'leva';
-import { GLTF } from 'three-stdlib';
+import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { Mesh } from 'three';
+import { GLTF } from 'three-stdlib';
 
 export type GLTFResult = GLTF & {
   nodes: {
@@ -136,28 +137,34 @@ export type GLTFResult = GLTF & {
   };
 };
 export type Nodes = GLTFResult['nodes'];
-export type PawnNames = keyof ExtractPropertiesStartingWith<Nodes, 'Pawn'>;
 export type Props = {
   a?: number;
 };
 
 export const Model = (props: Props) => {
-  const { getDestinationFromCoords } = usePosition();
+  const wallPosition = useWallPosition();
+  const pawnPosition = usePawnPosition();
+
+  const { isPawnMode, setWallMode, toggleMode } = useClickMode();
+
   const { nodes, materials } = useGLTF('./3D/board-v1.4.glb') as GLTFResult;
 
-  const { grid, mapByName } = useGrid();
+  const { grid, mapByName, canAddWall, addWallByCoords } = useGrid();
   const { floatOneByCos } = useAnimation();
 
   const placeholder = useRef<ForwardedPlaceholder>(null!);
 
-  const indexedPawns = useRef<Record<PawnNames, Mesh>>({} as Record<PawnNames, Mesh>);
-  const arrayOfPawns = useRef<Mesh[]>([] as Mesh[]);
+  const indexedPawns = useRef<Record<PawnName, ForwardedPawn>>({} as Record<PawnName, ForwardedPawn>);
+  const arrayOfPawns = useRef<ForwardedPawn[]>([] as ForwardedPawn[]);
   const arrayOfPawnAnimations = useRef<ReturnType<typeof floatOneByCos>[]>([]);
-  const pawnsRefCallback = useCallback((pawn: Mesh) => {
-    indexedPawns.current[pawn.name as PawnNames] = pawn;
-    arrayOfPawns.current.push(pawn);
-    arrayOfPawnAnimations.current.push(floatOneByCos(pawn));
-  }, []);
+  const pawnsRefCallback = useCallback(
+    (pawn: ForwardedPawn) => {
+      indexedPawns.current[pawn.name] = pawn;
+      arrayOfPawns.current.push(pawn);
+      arrayOfPawnAnimations.current.push(floatOneByCos(pawn.mesh));
+    },
+    [floatOneByCos],
+  );
 
   const indexedBlocks = useRef<Record<BlockName, ForwardedBlock>>({} as Record<BlockName, ForwardedBlock>);
   const arrayOfBlocks = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
@@ -192,31 +199,65 @@ export const Model = (props: Props) => {
     arrayOfBlocks.current.forEach((block) => setWireframe(value, block.material));
   }, []);
 
-  const handleBlockClick = (coords: CoordsWitPosType) => {
-    const wall = arrayOfWalls.current.shift();
-    if (!wall) return console.info('Out of walls');
+  const handleBlockClick = useCallback(
+    (coords: CoordsWithPosType) => {
+      if (isPawnMode()) {
+        // TODO: move pawn to the point
+        indexedPawns.current.Pawn000.moveTo(pawnPosition.getDestinationFromCoords(coords));
 
-    const targetBlock = grid[coords.row][coords.col];
-    if (!targetBlock) {
-      throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
-    }
+        return setWallMode(); // Activate wall mode
+      }
 
-    wall.moveTo(getDestinationFromCoords(coords));
-  };
+      const wall = arrayOfWalls.current.at(0);
+      if (!wall) return console.info('Out of walls');
 
-  const handleBlockOver = (coords: CoordsWitPosType) => {
-    const targetBlock = grid[coords.row][coords.col];
-    if (!targetBlock) {
-      throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
-    }
+      const targetBlock = grid[coords.row]?.[coords.col];
+      if (!targetBlock) {
+        throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
+      }
 
-    placeholder.current.mesh.visible = true;
-    placeholder.current.moveTo(getDestinationFromCoords(coords));
-  };
+      if (!canAddWall(coords)) return console.info('Cannot add wall to the edge');
 
-  const handleBlockOut = () => {
-    placeholder.current.mesh.visible = false;
-  };
+      addWallByCoords(wall, coords);
+      wall.moveTo(wallPosition.getDestinationFromCoords(coords));
+      arrayOfWalls.current.shift();
+    },
+    [isPawnMode, addWallByCoords, canAddWall, wallPosition.getDestinationFromCoords, grid],
+  );
+
+  const handleBlockOver = useCallback(
+    (coords: CoordsWithPosType) => {
+      if (isPawnMode()) return;
+
+      const targetBlock = grid[coords.row]?.[coords.col];
+      if (!targetBlock) {
+        throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
+      }
+
+      switch (canAddWall(coords)) {
+        case true:
+          placeholder.current.colorDefault();
+          break;
+        case false:
+          placeholder.current.colorDanger();
+          break;
+      }
+
+      placeholder.current.show();
+      placeholder.current.moveTo(wallPosition.getDestinationFromCoords(coords));
+    },
+    [canAddWall, wallPosition.getDestinationFromCoords, grid],
+  );
+
+  const handleBlockOut = useCallback(() => {
+    placeholder.current.hide();
+  }, [placeholder]);
+
+  const handlePawnClick = useCallback(() => {
+    toggleMode();
+    // TODO highlight possible moves
+    console.info('Pawn clicked');
+  }, [toggleMode]);
 
   useControls('Board', {
     wireframe: {
@@ -230,23 +271,33 @@ export const Model = (props: Props) => {
   });
 
   useEffect(() => {
+    if (!indexedPawns.current.Pawn000) return;
+
+    indexedPawns.current.Pawn000.moveTo({
+      position: pawnPosition.getDestinationFromCoords(pawnPosition.coords).position,
+      withAnimation: false,
+    });
+  }, [indexedPawns]);
+
+  useEffect(() => {
     if (placeholder.current) {
       placeholder.current.mesh.scale.copy(indexedWalls.current.Wall000.scale);
+      placeholder.current.mesh.scale.multiply(new THREE.Vector3(1.01, 1.01, 1.01));
     }
   }, [placeholder]);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!indexedBlocks.current.Block000) return;
     // board.current.rotation.y -= 0.001;
 
-    const time = state.clock.getElapsedTime();
+    // const time = state.clock.getElapsedTime();
 
-    arrayOfPawnAnimations.current.forEach((animation) => animation(time));
+    // arrayOfPawnAnimations.current.forEach((animation) => animation(time));
   });
 
   return (
     <group {...props} dispose={null}>
-      <Placeholder ref={placeholder} />
+      <Placeholder ref={placeholder} defaultColor={new THREE.Color(0x00ff00)} dangerColor={new THREE.Color(0xff0000)} />
       <mesh
         name="Platform"
         castShadow
@@ -1403,7 +1454,7 @@ export const Model = (props: Props) => {
         position={[7.629, 0.051, -4.181]}
         scale={[1.6, 0.05, 1.6]}
       />
-      <mesh
+      <Pawn
         ref={pawnsRefCallback}
         name="Pawn000"
         castShadow
@@ -1412,8 +1463,9 @@ export const Model = (props: Props) => {
         material={materials.PawnWhiteMaterial}
         position={[7.649, 0.1, 4.07]}
         scale={[0.3, 0.5, 0.3]}
+        handleClick={handlePawnClick}
       />
-      <mesh
+      <Pawn
         ref={pawnsRefCallback}
         name="Pawn001"
         castShadow

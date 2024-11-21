@@ -8,7 +8,7 @@ import { BufferGeometry, Material, Mesh, MeshStandardMaterial } from 'three';
 export type Colors = 'RED' | 'GREEN' | 'BLUE' | 'PURPLE';
 export type Positions = 'TOP' | 'LEFT' | 'BOTTOM' | 'RIGHT';
 export type CoordsType = { row: number; col: number };
-export type CoordsWitPosType = CoordsType & { pos: Positions };
+export type CoordsWithPosType = CoordsType & { pos: Positions };
 
 export type BlockName = keyof ExtractPropertiesStartingWith<Nodes, 'Block'>;
 export type ForwardedBlock = {
@@ -28,8 +28,8 @@ export type Props = {
   name: BlockName;
   material?: Material | Material[];
   scale?: Vector3;
-  handleClick: (coords: CoordsWitPosType) => void;
-  handleOver: (coords: CoordsWitPosType) => void;
+  handleClick: (coords: CoordsWithPosType) => void;
+  handleOver: (coords: CoordsWithPosType) => void;
   handleOut: () => void;
 };
 
@@ -40,17 +40,10 @@ export const Block = forwardRef(
     { geometry, position, name, scale, handleClick, handleOver, handleOut }: Props,
     ref: ForwardedRef<ForwardedBlock>,
   ) => {
-    const { getCoordinatesByBlockName } = useGrid();
-    const { row, col } = useMemo(() => getCoordinatesByBlockName(name), [getCoordinatesByBlockName, name]);
+    const { getCoordinatesByName } = useGrid();
+    const { row, col } = useMemo(() => getCoordinatesByName(name), [getCoordinatesByName, name]);
 
-    const hoveredFace = useRef<number>(null!);
     const colorRef = useRef<MeshStandardMaterial>(null!);
-    const colorMap = useRef<Record<number, Colors>>({
-      8: 'RED',
-      9: 'GREEN',
-      10: 'BLUE',
-      11: 'PURPLE',
-    });
     const faceIdPositionMap = useRef<Record<number, Positions>>({
       8: 'RIGHT',
       9: 'BOTTOM',
@@ -66,11 +59,11 @@ export const Block = forwardRef(
         material: colorRef.current,
         name: mesh.current.name as BlockName,
         getCoordinates: () => ({ row, col }),
-        changeColor: (color: 'RED' | 'GREEN' | 'BLUE' | 'PURPLE') => {
+        changeColor: (color: Colors) => {
           colorRef.current.color.setColorName(color);
         },
       };
-    }, []);
+    }, [col, row]);
 
     return (
       <mesh
@@ -78,23 +71,23 @@ export const Block = forwardRef(
         name={name}
         castShadow={true}
         receiveShadow={true}
-        onClick={() => {
-          const pos = faceIdPositionMap.current[hoveredFace.current];
+        onClick={({ faceIndex }) => {
+          if (!faceIndex) return;
+
+          const pos = faceIdPositionMap.current[faceIndex];
 
           if (!pos) return; // Not a valid face, we don't care side faces
 
-          handleClick({
-            row,
-            col,
-            pos,
-          });
+          handleClick({ row, col, pos });
         }}
         onPointerMove={({ faceIndex }) => {
           if (!faceIndex) return;
-          if (hoveredFace.current === faceIndex) return;
-          hoveredFace.current = faceIndex;
-          colorRef.current.color.setColorName(colorMap.current[faceIndex] || defaultColor);
-          handleOver({ row, col, pos: faceIdPositionMap.current[faceIndex] });
+
+          const pos = faceIdPositionMap.current[faceIndex];
+
+          if (!pos) return;
+
+          handleOver({ row, col, pos });
         }}
         onPointerOut={() => {
           colorRef.current.color.setColorName(defaultColor);
