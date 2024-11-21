@@ -8,7 +8,7 @@ type Options = {
   max?: number; // +4.2
   step?: number; // +1.2
 };
-export const usePosition = (options: Options = {}) => {
+export const useWallPosition = (options: Options = {}) => {
   const { min = -4.2, step = 1.2 } = options;
 
   const roundToPrecision = (value: number, precision = 2) => {
