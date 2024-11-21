@@ -96,9 +96,33 @@ input[type='number']::-webkit-inner-spin-button {
   background-position: center;
   box-shadow: inset 0 0 0 1px #e9e9e9;
 
+  animation:
+    bounce 1.5s infinite 1.5s,
+    fadeIn 1s ease forwards;
   &:hover {
     transform: translateY(-2px);
     box-shadow: inset 0 0 0 1px #e9e9e9;
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(-25%);
+      animation-timing-function: cubic-bezier(1, 0, 1, 1);
+    }
+    50% {
+      transform: none;
+      animation-timing-function: cubic-bezier(1, 0, 0, 1);
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 
@@ -112,6 +136,10 @@ input[type='number']::-webkit-inner-spin-button {
   z-index: 1;
   font-family: 'Caprasimo', sans-serif;
   text-align: center;
+
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 .input-container {
