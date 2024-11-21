@@ -1,4 +1,4 @@
-import { Block, BlockName, CoordsWitPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
+import { Block, BlockName, CoordsWithPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
 import { ForwardedPlaceholder, Placeholder } from '@src/components/game/Placeholder.tsx';
 import { ForwardedWall, Wall, WallName } from '@src/components/game/Wall.tsx';
 import { useAnimation } from '@src/components/hooks/useAnimation.ts';
@@ -193,12 +193,11 @@ export const Model = (props: Props) => {
   }, []);
 
   const handleBlockClick = useCallback(
-    (coords: CoordsWitPosType) => {
-      console.info(coords);
-      const wall = arrayOfWalls.current.shift();
+    (coords: CoordsWithPosType) => {
+      const wall = arrayOfWalls.current.at(0);
       if (!wall) return console.info('Out of walls');
 
-      const targetBlock = grid[coords.row][coords.col];
+      const targetBlock = grid[coords.row]?.[coords.col];
       if (!targetBlock) {
         throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
       }
@@ -206,25 +205,27 @@ export const Model = (props: Props) => {
       if (!canAddWall(coords)) return console.info('Cannot add wall to the edge');
 
       addWallByCoords(wall, coords);
-      console.info(grid);
       wall.moveTo(getDestinationFromCoords(coords));
+      arrayOfWalls.current.shift();
     },
-    [arrayOfWalls, getDestinationFromCoords, grid],
+    [addWallByCoords, canAddWall, getDestinationFromCoords, grid],
   );
 
   const handleBlockOver = useCallback(
-    (coords: CoordsWitPosType) => {
-      const targetBlock = grid[coords.row][coords.col];
+    (coords: CoordsWithPosType) => {
+      const targetBlock = grid[coords.row]?.[coords.col];
       if (!targetBlock) {
         throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
       }
 
-      canAddWall(coords) ? placeholder.current.colorDefault() : placeholder.current.colorDanger();
+      const allowed = canAddWall(coords);
+
+      allowed ? placeholder.current.colorDefault() : placeholder.current.colorDanger();
 
       placeholder.current.show();
       placeholder.current.moveTo(getDestinationFromCoords(coords));
     },
-    [grid, placeholder],
+    [canAddWall, getDestinationFromCoords, grid],
   );
 
   const handleBlockOut = useCallback(() => {
@@ -245,6 +246,7 @@ export const Model = (props: Props) => {
   useEffect(() => {
     if (placeholder.current) {
       placeholder.current.mesh.scale.copy(indexedWalls.current.Wall000.scale);
+      placeholder.current.mesh.scale.multiply(new THREE.Vector3(1.01, 1.01, 1.01));
     }
   }, [placeholder]);
 

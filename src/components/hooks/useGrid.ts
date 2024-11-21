@@ -1,4 +1,4 @@
-import { CoordsWitPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
+import { CoordsWithPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
 import { ForwardedWall } from '@src/components/game/Wall.tsx';
 import { useCallback, useMemo } from 'react';
 
@@ -24,7 +24,7 @@ export const useGrid = (options: Options = {}) => {
     return rows;
   }, [width, height]);
 
-  const getNextCoordsByCurrent = useCallback((coords: CoordsWitPosType) => {
+  const getNextCoordsByCurrent = useCallback((coords: CoordsWithPosType) => {
     switch (coords.pos) {
       case 'TOP':
         return [
@@ -51,12 +51,10 @@ export const useGrid = (options: Options = {}) => {
           { row: coords.row + 2, col: coords.col + 1 },
         ];
     }
-
-    throw new Error(`Invalid position: ${coords.pos}`);
   }, []);
 
   const canAddWall = useCallback(
-    (coords: CoordsWitPosType) => {
+    (coords: CoordsWithPosType) => {
       const isTopRow = coords.row === 0 && coords.pos === 'TOP';
       const isBottomRow = coords.row === height * 2 - 2 && coords.pos === 'BOTTOM';
       const isLeftCol = coords.col === 0 && coords.pos === 'LEFT';
@@ -64,8 +62,7 @@ export const useGrid = (options: Options = {}) => {
 
       const isEdge = isTopRow || isBottomRow || isLeftCol || isRightCol;
       const hasWall = getNextCoordsByCurrent(coords).some(({ row, col }) => {
-        console.info({ row, col });
-        return grid[row][col] !== null;
+        return grid[row]?.[col] !== null;
       });
 
       return !isEdge && !hasWall;
@@ -74,7 +71,7 @@ export const useGrid = (options: Options = {}) => {
   );
 
   const addWallByCoords = useCallback(
-    (wall: ForwardedWall, coords: CoordsWitPosType) => {
+    (wall: ForwardedWall, coords: CoordsWithPosType) => {
       getNextCoordsByCurrent(coords).forEach(({ row, col }) => {
         grid[row][col] = wall;
       });

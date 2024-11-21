@@ -8,7 +8,7 @@ import { BufferGeometry, Material, Mesh, MeshStandardMaterial } from 'three';
 export type Colors = 'RED' | 'GREEN' | 'BLUE' | 'PURPLE';
 export type Positions = 'TOP' | 'LEFT' | 'BOTTOM' | 'RIGHT';
 export type CoordsType = { row: number; col: number };
-export type CoordsWitPosType = CoordsType & { pos: Positions };
+export type CoordsWithPosType = CoordsType & { pos: Positions };
 
 export type BlockName = keyof ExtractPropertiesStartingWith<Nodes, 'Block'>;
 export type ForwardedBlock = {
@@ -28,8 +28,8 @@ export type Props = {
   name: BlockName;
   material?: Material | Material[];
   scale?: Vector3;
-  handleClick: (coords: CoordsWitPosType) => void;
-  handleOver: (coords: CoordsWitPosType) => void;
+  handleClick: (coords: CoordsWithPosType) => void;
+  handleOver: (coords: CoordsWithPosType) => void;
   handleOut: () => void;
 };
 
@@ -44,12 +44,6 @@ export const Block = forwardRef(
     const { row, col } = useMemo(() => getCoordinatesByName(name), [getCoordinatesByName, name]);
 
     const colorRef = useRef<MeshStandardMaterial>(null!);
-    const colorMap = useRef<Record<number, Colors>>({
-      8: 'RED',
-      9: 'GREEN',
-      10: 'BLUE',
-      11: 'PURPLE',
-    });
     const faceIdPositionMap = useRef<Record<number, Positions>>({
       8: 'RIGHT',
       9: 'BOTTOM',
@@ -84,20 +78,15 @@ export const Block = forwardRef(
 
           if (!pos) return; // Not a valid face, we don't care side faces
 
-          handleClick({
-            row,
-            col,
-            pos,
-          });
+          handleClick({ row, col, pos });
         }}
         onPointerMove={({ faceIndex }) => {
           if (!faceIndex) return;
 
           const pos = faceIdPositionMap.current[faceIndex];
 
-          if (!pos) return; // Not a valid face, we don't care side faces
-          // Fixme: here
-          colorRef.current.color.setColorName(colorMap.current[faceIndex] || defaultColor);
+          if (!pos) return;
+
           handleOver({ row, col, pos });
         }}
         onPointerOut={() => {
