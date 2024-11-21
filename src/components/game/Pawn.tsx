@@ -35,6 +35,7 @@ export const Pawn = forwardRef(
   ({ geometry, position, name, scale, material, handleClick }: Props, ref: ForwardedRef<ForwardedPawn>) => {
     const mesh = useRef<Mesh>(null!);
     const moveUpAnimation = useRef<Tween<Vector3>>(null!);
+    const moveDownAnimation = useRef<Tween<Vector3>>(null!);
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
 
     const moveTo = ({ position, withAnimation = true }: MoveToParams) => {
@@ -44,15 +45,28 @@ export const Pawn = forwardRef(
         return;
       }
 
+      const animationDuration = 1500;
+
+      const origin = new Vector3();
+      origin.copy(mesh.current.position);
+
       moveUpAnimation.current = new Tween(mesh.current.position)
         .to({ y: 1.65 })
-        .duration(500)
-        .yoyo(true)
-        .repeat(1)
+        .duration(animationDuration / 2)
         .easing(Easing.Exponential.In)
         .onComplete(() => {
           moveUpAnimation.current.remove();
           moveUpAnimation.current = null!;
+
+          moveDownAnimation.current = new Tween(mesh.current.position)
+            .to({ y: origin.y })
+            .duration(animationDuration / 2)
+            .easing(Easing.Exponential.Out)
+            .onComplete(() => {
+              moveDownAnimation.current.remove();
+              moveDownAnimation.current = null!;
+            })
+            .start();
         })
         .start();
 
@@ -61,8 +75,8 @@ export const Pawn = forwardRef(
           x: position.x,
           z: position.z,
         })
-        .duration(1000)
-        .easing(Easing.Exponential.In)
+        .duration(animationDuration)
+        .easing(Easing.Exponential.InOut)
         .onComplete(() => {
           moveToAnimation.current.remove();
           moveToAnimation.current = null!;
@@ -97,6 +111,7 @@ export const Pawn = forwardRef(
     useFrame(() => {
       if (moveToAnimation.current) moveToAnimation.current.update();
       if (moveUpAnimation.current) moveUpAnimation.current.update();
+      if (moveDownAnimation.current) moveDownAnimation.current.update();
     });
 
     return (

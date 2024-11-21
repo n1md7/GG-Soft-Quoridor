@@ -297,7 +297,7 @@ export const Model = (props: Props) => {
 
   return (
     <group {...props} dispose={null}>
-      <Placeholder ref={placeholder} defaultColor={new THREE.Color(0xffff00)} dangerColor={new THREE.Color(0xff0000)} />
+      <Placeholder ref={placeholder} defaultColor={new THREE.Color(0x00ff00)} dangerColor={new THREE.Color(0xff0000)} />
       <mesh
         name="Platform"
         castShadow
