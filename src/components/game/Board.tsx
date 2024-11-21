@@ -286,11 +286,11 @@ export const Model = (props: Props) => {
     }
   }, [placeholder]);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!indexedBlocks.current.Block000) return;
     // board.current.rotation.y -= 0.001;
 
-    const time = state.clock.getElapsedTime();
+    // const time = state.clock.getElapsedTime();
 
     // arrayOfPawnAnimations.current.forEach((animation) => animation(time));
   });
