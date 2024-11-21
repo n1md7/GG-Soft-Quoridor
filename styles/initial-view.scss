@@ -115,17 +115,18 @@
       border: 0.4rem solid #4e496b;
       outline: 0.2rem solid #6e78b3;
       cursor: pointer;
-
+      &:hover {
+        transform: translateY(-2px);
+        border: 0.4rem solid #6f59cb;
+        outline: 0.2rem solid #b7bde5;
+        box-shadow: 0 0 10px 3px #4e4e4e;
+      }
       .icon {
         background-repeat: no-repeat;
         display: flex;
         justify-content: center;
         height: 2rem;
         width: 2rem;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s,
-          background-color 0.2s;
       }
 
       .game-settings {
