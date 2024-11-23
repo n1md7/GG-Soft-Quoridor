@@ -1,4 +1,4 @@
-import { Nodes } from '@src/components/game/board/Board.tsx';
+import { Nodes } from '@src/components/game/board/board.type.ts';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { Mesh, Vector3 } from 'three';
 
@@ -13,4 +13,8 @@ export type ForwardedPawn = {
   name: PawnName;
   scale: Vector3;
   moveTo: (params: MoveToParams) => void;
+};
+export type ForwardedPawns = {
+  player: ForwardedPawn;
+  opponent: ForwardedPawn;
 };

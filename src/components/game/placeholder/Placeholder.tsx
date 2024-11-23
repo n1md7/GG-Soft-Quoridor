@@ -27,14 +27,18 @@ export const Placeholder = forwardRef(
     const colorDanger = useCallback(() => (material.current.color = dangerColor), [material, dangerColor]);
     const colorDefault = useCallback(() => (material.current.color = defaultColor), [material, defaultColor]);
 
-    useImperativeHandle(ref, () => ({
-      mesh: mesh.current,
-      moveTo,
-      show,
-      hide,
-      colorDanger,
-      colorDefault,
-    }));
+    useImperativeHandle(
+      ref,
+      () => ({
+        mesh: mesh.current,
+        moveTo,
+        show,
+        hide,
+        colorDanger,
+        colorDefault,
+      }),
+      [mesh, moveTo, show, hide, colorDanger, colorDefault],
+    );
 
     useLayoutEffect(() => {
       if (mesh.current) mesh.current.visible = false;

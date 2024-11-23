@@ -1,6 +1,6 @@
 import { useCursor } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawn/pawn.type.ts';
+import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawns/pawn.type.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
@@ -100,7 +100,7 @@ export const Pawn = forwardRef(
         scale: mesh.current.scale,
         moveTo,
       };
-    }, []);
+    }, [mesh, moveTo]);
 
     useFrame(() => {
       if (moveToAnimation.current) moveToAnimation.current.update();

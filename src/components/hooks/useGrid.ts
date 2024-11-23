@@ -1,29 +1,27 @@
 import { CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
-type Options = {
-  width?: number;
-  height?: number;
-};
-export const useGrid = (options: Options = {}) => {
-  const { width = 9, height = 9 } = options;
+const width = 9;
+const height = 9;
 
-  const grid = useMemo(() => {
-    const rows: (ForwardedBlock | ForwardedWall | null)[][] = [];
-    for (let row = 0; row < width * 2 - 1; row++) {
-      const cols: (ForwardedBlock | null)[] = [];
+// TODO: move grid into store
+const grid = (() => {
+  const rows: (ForwardedBlock | ForwardedWall | null)[][] = [];
+  for (let row = 0; row < width * 2 - 1; row++) {
+    const cols: (ForwardedBlock | null)[] = [];
 
-      for (let col = 0; col < height * 2 - 1; col++) {
-        cols.push(null);
-      }
-
-      rows.push(cols);
+    for (let col = 0; col < height * 2 - 1; col++) {
+      cols.push(null);
     }
 
-    return rows;
-  }, [width, height]);
+    rows.push(cols);
+  }
 
+  return rows;
+})();
+
+export const useGrid = () => {
   const getNextCoordsByCurrent = useCallback((coords: CoordsWithPosType) => {
     switch (coords.pos) {
       case 'TOP':

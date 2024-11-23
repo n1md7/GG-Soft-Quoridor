@@ -58,7 +58,7 @@ export const Block = forwardRef(
           colorRef.current.color.setColorName(color);
         },
       };
-    }, [col, row]);
+    }, [col, row, mesh]);
 
     return (
       <mesh

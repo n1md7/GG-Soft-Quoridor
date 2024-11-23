@@ -80,7 +80,7 @@ export const Wall = forwardRef(
         scale: mesh.current.scale,
         moveTo,
       };
-    }, []);
+    }, [mesh, moveTo]);
 
     useFrame(() => {
       if (moveToAnimation.current) moveToAnimation.current.update();

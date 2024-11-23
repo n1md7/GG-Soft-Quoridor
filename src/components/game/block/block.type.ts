@@ -15,3 +15,7 @@ export type ForwardedBlock = {
   getCoordinates: () => CoordsType;
   changeColor: (color: Colors) => void;
 };
+export type ForwardedBlocks = {
+  items: ForwardedBlock[];
+  setWireframes: (show: boolean) => void;
+};
