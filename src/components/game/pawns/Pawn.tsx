@@ -122,6 +122,7 @@ export const Pawn = forwardRef(
         mesh: mesh.current,
         name: mesh.current.name as PawnName,
         scale: mesh.current.scale,
+        coords: coords.current,
         moveTo,
         setHighlight,
       };

@@ -6,6 +6,7 @@ export type Colors = 'RED' | 'GREEN' | 'BLUE' | 'PURPLE' | 'YELLOW' | 'DEFAULT';
 export type Positions = 'TOP' | 'LEFT' | 'BOTTOM' | 'RIGHT';
 export type CoordsType = { row: number; col: number };
 export type CoordsWithPosType = CoordsType & { pos: Positions };
+export type CoordsWithIsHighlightedType = CoordsWithPosType & { isHighlighted: boolean };
 
 export type BlockName = keyof ExtractPropertiesStartingWith<Nodes, 'Block'>;
 export type ForwardedBlock = {

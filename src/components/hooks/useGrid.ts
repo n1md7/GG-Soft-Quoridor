@@ -1,5 +1,4 @@
 import { CoordsType, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
-import { ForwardedPawn } from '@src/components/game/pawns/pawn.type.ts';
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
 import { useCallback } from 'react';
 
@@ -8,7 +7,7 @@ export const height = 9;
 
 // TODO: move grid into store
 const grid = (() => {
-  const rows: (ForwardedBlock | ForwardedWall | ForwardedPawn | null)[][] = [];
+  const rows: (ForwardedBlock | ForwardedWall | null)[][] = [];
   for (let row = 0; row < width * 2 - 1; row++) {
     const cols: (ForwardedBlock | null)[] = [];
 
@@ -69,6 +68,11 @@ export const useGrid = () => {
     [getNextCoordsByCurrent],
   );
 
+  const canAddPawn = useCallback((coords: CoordsType) => {
+    // Only allow pawns to be placed on blocks
+    return grid[coords.row]?.[coords.col]?.name.startsWith('Block');
+  }, []);
+
   const addWallByCoords = useCallback(
     (wall: ForwardedWall, coords: CoordsWithPosType) => {
       getNextCoordsByCurrent(coords).forEach(({ row, col }) => {
@@ -77,10 +81,6 @@ export const useGrid = () => {
     },
     [getNextCoordsByCurrent],
   );
-
-  const addPawnByCoords = useCallback((pawn: ForwardedPawn, coords: CoordsType) => {
-    grid[coords.row][coords.col] = pawn;
-  }, []);
 
   const toColIndex = useCallback((num: number) => {
     return num % width;
@@ -186,9 +186,9 @@ export const useGrid = () => {
     assertBlockByCoords,
     addWallByCoords,
     canAddWall,
+    canAddPawn,
     getNeighbourBlocks,
     getNeighbourWalls,
     getNeighbours,
-    addPawnByCoords,
   };
 };

@@ -13,6 +13,7 @@ export type ForwardedPawn = {
   mesh: Mesh;
   name: PawnName;
   scale: Vector3;
+  coords: CoordsType;
   moveTo: (params: MoveToParams) => CoordsType;
   setHighlight: (show: boolean) => void;
 };
@@ -21,6 +22,7 @@ export type PawnFn = {
   animateTo: (params: AnimateToParams) => CoordsType;
   animateToStartingPosition: () => CoordsType;
   setHighlight: (show: boolean) => void;
+  coords: CoordsType;
 };
 export type ForwardedPawns = {
   player: PawnFn;

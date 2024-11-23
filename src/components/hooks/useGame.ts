@@ -1,4 +1,4 @@
-import { CoordsType, CoordsWithPosType } from '@src/components/game/block/block.type.ts';
+import { CoordsType, CoordsWithIsHighlightedType, CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { useModel } from '@src/components/hooks/useModel.ts';
 import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
@@ -15,6 +15,7 @@ export const useGame = ({ path }: Options) => {
     toggleMode,
     assertBlockByCoords,
     canAddWall,
+    canAddPawn,
     addWallByCoords,
     pawns,
     nodes,
@@ -28,13 +29,17 @@ export const useGame = ({ path }: Options) => {
   const pawnPosition = usePawnPosition();
 
   const handlePawnStrategy = useCallback(
-    (coords: CoordsWithPosType) => {
+    (coords: CoordsWithIsHighlightedType) => {
+      // Only allow pawns to be placed on highlighted blocks
+      if (!coords.isHighlighted) return setWallMode();
+      if (!canAddPawn(coords)) return setWallMode();
+
       pawns.current.player.setHighlight(false);
       pawns.current.player.animateTo(pawnPosition.getDestinationFromCoords(coords));
 
       return setWallMode(); // Activate wall mode
     },
-    [pawns, pawnPosition, setWallMode],
+    [canAddPawn, pawns, pawnPosition, setWallMode],
   );
 
   const handleWallStrategy = useCallback(
@@ -53,8 +58,9 @@ export const useGame = ({ path }: Options) => {
   );
 
   const handleBlockClick = useCallback(
-    (coords: CoordsWithPosType) => {
+    (coords: CoordsWithIsHighlightedType) => {
       blocks.current.hidePossibleMoves();
+      pawns.current.player.setHighlight(false);
 
       if (isPawnMode()) {
         return handlePawnStrategy(coords);
@@ -62,7 +68,7 @@ export const useGame = ({ path }: Options) => {
 
       return handleWallStrategy(coords);
     },
-    [blocks, isPawnMode, handleWallStrategy, handlePawnStrategy],
+    [blocks, pawns, isPawnMode, handleWallStrategy, handlePawnStrategy],
   );
 
   const handleBlockOver = useCallback(
