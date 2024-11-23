@@ -1,9 +1,10 @@
+import { useCursor } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { Nodes } from '@src/components/game/Board.tsx';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
-import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
+import { ForwardedRef, forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { BufferGeometry, Material, Mesh, Vector3 } from 'three';
 
 type Props = {
@@ -33,6 +34,8 @@ export type ForwardedPawn = {
 
 export const Pawn = forwardRef(
   ({ geometry, position, name, scale, material, handleClick }: Props, ref: ForwardedRef<ForwardedPawn>) => {
+    const [hovered, set] = useState(false);
+
     const mesh = useRef<Mesh>(null!);
     const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const moveDownAnimation = useRef<Tween<Vector3>>(null!);
@@ -84,6 +87,8 @@ export const Pawn = forwardRef(
         .start();
     };
 
+    useCursor(hovered /*'pointer', 'auto', document.body*/);
+
     useControls(
       'Pawns',
       {
@@ -126,6 +131,10 @@ export const Pawn = forwardRef(
         scale={scale}
         onPointerOver={(e) => {
           e.stopPropagation();
+          set(true);
+        }}
+        onPointerOut={() => {
+          set(false);
         }}
         onClick={(e) => {
           e.stopPropagation();
