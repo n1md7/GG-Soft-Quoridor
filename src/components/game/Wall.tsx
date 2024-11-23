@@ -1,9 +1,8 @@
-import { useFrame } from '@react-three/fiber';
+import { ThreeEvent, useFrame } from '@react-three/fiber';
 import { Nodes } from '@src/components/game/Board.tsx';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
-import { useControls } from 'leva';
-import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { BufferGeometry, Euler, Material, Mesh, Vector3 } from 'three';
 
 type Props = {
@@ -75,6 +74,10 @@ export const Wall = forwardRef(
         .start();
     };
 
+    const over = useCallback((e: ThreeEvent<PointerEvent>) => {
+      e.stopPropagation();
+    }, []);
+
     useImperativeHandle(ref, () => {
       return {
         mesh: mesh.current,
@@ -83,21 +86,6 @@ export const Wall = forwardRef(
         moveTo,
       };
     }, []);
-
-    useControls(
-      'Walls',
-      {
-        [name]: {
-          transient: false,
-          value: position,
-          step: 0.1,
-          onChange: ([x, y, z]: [number, number, number]) => {
-            mesh.current.position.set(x, y, z);
-          },
-        },
-      },
-      { collapsed: true },
-    );
 
     useFrame(() => {
       if (moveToAnimation.current) moveToAnimation.current.update();
@@ -114,6 +102,7 @@ export const Wall = forwardRef(
         material={material}
         geometry={geometry}
         position={position}
+        onPointerOver={over}
         scale={scale}
       />
     );

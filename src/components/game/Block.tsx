@@ -2,7 +2,7 @@ import { Vector3 } from '@react-three/fiber';
 import { Nodes } from '@src/components/game/Board.tsx';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
-import { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
 import { BufferGeometry, Material, Mesh, MeshStandardMaterial } from 'three';
 
 export type Colors = 'RED' | 'GREEN' | 'BLUE' | 'PURPLE';
@@ -52,6 +52,10 @@ export const Block = forwardRef(
     });
 
     const mesh = useRef<Mesh>(null!);
+    const out = useCallback(() => {
+      colorRef.current.color.setColorName(defaultColor);
+      handleOut();
+    }, [handleOut]);
 
     useImperativeHandle(ref, () => {
       return {
@@ -89,10 +93,8 @@ export const Block = forwardRef(
 
           handleOver({ row, col, pos });
         }}
-        onPointerOut={() => {
-          colorRef.current.color.setColorName(defaultColor);
-          handleOut();
-        }}
+        onPointerOut={out}
+        onPointerMissed={out}
         geometry={geometry}
         position={position}
         scale={scale}
