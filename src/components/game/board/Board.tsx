@@ -23,12 +23,11 @@ export const Model = () => {
   const pawnPosition = usePawnPosition();
   const { nodes, materials } = useGLTF('./3D/board-v1.4.glb') as GLTFResult;
   const { isPawnMode, setWallMode, toggleMode } = useClickMode();
-  const { grid, canAddWall, addWallByCoords } = useGrid();
+  const { assertBlockByCoords, canAddWall, addWallByCoords } = useGrid();
 
   const placeholder = useRef<ForwardedPlaceholder>(null!);
   const pawns = useRef<ForwardedPawns>({} as ForwardedPawns);
   const walls = useRef<ForwardedWalls>({} as ForwardedWalls);
-
   const blocks = useRef<ForwardedBlocks>({} as ForwardedBlocks);
 
   const showWireframes = useCallback(
@@ -60,10 +59,7 @@ export const Model = () => {
       const wall = walls.current.player.getFrontWall();
       if (!wall) return console.info('Out of walls');
 
-      const targetBlock = grid[coords.row]?.[coords.col];
-      if (!targetBlock) {
-        throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
-      }
+      assertBlockByCoords(coords);
 
       if (!canAddWall(coords)) return console.info('Cannot add wall here');
 
@@ -71,17 +67,14 @@ export const Model = () => {
       wall.moveTo(wallPosition.getDestinationFromCoords(coords));
       walls.current.player.dropFrontWall();
     },
-    [isPawnMode, grid, canAddWall, addWallByCoords, wallPosition, pawnPosition, setWallMode],
+    [isPawnMode, assertBlockByCoords, canAddWall, addWallByCoords, wallPosition, pawnPosition, setWallMode],
   );
 
   const handleBlockOver = useCallback(
     (coords: CoordsWithPosType) => {
       if (isPawnMode()) return;
 
-      const targetBlock = grid[coords.row]?.[coords.col];
-      if (!targetBlock) {
-        throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
-      }
+      assertBlockByCoords(coords);
 
       switch (canAddWall(coords)) {
         case true:
@@ -95,7 +88,7 @@ export const Model = () => {
       placeholder.current.show();
       placeholder.current.moveTo(wallPosition.getDestinationFromCoords(coords));
     },
-    [canAddWall, wallPosition.getDestinationFromCoords, grid],
+    [isPawnMode, assertBlockByCoords, canAddWall, wallPosition],
   );
 
   const handleBlockOut = useCallback(() => {

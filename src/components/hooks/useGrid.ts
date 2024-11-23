@@ -65,7 +65,7 @@ export const useGrid = () => {
 
       return !isEdge && !hasWall;
     },
-    [getNextCoordsByCurrent, grid, height, width],
+    [getNextCoordsByCurrent],
   );
 
   const addWallByCoords = useCallback(
@@ -74,22 +74,16 @@ export const useGrid = () => {
         grid[row][col] = wall;
       });
     },
-    [getNextCoordsByCurrent, grid],
+    [getNextCoordsByCurrent],
   );
 
-  const toColIndex = useCallback(
-    (num: number) => {
-      return num % width;
-    },
-    [width],
-  );
+  const toColIndex = useCallback((num: number) => {
+    return num % width;
+  }, []);
 
-  const toRowIndex = useCallback(
-    (num: number) => {
-      return width - 1 - Math.floor(num / width);
-    },
-    [width],
-  );
+  const toRowIndex = useCallback((num: number) => {
+    return width - 1 - Math.floor(num / width);
+  }, []);
 
   const getCoordinatesByName = useCallback(
     (name: string) => {
@@ -123,13 +117,30 @@ export const useGrid = () => {
 
       grid[row][col] = block;
     },
-    [getCoordinatesByName, grid],
+    [getCoordinatesByName],
+  );
+
+  const getBlockByCoords = useCallback((coords: CoordsWithPosType) => {
+    return grid[coords.row]?.[coords.col];
+  }, []);
+
+  const assertBlockByCoords = useCallback(
+    (coords: CoordsWithPosType) => {
+      const block = getBlockByCoords(coords);
+
+      if (!block) {
+        throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
+      }
+    },
+    [getBlockByCoords],
   );
 
   return {
     grid,
     mapByName,
     getCoordinatesByName,
+    getBlockByCoords,
+    assertBlockByCoords,
     addWallByCoords,
     canAddWall,
   };
