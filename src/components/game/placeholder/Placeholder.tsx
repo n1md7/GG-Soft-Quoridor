@@ -1,4 +1,5 @@
-import { MoveToParams, PositionMap } from '@src/components/game/Wall.tsx';
+import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
+import { MoveToParams, PositionMap } from '@src/components/game/wall/wall.type.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useLayoutEffect, useRef } from 'react';
 import { Mesh, MeshStandardMaterial } from 'three';
 import { Color } from 'three';
@@ -7,14 +8,7 @@ type Props = {
   defaultColor: Color;
   dangerColor: Color;
 };
-export type ForwardedPlaceholder = {
-  moveTo: (params: MoveToParams) => void;
-  mesh: Mesh;
-  show: () => void;
-  hide: () => void;
-  colorDanger: () => void;
-  colorDefault: () => void;
-};
+
 export const Placeholder = forwardRef(
   ({ defaultColor, dangerColor }: Props, ref: ForwardedRef<ForwardedPlaceholder>) => {
     const mesh = useRef<Mesh>(null!);

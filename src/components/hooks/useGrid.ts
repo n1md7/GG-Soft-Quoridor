@@ -1,5 +1,5 @@
-import { CoordsWithPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
-import { ForwardedWall } from '@src/components/game/Wall.tsx';
+import { CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
+import { ForwardedWall } from '@src/components/game/wall/wall.type.ts';
 import { useCallback, useMemo } from 'react';
 
 type Options = {

@@ -1,12 +1,11 @@
 import { useCursor } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { Nodes } from '@src/components/game/Board.tsx';
-import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
+import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawn/pawn.type.ts';
+import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
 import { ForwardedRef, forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { BufferGeometry, Material, Mesh, Vector3 } from 'three';
-
 type Props = {
   geometry: BufferGeometry;
   material: Material;
@@ -19,23 +18,11 @@ type Props = {
   receiveShadow?: boolean;
 };
 
-export type MoveToParams = {
-  position: Vector3;
-  withAnimation?: boolean;
-};
-
-export type PawnName = keyof ExtractPropertiesStartingWith<Nodes, 'Pawn'>;
-export type ForwardedPawn = {
-  mesh: Mesh;
-  name: PawnName;
-  scale: Vector3;
-  moveTo: (params: MoveToParams) => void;
-};
-
 export const Pawn = forwardRef(
   ({ geometry, position, name, scale, material, handleClick }: Props, ref: ForwardedRef<ForwardedPawn>) => {
     const [hovered, set] = useState(false);
 
+    const percentage = usePercentage();
     const mesh = useRef<Mesh>(null!);
     const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const moveDownAnimation = useRef<Tween<Vector3>>(null!);
@@ -48,30 +35,10 @@ export const Pawn = forwardRef(
         return;
       }
 
-      const animationDuration = 1500;
+      const animationDuration = 800;
 
       const origin = new Vector3();
       origin.copy(mesh.current.position);
-
-      moveUpAnimation.current = new Tween(mesh.current.position)
-        .to({ y: 1.65 })
-        .duration(animationDuration / 2)
-        .easing(Easing.Exponential.In)
-        .onComplete(() => {
-          moveUpAnimation.current.remove();
-          moveUpAnimation.current = null!;
-
-          moveDownAnimation.current = new Tween(mesh.current.position)
-            .to({ y: origin.y })
-            .duration(animationDuration / 2)
-            .easing(Easing.Exponential.Out)
-            .onComplete(() => {
-              moveDownAnimation.current.remove();
-              moveDownAnimation.current = null!;
-            })
-            .start();
-        })
-        .start();
 
       moveToAnimation.current = new Tween(mesh.current.position)
         .to({
@@ -79,10 +46,32 @@ export const Pawn = forwardRef(
           z: position.z,
         })
         .duration(animationDuration)
-        .easing(Easing.Exponential.InOut)
+        .easing(Easing.Exponential.Out)
         .onComplete(() => {
           moveToAnimation.current.remove();
           moveToAnimation.current = null!;
+        })
+        .start();
+
+      const [upTime, downTime] = percentage.get(animationDuration, 80);
+
+      moveUpAnimation.current = new Tween(mesh.current.position)
+        .to({ y: 0.9 })
+        .duration(upTime)
+        .easing(Easing.Exponential.Out)
+        .onComplete(() => {
+          moveUpAnimation.current.remove();
+          moveUpAnimation.current = null!;
+
+          moveDownAnimation.current = new Tween(mesh.current.position)
+            .to({ y: origin.y })
+            .duration(downTime)
+            .easing(Easing.Exponential.In)
+            .onComplete(() => {
+              moveDownAnimation.current.remove();
+              moveDownAnimation.current = null!;
+            })
+            .start();
         })
         .start();
     };

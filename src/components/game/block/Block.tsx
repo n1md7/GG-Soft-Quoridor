@@ -1,25 +1,16 @@
 import { Vector3 } from '@react-three/fiber';
-import { Nodes } from '@src/components/game/Board.tsx';
+import {
+  BlockName,
+  Colors,
+  CoordsWithPosType,
+  ForwardedBlock,
+  Positions,
+} from '@src/components/game/block/block.type.ts';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
-import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
 import { BufferGeometry, Material, Mesh, MeshStandardMaterial } from 'three';
 
-export type Colors = 'RED' | 'GREEN' | 'BLUE' | 'PURPLE';
-export type Positions = 'TOP' | 'LEFT' | 'BOTTOM' | 'RIGHT';
-export type CoordsType = { row: number; col: number };
-export type CoordsWithPosType = CoordsType & { pos: Positions };
-
-export type BlockName = keyof ExtractPropertiesStartingWith<Nodes, 'Block'>;
-export type ForwardedBlock = {
-  mesh: Mesh;
-  name: BlockName;
-  material: MeshStandardMaterial;
-  getCoordinates: () => CoordsType;
-  changeColor: (color: Colors) => void;
-};
-
-export type Props = {
+type Props = {
   geometry: BufferGeometry;
   position: Vector3;
   wireframe?: boolean;

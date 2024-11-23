@@ -1,9 +1,12 @@
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { Block, BlockName, CoordsWithPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
-import { ForwardedPawn, Pawn, PawnName } from '@src/components/game/Pawn.tsx';
-import { ForwardedPlaceholder, Placeholder } from '@src/components/game/Placeholder.tsx';
-import { ForwardedWall, Wall, WallName } from '@src/components/game/Wall.tsx';
+import { Block } from '@src/components/game/block/Block.tsx';
+import { BlockName, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
+import { GLTFResult } from '@src/components/game/board/board.type.ts';
+import { Pawn } from '@src/components/game/pawn/Pawn.tsx';
+import { Placeholder } from '@src/components/game/placeholder/Placeholder.tsx';
+import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
+import { ForwardedWall, WallName } from '@src/components/game/wall/wall.type.ts';
 import { useAnimation } from '@src/components/hooks/useAnimation.ts';
 import { useClickMode } from '@src/components/hooks/useClickMode.ts';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
@@ -13,135 +16,10 @@ import { setWireframe } from '@src/components/utils/material.util.ts';
 import { useControls } from 'leva';
 import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { GLTF } from 'three-stdlib';
+import { ForwardedPawn, PawnName } from '../pawn/pawn.type';
+import { Wall } from '../wall/Wall';
 
-export type GLTFResult = GLTF & {
-  nodes: {
-    Platform: THREE.Mesh;
-    Block000: THREE.Mesh;
-    Block001: THREE.Mesh;
-    Block002: THREE.Mesh;
-    Block003: THREE.Mesh;
-    Block004: THREE.Mesh;
-    Block005: THREE.Mesh;
-    Block006: THREE.Mesh;
-    Block007: THREE.Mesh;
-    Block008: THREE.Mesh;
-    Block009: THREE.Mesh;
-    Block010: THREE.Mesh;
-    Block011: THREE.Mesh;
-    Block012: THREE.Mesh;
-    Block013: THREE.Mesh;
-    Block014: THREE.Mesh;
-    Block015: THREE.Mesh;
-    Block016: THREE.Mesh;
-    Block017: THREE.Mesh;
-    Block018: THREE.Mesh;
-    Block019: THREE.Mesh;
-    Block020: THREE.Mesh;
-    Block021: THREE.Mesh;
-    Block022: THREE.Mesh;
-    Block023: THREE.Mesh;
-    Block024: THREE.Mesh;
-    Block025: THREE.Mesh;
-    Block026: THREE.Mesh;
-    Block027: THREE.Mesh;
-    Block028: THREE.Mesh;
-    Block029: THREE.Mesh;
-    Block030: THREE.Mesh;
-    Block031: THREE.Mesh;
-    Block032: THREE.Mesh;
-    Block033: THREE.Mesh;
-    Block034: THREE.Mesh;
-    Block035: THREE.Mesh;
-    Block036: THREE.Mesh;
-    Block037: THREE.Mesh;
-    Block038: THREE.Mesh;
-    Block039: THREE.Mesh;
-    Block040: THREE.Mesh;
-    Block041: THREE.Mesh;
-    Block042: THREE.Mesh;
-    Block043: THREE.Mesh;
-    Block044: THREE.Mesh;
-    Block045: THREE.Mesh;
-    Block046: THREE.Mesh;
-    Block047: THREE.Mesh;
-    Block048: THREE.Mesh;
-    Block049: THREE.Mesh;
-    Block050: THREE.Mesh;
-    Block051: THREE.Mesh;
-    Block052: THREE.Mesh;
-    Block053: THREE.Mesh;
-    Block054: THREE.Mesh;
-    Block055: THREE.Mesh;
-    Block056: THREE.Mesh;
-    Block057: THREE.Mesh;
-    Block058: THREE.Mesh;
-    Block059: THREE.Mesh;
-    Block060: THREE.Mesh;
-    Block061: THREE.Mesh;
-    Block062: THREE.Mesh;
-    Block063: THREE.Mesh;
-    Block064: THREE.Mesh;
-    Block065: THREE.Mesh;
-    Block066: THREE.Mesh;
-    Block067: THREE.Mesh;
-    Block068: THREE.Mesh;
-    Block069: THREE.Mesh;
-    Block070: THREE.Mesh;
-    Block071: THREE.Mesh;
-    Block072: THREE.Mesh;
-    Block073: THREE.Mesh;
-    Block074: THREE.Mesh;
-    Block075: THREE.Mesh;
-    Block076: THREE.Mesh;
-    Block077: THREE.Mesh;
-    Block078: THREE.Mesh;
-    Block079: THREE.Mesh;
-    Block080: THREE.Mesh;
-    Wall000: THREE.Mesh;
-    Wall001: THREE.Mesh;
-    Wall002: THREE.Mesh;
-    Wall003: THREE.Mesh;
-    Wall004: THREE.Mesh;
-    Wall005: THREE.Mesh;
-    Wall006: THREE.Mesh;
-    Wall007: THREE.Mesh;
-    Wall008: THREE.Mesh;
-    Wall009: THREE.Mesh;
-    Wall010: THREE.Mesh;
-    Wall011: THREE.Mesh;
-    Wall012: THREE.Mesh;
-    Wall013: THREE.Mesh;
-    Wall014: THREE.Mesh;
-    Wall015: THREE.Mesh;
-    Wall016: THREE.Mesh;
-    Wall017: THREE.Mesh;
-    Wall018: THREE.Mesh;
-    Wall019: THREE.Mesh;
-    Plate001: THREE.Mesh;
-    Plate000: THREE.Mesh;
-    Pawn000: THREE.Mesh;
-    Pawn001: THREE.Mesh;
-    Container000: THREE.Mesh;
-    Container001: THREE.Mesh;
-  };
-  materials: {
-    PlatformMaterial: THREE.MeshStandardMaterial;
-    BlockMaterial: THREE.MeshStandardMaterial;
-    WallWhiteMaterial: THREE.MeshStandardMaterial;
-    ContainerMaterial: THREE.MeshStandardMaterial;
-    WallBlackMaterial: THREE.MeshStandardMaterial;
-    PawnWhiteMaterial: THREE.MeshStandardMaterial;
-    PawnBlackMaterial: THREE.MeshStandardMaterial;
-  };
-};
-export type Nodes = GLTFResult['nodes'];
-export type Props = {
-  a?: number;
-};
-
-export const Model = (props: Props) => {
+export const Model = () => {
   const wallPosition = useWallPosition();
   const pawnPosition = usePawnPosition();
 
@@ -156,12 +34,12 @@ export const Model = (props: Props) => {
 
   const indexedPawns = useRef<Record<PawnName, ForwardedPawn>>({} as Record<PawnName, ForwardedPawn>);
   const arrayOfPawns = useRef<ForwardedPawn[]>([] as ForwardedPawn[]);
-  const arrayOfPawnAnimations = useRef<ReturnType<typeof floatOneByCos>[]>([]);
   const pawnsRefCallback = useCallback(
     (pawn: ForwardedPawn) => {
+      if (!pawn) return;
+
       indexedPawns.current[pawn.name] = pawn;
       arrayOfPawns.current.push(pawn);
-      arrayOfPawnAnimations.current.push(floatOneByCos(pawn.mesh));
     },
     [floatOneByCos],
   );
@@ -170,6 +48,8 @@ export const Model = (props: Props) => {
   const arrayOfBlocks = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
   const blocksRefCallback = useCallback(
     (block: ForwardedBlock) => {
+      if (!block) return;
+
       indexedBlocks.current[block.name] = block;
       arrayOfBlocks.current.push(block);
       mapByName(block);
@@ -180,6 +60,8 @@ export const Model = (props: Props) => {
   const indexedWalls = useRef<Record<WallName, ForwardedWall>>({} as Record<WallName, ForwardedWall>);
   const arrayOfWalls = useRef<ForwardedWall[]>([] as ForwardedWall[]);
   const wallsRefCallback = useCallback((wall: ForwardedWall) => {
+    if (!wall) return;
+
     indexedWalls.current[wall.name] = wall;
     arrayOfWalls.current.push(wall);
   }, []);
@@ -296,7 +178,7 @@ export const Model = (props: Props) => {
   });
 
   return (
-    <group {...props} dispose={null}>
+    <group dispose={null}>
       <Placeholder ref={placeholder} defaultColor={new THREE.Color(0x00ff00)} dangerColor={new THREE.Color(0xff0000)} />
       <mesh
         name="Platform"
