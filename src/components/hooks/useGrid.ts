@@ -2,8 +2,8 @@ import { CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/bl
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
 import { useCallback } from 'react';
 
-const width = 9;
-const height = 9;
+export const width = 9;
+export const height = 9;
 
 // TODO: move grid into store
 const grid = (() => {
