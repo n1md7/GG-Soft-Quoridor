@@ -5,7 +5,7 @@ import { useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { Suspense } from 'react';
 import { Vector3 } from 'three';
-import * as Board from './Board.tsx';
+import { Board } from './board/Board.tsx';
 
 export function Experience() {
   const { gridSize, ...gridConfig } = useControls(
@@ -53,11 +53,12 @@ export function Experience() {
       <Show when={!!envMap}>
         <Environment preset={envMap} background />
       </Show>
+
       <ambientLight intensity={Math.PI / 2} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
       <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
       <Suspense>
-        <Board.Model />
+        <Board />
       </Suspense>
     </>
   );

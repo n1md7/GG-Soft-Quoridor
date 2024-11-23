@@ -1,25 +1,17 @@
 import { Vector3 } from '@react-three/fiber';
-import { Nodes } from '@src/components/game/Board.tsx';
+import {
+  BlockName,
+  Colors,
+  CoordsWithIsHighlightedType,
+  CoordsWithPosType,
+  ForwardedBlock,
+  Positions,
+} from '@src/components/game/block/block.type.ts';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
-import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
-import { BufferGeometry, Material, Mesh, MeshStandardMaterial } from 'three';
+import { BufferGeometry, Color, Material, Mesh, MeshStandardMaterial } from 'three';
 
-export type Colors = 'RED' | 'GREEN' | 'BLUE' | 'PURPLE';
-export type Positions = 'TOP' | 'LEFT' | 'BOTTOM' | 'RIGHT';
-export type CoordsType = { row: number; col: number };
-export type CoordsWithPosType = CoordsType & { pos: Positions };
-
-export type BlockName = keyof ExtractPropertiesStartingWith<Nodes, 'Block'>;
-export type ForwardedBlock = {
-  mesh: Mesh;
-  name: BlockName;
-  material: MeshStandardMaterial;
-  getCoordinates: () => CoordsType;
-  changeColor: (color: Colors) => void;
-};
-
-export type Props = {
+type Props = {
   geometry: BufferGeometry;
   position: Vector3;
   wireframe?: boolean;
@@ -28,12 +20,12 @@ export type Props = {
   name: BlockName;
   material?: Material | Material[];
   scale?: Vector3;
-  handleClick: (coords: CoordsWithPosType) => void;
+  handleClick: (coords: CoordsWithIsHighlightedType) => void;
   handleOver: (coords: CoordsWithPosType) => void;
   handleOut: () => void;
 };
 
-const defaultColor = 'GRAY';
+const defaultColor = new Color('GRAY');
 
 export const Block = forwardRef(
   (
@@ -60,10 +52,10 @@ export const Block = forwardRef(
         name: mesh.current.name as BlockName,
         getCoordinates: () => ({ row, col }),
         changeColor: (color: Colors) => {
-          colorRef.current.color.setColorName(color);
+          colorRef.current.color.set(color === 'DEFAULT' ? defaultColor : new Color(color));
         },
       };
-    }, [col, row]);
+    }, [col, row, mesh]);
 
     return (
       <mesh
@@ -78,9 +70,16 @@ export const Block = forwardRef(
 
           if (!pos) return; // Not a valid face, we don't care side faces
 
-          handleClick({ row, col, pos });
+          handleClick({
+            row,
+            col,
+            pos,
+            isHighlighted: !colorRef.current.color.equals(defaultColor),
+          });
         }}
-        onPointerMove={({ faceIndex }) => {
+        onPointerMove={({ stopPropagation, faceIndex }) => {
+          stopPropagation();
+
           if (!faceIndex) return;
 
           const pos = faceIdPositionMap.current[faceIndex];
@@ -89,10 +88,8 @@ export const Block = forwardRef(
 
           handleOver({ row, col, pos });
         }}
-        onPointerOut={() => {
-          colorRef.current.color.setColorName(defaultColor);
-          handleOut();
-        }}
+        onPointerOut={handleOut}
+        onPointerMissed={handleOut}
         geometry={geometry}
         position={position}
         scale={scale}

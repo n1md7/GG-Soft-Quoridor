@@ -1,5 +1,5 @@
-import { CoordsWithPosType } from '@src/components/game/Block.tsx';
-import { PositionType } from '@src/components/game/Wall.tsx';
+import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
+import { PositionType } from '@src/components/game/walls/wall.type.ts';
 import { useCallback } from 'react';
 import { Vector3 } from 'three';
 
