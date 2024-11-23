@@ -4,7 +4,7 @@ import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawn
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
-import { ForwardedRef, forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { BufferGeometry, Material, Mesh, Vector3 } from 'three';
 type Props = {
   geometry: BufferGeometry;
@@ -28,53 +28,56 @@ export const Pawn = forwardRef(
     const moveDownAnimation = useRef<Tween<Vector3>>(null!);
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
 
-    const moveTo = ({ position, withAnimation = true }: MoveToParams) => {
-      if (!withAnimation) {
-        mesh.current.position.copy(position);
+    const moveTo = useCallback(
+      ({ position, withAnimation = true }: MoveToParams) => {
+        if (!withAnimation) {
+          mesh.current.position.copy(position);
 
-        return;
-      }
+          return;
+        }
 
-      const animationDuration = 800;
+        const animationDuration = 800;
 
-      const origin = new Vector3();
-      origin.copy(mesh.current.position);
+        const origin = new Vector3();
+        origin.copy(mesh.current.position);
 
-      moveToAnimation.current = new Tween(mesh.current.position)
-        .to({
-          x: position.x,
-          z: position.z,
-        })
-        .duration(animationDuration)
-        .easing(Easing.Exponential.Out)
-        .onComplete(() => {
-          moveToAnimation.current.remove();
-          moveToAnimation.current = null!;
-        })
-        .start();
+        moveToAnimation.current = new Tween(mesh.current.position)
+          .to({
+            x: position.x,
+            z: position.z,
+          })
+          .duration(animationDuration)
+          .easing(Easing.Exponential.Out)
+          .onComplete(() => {
+            moveToAnimation.current.remove();
+            moveToAnimation.current = null!;
+          })
+          .start();
 
-      const [upTime, downTime] = percentage.get(animationDuration, 80);
+        const [upTime, downTime] = percentage.get(animationDuration, 80);
 
-      moveUpAnimation.current = new Tween(mesh.current.position)
-        .to({ y: 0.9 })
-        .duration(upTime)
-        .easing(Easing.Exponential.Out)
-        .onComplete(() => {
-          moveUpAnimation.current.remove();
-          moveUpAnimation.current = null!;
+        moveUpAnimation.current = new Tween(mesh.current.position)
+          .to({ y: 0.9 })
+          .duration(upTime)
+          .easing(Easing.Exponential.Out)
+          .onComplete(() => {
+            moveUpAnimation.current.remove();
+            moveUpAnimation.current = null!;
 
-          moveDownAnimation.current = new Tween(mesh.current.position)
-            .to({ y: origin.y })
-            .duration(downTime)
-            .easing(Easing.Exponential.In)
-            .onComplete(() => {
-              moveDownAnimation.current.remove();
-              moveDownAnimation.current = null!;
-            })
-            .start();
-        })
-        .start();
-    };
+            moveDownAnimation.current = new Tween(mesh.current.position)
+              .to({ y: origin.y })
+              .duration(downTime)
+              .easing(Easing.Exponential.In)
+              .onComplete(() => {
+                moveDownAnimation.current.remove();
+                moveDownAnimation.current = null!;
+              })
+              .start();
+          })
+          .start();
+      },
+      [percentage],
+    );
 
     useCursor(hovered /*'pointer', 'auto', document.body*/);
 

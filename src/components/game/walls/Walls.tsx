@@ -64,7 +64,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         },
       },
     };
-  }, []);
+  }, [playerWalls, opponentWalls, placeholderWall]);
 
   return (
     <>
