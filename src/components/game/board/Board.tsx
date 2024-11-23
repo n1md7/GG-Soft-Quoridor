@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 const path = './3D/board-v1.4.glb';
 
-export const Model = () => {
+export const Board = () => {
   const {
     handleBlockClick,
     handleBlockOver,

@@ -1,3 +1,4 @@
+import { CoordsType } from '@src/components/game/block/block.type.ts';
 import { Pawn } from '@src/components/game/pawns/Pawn.tsx';
 import { AnimateToParams, ForwardedPawn, ForwardedPawns } from '@src/components/game/pawns/pawn.type.ts';
 import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
@@ -10,7 +11,7 @@ type Props = {
     player: Material;
     opponent: Material;
   };
-  playerClick: () => void;
+  playerClick: (coords: CoordsType) => void;
 };
 
 export const Pawns = forwardRef(({ geometry, materials, playerClick }: Props, ref: ForwardedRef<ForwardedPawns>) => {
@@ -22,19 +23,23 @@ export const Pawns = forwardRef(({ geometry, materials, playerClick }: Props, re
     return {
       player: {
         animateTo(params: AnimateToParams) {
-          player.current.moveTo(params);
+          return player.current.moveTo(params);
         },
         animateToStartingPosition() {
-          player.current.moveTo(getDestinationFromCoords(coords.player));
+          return player.current.moveTo(getDestinationFromCoords(coords.player));
         },
+        setHighlight: player.current.setHighlight,
+        coords: player.current.coords,
       },
       opponent: {
         animateTo(params: AnimateToParams) {
-          opponent.current.moveTo(params);
+          return opponent.current.moveTo(params);
         },
         animateToStartingPosition() {
-          opponent.current.moveTo(getDestinationFromCoords(coords.opponent));
+          return opponent.current.moveTo(getDestinationFromCoords(coords.opponent));
         },
+        setHighlight: opponent.current.setHighlight,
+        coords: opponent.current.coords,
       },
     };
   });

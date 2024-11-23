@@ -1,5 +1,12 @@
 import { Block } from '@src/components/game/block/Block.tsx';
-import { CoordsWithPosType, ForwardedBlock, ForwardedBlocks } from '@src/components/game/block/block.type.ts';
+import {
+  Colors,
+  CoordsType,
+  CoordsWithIsHighlightedType,
+  CoordsWithPosType,
+  ForwardedBlock,
+  ForwardedBlocks,
+} from '@src/components/game/block/block.type.ts';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { BufferGeometry, Material } from 'three';
@@ -7,15 +14,16 @@ import { BufferGeometry, Material } from 'three';
 type Props = {
   geometry: BufferGeometry;
   material: Material;
-  handleClick: (coords: CoordsWithPosType) => void;
+  handleClick: (coords: CoordsWithIsHighlightedType) => void;
   handleOver: (coords: CoordsWithPosType) => void;
   handleOut: () => void;
 };
 
 export const Blocks = forwardRef(
   ({ geometry, material, handleOver, handleOut, handleClick }: Props, ref: ForwardedRef<ForwardedBlocks>) => {
-    const { mapByName } = useGrid();
+    const { mapByName, getNeighbours } = useGrid();
 
+    const lastHighlighted = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
     const blocks = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
     const blocksRefCallback = useCallback(
       (block: ForwardedBlock) => {
@@ -33,8 +41,36 @@ export const Blocks = forwardRef(
         setWireframes: (show: boolean) => {
           blocks.current.forEach((block) => (block.material.wireframe = show));
         },
+        hidePossibleMoves: () => {
+          lastHighlighted.current.forEach((block) => block.changeColor('DEFAULT'));
+          lastHighlighted.current = [];
+        },
+        showPossibleMoves: (coords: CoordsType, show: boolean) => {
+          const neighbour = getNeighbours(coords);
+
+          const color: Colors = show ? 'YELLOW' : 'DEFAULT';
+
+          // TODO: get Pawn reference here and do checks to make they do no step each other
+
+          if (!neighbour.wall.top && neighbour.block.top) {
+            neighbour.block.top.changeColor(color);
+            lastHighlighted.current.push(neighbour.block.top);
+          }
+          if (!neighbour.wall.bottom && neighbour.block.bottom) {
+            neighbour.block.bottom.changeColor(color);
+            lastHighlighted.current.push(neighbour.block.bottom);
+          }
+          if (!neighbour.wall.left && neighbour.block.left) {
+            neighbour.block.left.changeColor(color);
+            lastHighlighted.current.push(neighbour.block.left);
+          }
+          if (!neighbour.wall.right && neighbour.block.right) {
+            neighbour.block.right.changeColor(color);
+            lastHighlighted.current.push(neighbour.block.right);
+          }
+        },
       };
-    }, [blocks]);
+    }, [getNeighbours]);
 
     return (
       <>

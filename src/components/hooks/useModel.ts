@@ -15,7 +15,7 @@ type Options = {
 export const useModel = (options: Options) => {
   const { nodes, materials } = useGLTF(options.path) as GLTFResult;
   const { isPawnMode, setWallMode, toggleMode } = useClickMode();
-  const { assertBlockByCoords, canAddWall, addWallByCoords } = useGrid();
+  const { assertBlockByCoords, canAddWall, addWallByCoords, canAddPawn, grid, getBlockByCoords } = useGrid();
 
   const pawns = useRef<ForwardedPawns>({} as ForwardedPawns);
   const walls = useRef<ForwardedWalls>({} as ForwardedWalls);
@@ -47,10 +47,13 @@ export const useModel = (options: Options) => {
     toggleMode,
     assertBlockByCoords,
     canAddWall,
+    canAddPawn,
     addWallByCoords,
     pawns,
     walls,
     blocks,
+    grid,
     showWireframes,
+    getBlockByCoords,
   };
 };

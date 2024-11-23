@@ -2,13 +2,14 @@ import { Vector3 } from '@react-three/fiber';
 import {
   BlockName,
   Colors,
+  CoordsWithIsHighlightedType,
   CoordsWithPosType,
   ForwardedBlock,
   Positions,
 } from '@src/components/game/block/block.type.ts';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
-import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
-import { BufferGeometry, Material, Mesh, MeshStandardMaterial } from 'three';
+import { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
+import { BufferGeometry, Color, Material, Mesh, MeshStandardMaterial } from 'three';
 
 type Props = {
   geometry: BufferGeometry;
@@ -19,12 +20,12 @@ type Props = {
   name: BlockName;
   material?: Material | Material[];
   scale?: Vector3;
-  handleClick: (coords: CoordsWithPosType) => void;
+  handleClick: (coords: CoordsWithIsHighlightedType) => void;
   handleOver: (coords: CoordsWithPosType) => void;
   handleOut: () => void;
 };
 
-const defaultColor = 'GRAY';
+const defaultColor = new Color('GRAY');
 
 export const Block = forwardRef(
   (
@@ -43,10 +44,6 @@ export const Block = forwardRef(
     });
 
     const mesh = useRef<Mesh>(null!);
-    const out = useCallback(() => {
-      colorRef.current.color.setColorName(defaultColor);
-      handleOut();
-    }, [handleOut]);
 
     useImperativeHandle(ref, () => {
       return {
@@ -55,7 +52,7 @@ export const Block = forwardRef(
         name: mesh.current.name as BlockName,
         getCoordinates: () => ({ row, col }),
         changeColor: (color: Colors) => {
-          colorRef.current.color.setColorName(color);
+          colorRef.current.color.set(color === 'DEFAULT' ? defaultColor : new Color(color));
         },
       };
     }, [col, row, mesh]);
@@ -73,9 +70,16 @@ export const Block = forwardRef(
 
           if (!pos) return; // Not a valid face, we don't care side faces
 
-          handleClick({ row, col, pos });
+          handleClick({
+            row,
+            col,
+            pos,
+            isHighlighted: !colorRef.current.color.equals(defaultColor),
+          });
         }}
-        onPointerMove={({ faceIndex }) => {
+        onPointerMove={({ stopPropagation, faceIndex }) => {
+          stopPropagation();
+
           if (!faceIndex) return;
 
           const pos = faceIdPositionMap.current[faceIndex];
@@ -84,8 +88,8 @@ export const Block = forwardRef(
 
           handleOver({ row, col, pos });
         }}
-        onPointerOut={out}
-        onPointerMissed={out}
+        onPointerOut={handleOut}
+        onPointerMissed={handleOut}
         geometry={geometry}
         position={position}
         scale={scale}

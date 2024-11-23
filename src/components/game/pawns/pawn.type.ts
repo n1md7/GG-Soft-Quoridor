@@ -1,3 +1,4 @@
+import { CoordsType } from '@src/components/game/block/block.type.ts';
 import { Nodes } from '@src/components/game/board/board.type.ts';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { Mesh, Vector3 } from 'three';
@@ -12,12 +13,16 @@ export type ForwardedPawn = {
   mesh: Mesh;
   name: PawnName;
   scale: Vector3;
-  moveTo: (params: MoveToParams) => void;
+  coords: CoordsType;
+  moveTo: (params: MoveToParams) => CoordsType;
+  setHighlight: (show: boolean) => void;
 };
 export type AnimateToParams = Pick<MoveToParams, 'position'>;
 export type PawnFn = {
-  animateTo: (params: AnimateToParams) => void;
-  animateToStartingPosition: () => void;
+  animateTo: (params: AnimateToParams) => CoordsType;
+  animateToStartingPosition: () => CoordsType;
+  setHighlight: (show: boolean) => void;
+  coords: CoordsType;
 };
 export type ForwardedPawns = {
   player: PawnFn;

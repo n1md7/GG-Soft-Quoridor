@@ -1,4 +1,4 @@
-import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
+import { CoordsType, CoordsWithIsHighlightedType, CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { useModel } from '@src/components/hooks/useModel.ts';
 import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
@@ -15,6 +15,7 @@ export const useGame = ({ path }: Options) => {
     toggleMode,
     assertBlockByCoords,
     canAddWall,
+    canAddPawn,
     addWallByCoords,
     pawns,
     nodes,
@@ -27,36 +28,47 @@ export const useGame = ({ path }: Options) => {
   const wallPosition = useWallPosition();
   const pawnPosition = usePawnPosition();
 
-  const handleBlockClick = useCallback(
-    (coords: CoordsWithPosType) => {
-      if (isPawnMode()) {
-        pawns.current.player.animateTo(pawnPosition.getDestinationFromCoords(coords));
+  const handlePawnStrategy = useCallback(
+    (coords: CoordsWithIsHighlightedType) => {
+      // Only allow pawns to be placed on highlighted blocks
+      if (!coords.isHighlighted) return setWallMode();
+      if (!canAddPawn(coords)) return setWallMode();
 
-        return setWallMode(); // Activate wall mode
-      }
+      pawns.current.player.setHighlight(false);
+      pawns.current.player.animateTo(pawnPosition.getDestinationFromCoords(coords));
+
+      return setWallMode(); // Activate wall mode
+    },
+    [canAddPawn, pawns, pawnPosition, setWallMode],
+  );
+
+  const handleWallStrategy = useCallback(
+    (coords: CoordsWithPosType) => {
+      assertBlockByCoords(coords);
 
       const wall = walls.current.player.getFrontWall();
       if (!wall) return console.info('Out of walls');
-
-      assertBlockByCoords(coords);
-
       if (!canAddWall(coords)) return console.info('Cannot add wall here');
 
       addWallByCoords(wall, coords);
       wall.moveTo(wallPosition.getDestinationFromCoords(coords));
       walls.current.player.dropFrontWall();
     },
-    [
-      isPawnMode,
-      walls,
-      assertBlockByCoords,
-      canAddWall,
-      addWallByCoords,
-      wallPosition,
-      pawns,
-      pawnPosition,
-      setWallMode,
-    ],
+    [walls, assertBlockByCoords, canAddWall, addWallByCoords, wallPosition],
+  );
+
+  const handleBlockClick = useCallback(
+    (coords: CoordsWithIsHighlightedType) => {
+      blocks.current.hidePossibleMoves();
+      pawns.current.player.setHighlight(false);
+
+      if (isPawnMode()) {
+        return handlePawnStrategy(coords);
+      }
+
+      return handleWallStrategy(coords);
+    },
+    [blocks, pawns, isPawnMode, handleWallStrategy, handlePawnStrategy],
   );
 
   const handleBlockOver = useCallback(
@@ -84,11 +96,15 @@ export const useGame = ({ path }: Options) => {
     walls.current.placeholder.hide();
   }, [walls]);
 
-  const handlePawnClick = useCallback(() => {
-    toggleMode();
-    // TODO highlight possible moves
-    console.info('Pawn clicked');
-  }, [toggleMode]);
+  const handlePawnClick = useCallback(
+    (coords: CoordsType) => {
+      toggleMode();
+
+      pawns.current.player.setHighlight(isPawnMode());
+      blocks.current.showPossibleMoves(coords, isPawnMode());
+    },
+    [blocks, isPawnMode, pawns, toggleMode],
+  );
 
   return {
     handleBlockClick,

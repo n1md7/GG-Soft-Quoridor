@@ -34,8 +34,19 @@ export const usePawnPosition = (options: Options = {}) => {
     [min, step],
   );
 
+  const getCoordsFromDestination = useCallback(
+    (position: Vector3) => {
+      return {
+        row: Math.round((position.z - min) / step) * 2,
+        col: Math.round((position.x - min) / step) * 2,
+      };
+    },
+    [min, step],
+  );
+
   return {
     getDestinationFromCoords,
+    getCoordsFromDestination,
     coords: {
       player: playerPosition.current,
       opponent: opponentPosition.current,
