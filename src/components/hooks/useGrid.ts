@@ -1,29 +1,27 @@
-import { CoordsWithPosType, ForwardedBlock } from '@src/components/game/Block.tsx';
-import { ForwardedWall } from '@src/components/game/Wall.tsx';
-import { useCallback, useMemo } from 'react';
+import { CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
+import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
+import { useCallback } from 'react';
 
-type Options = {
-  width?: number;
-  height?: number;
-};
-export const useGrid = (options: Options = {}) => {
-  const { width = 9, height = 9 } = options;
+const width = 9;
+const height = 9;
 
-  const grid = useMemo(() => {
-    const rows: (ForwardedBlock | ForwardedWall | null)[][] = [];
-    for (let row = 0; row < width * 2 - 1; row++) {
-      const cols: (ForwardedBlock | null)[] = [];
+// TODO: move grid into store
+const grid = (() => {
+  const rows: (ForwardedBlock | ForwardedWall | null)[][] = [];
+  for (let row = 0; row < width * 2 - 1; row++) {
+    const cols: (ForwardedBlock | null)[] = [];
 
-      for (let col = 0; col < height * 2 - 1; col++) {
-        cols.push(null);
-      }
-
-      rows.push(cols);
+    for (let col = 0; col < height * 2 - 1; col++) {
+      cols.push(null);
     }
 
-    return rows;
-  }, [width, height]);
+    rows.push(cols);
+  }
 
+  return rows;
+})();
+
+export const useGrid = () => {
   const getNextCoordsByCurrent = useCallback((coords: CoordsWithPosType) => {
     switch (coords.pos) {
       case 'TOP':
@@ -67,7 +65,7 @@ export const useGrid = (options: Options = {}) => {
 
       return !isEdge && !hasWall;
     },
-    [getNextCoordsByCurrent, grid, height, width],
+    [getNextCoordsByCurrent],
   );
 
   const addWallByCoords = useCallback(
@@ -76,22 +74,16 @@ export const useGrid = (options: Options = {}) => {
         grid[row][col] = wall;
       });
     },
-    [getNextCoordsByCurrent, grid],
+    [getNextCoordsByCurrent],
   );
 
-  const toColIndex = useCallback(
-    (num: number) => {
-      return num % width;
-    },
-    [width],
-  );
+  const toColIndex = useCallback((num: number) => {
+    return num % width;
+  }, []);
 
-  const toRowIndex = useCallback(
-    (num: number) => {
-      return width - 1 - Math.floor(num / width);
-    },
-    [width],
-  );
+  const toRowIndex = useCallback((num: number) => {
+    return width - 1 - Math.floor(num / width);
+  }, []);
 
   const getCoordinatesByName = useCallback(
     (name: string) => {
@@ -125,13 +117,30 @@ export const useGrid = (options: Options = {}) => {
 
       grid[row][col] = block;
     },
-    [getCoordinatesByName, grid],
+    [getCoordinatesByName],
+  );
+
+  const getBlockByCoords = useCallback((coords: CoordsWithPosType) => {
+    return grid[coords.row]?.[coords.col];
+  }, []);
+
+  const assertBlockByCoords = useCallback(
+    (coords: CoordsWithPosType) => {
+      const block = getBlockByCoords(coords);
+
+      if (!block) {
+        throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
+      }
+    },
+    [getBlockByCoords],
   );
 
   return {
     grid,
     mapByName,
     getCoordinatesByName,
+    getBlockByCoords,
+    assertBlockByCoords,
     addWallByCoords,
     canAddWall,
   };

@@ -1,4 +1,4 @@
-import { CoordsType } from '@src/components/game/Block.tsx';
+import { CoordsType } from '@src/components/game/block/block.type.ts';
 import { useCallback, useRef } from 'react';
 import { Vector3 } from 'three';
 
