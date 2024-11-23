@@ -1,7 +1,10 @@
+import { Placeholder } from '@src/components/game/placeholder/Placeholder.tsx';
+import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { ForwardedWall, ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { useWalls } from '@src/components/hooks/useWalls.ts';
 import { Wall } from '@src/components/game/walls/Wall.tsx';
+import * as THREE from 'three';
 import { BufferGeometry, Material } from 'three';
 
 type Props = {
@@ -24,6 +27,7 @@ type Props = {
 export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef<ForwardedWalls>) => {
   const { getIndexBy } = useWalls();
 
+  const placeholderWall = useRef<ForwardedPlaceholder>(null!);
   const playerWalls = useRef<ForwardedWall[]>([] as ForwardedWall[]);
   const opponentWalls = useRef<ForwardedWall[]>([] as ForwardedWall[]);
   const wallsRefCallback = useCallback(
@@ -42,6 +46,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
 
   useImperativeHandle(ref, () => {
     return {
+      placeholder: placeholderWall.current,
       player: {
         walls: playerWalls.current,
         hasWall: () => playerWalls.current.length > 0,
@@ -59,10 +64,17 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         },
       },
     };
-  }, []);
+  }, [playerWalls, opponentWalls, placeholderWall]);
 
   return (
     <>
+      <Placeholder
+        ref={placeholderWall}
+        color={{
+          default: new THREE.Color(0x00ff00),
+          danger: new THREE.Color(0xff0000),
+        }}
+      />
       <Wall
         ref={wallsRefCallback}
         name="Wall000"

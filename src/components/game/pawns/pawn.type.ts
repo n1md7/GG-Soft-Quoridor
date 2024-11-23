@@ -14,7 +14,12 @@ export type ForwardedPawn = {
   scale: Vector3;
   moveTo: (params: MoveToParams) => void;
 };
+export type AnimateToParams = Pick<MoveToParams, 'position'>;
+export type PawnFn = {
+  animateTo: (params: AnimateToParams) => void;
+  animateToStartingPosition: () => void;
+};
 export type ForwardedPawns = {
-  player: ForwardedPawn;
-  opponent: ForwardedPawn;
+  player: PawnFn;
+  opponent: PawnFn;
 };

@@ -1,4 +1,5 @@
 import { Nodes } from '@src/components/game/board/board.type.ts';
+import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { Euler, Mesh, Vector3 } from 'three';
 
@@ -28,4 +29,5 @@ export type PlayerFn = {
 export type ForwardedWalls = {
   player: PlayerFn;
   opponent: PlayerFn;
+  placeholder: ForwardedPlaceholder;
 };
