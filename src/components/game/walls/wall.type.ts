@@ -1,4 +1,4 @@
-import { Nodes } from '@src/components/game/board/Board.tsx';
+import { Nodes } from '@src/components/game/board/board.type.ts';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
 import { Euler, Mesh, Vector3 } from 'three';
 
@@ -18,4 +18,14 @@ export type ForwardedWall = {
   name: WallName;
   scale: Vector3;
   moveTo: (params: MoveToParams) => void;
+};
+export type PlayerFn = {
+  walls: ForwardedWall[];
+  hasWall: () => boolean;
+  getFrontWall: () => ForwardedWall | undefined;
+  dropFrontWall: () => void;
+};
+export type ForwardedWalls = {
+  player: PlayerFn;
+  opponent: PlayerFn;
 };

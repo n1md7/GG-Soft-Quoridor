@@ -1,32 +1,29 @@
-import { useGLTF } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import { Block } from '@src/components/game/block/Block.tsx';
 import { BlockName, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
+import { Block } from '@src/components/game/block/Block.tsx';
 import { GLTFResult } from '@src/components/game/board/board.type.ts';
 import { Pawn } from '@src/components/game/pawn/Pawn.tsx';
 import { Placeholder } from '@src/components/game/placeholder/Placeholder.tsx';
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
-import { ForwardedWall, WallName } from '@src/components/game/wall/wall.type.ts';
+import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
+import { Walls } from '@src/components/game/walls/Walls.tsx';
 import { useAnimation } from '@src/components/hooks/useAnimation.ts';
 import { useClickMode } from '@src/components/hooks/useClickMode.ts';
 import { useGrid } from '@src/components/hooks/useGrid.ts';
 import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
 import { setWireframe } from '@src/components/utils/material.util.ts';
-import { useControls } from 'leva';
-import { useCallback, useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { ForwardedPawn, PawnName } from '../pawn/pawn.type';
-import { Wall } from '../wall/Wall';
+import { useCallback, useEffect, useRef } from 'react';
+import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { useControls } from 'leva';
+import * as THREE from 'three';
 
 export const Model = () => {
   const wallPosition = useWallPosition();
   const pawnPosition = usePawnPosition();
-
-  const { isPawnMode, setWallMode, toggleMode } = useClickMode();
-
   const { nodes, materials } = useGLTF('./3D/board-v1.4.glb') as GLTFResult;
-
+  const { isPawnMode, setWallMode, toggleMode } = useClickMode();
   const { grid, mapByName, canAddWall, addWallByCoords } = useGrid();
   const { floatOneByCos } = useAnimation();
 
@@ -57,14 +54,7 @@ export const Model = () => {
     [mapByName],
   );
 
-  const indexedWalls = useRef<Record<WallName, ForwardedWall>>({} as Record<WallName, ForwardedWall>);
-  const arrayOfWalls = useRef<ForwardedWall[]>([] as ForwardedWall[]);
-  const wallsRefCallback = useCallback((wall: ForwardedWall) => {
-    if (!wall) return;
-
-    indexedWalls.current[wall.name] = wall;
-    arrayOfWalls.current.push(wall);
-  }, []);
+  const walls = useRef<ForwardedWalls>({} as ForwardedWalls);
 
   const showWireframes = useCallback((value: boolean) => {
     setWireframe(value, materials.PlatformMaterial);
@@ -84,13 +74,12 @@ export const Model = () => {
   const handleBlockClick = useCallback(
     (coords: CoordsWithPosType) => {
       if (isPawnMode()) {
-        // TODO: move pawn to the point
         indexedPawns.current.Pawn000.moveTo(pawnPosition.getDestinationFromCoords(coords));
 
         return setWallMode(); // Activate wall mode
       }
 
-      const wall = arrayOfWalls.current.at(0);
+      const wall = walls.current.player.getFrontWall();
       if (!wall) return console.info('Out of walls');
 
       const targetBlock = grid[coords.row]?.[coords.col];
@@ -98,13 +87,13 @@ export const Model = () => {
         throw new Error(`Invalid block coordinates: ${coords.row}, ${coords.col}`);
       }
 
-      if (!canAddWall(coords)) return console.info('Cannot add wall to the edge');
+      if (!canAddWall(coords)) return console.info('Cannot add wall here');
 
       addWallByCoords(wall, coords);
       wall.moveTo(wallPosition.getDestinationFromCoords(coords));
-      arrayOfWalls.current.shift();
+      walls.current.player.dropFrontWall();
     },
-    [isPawnMode, addWallByCoords, canAddWall, wallPosition.getDestinationFromCoords, grid],
+    [isPawnMode, grid, canAddWall, addWallByCoords, wallPosition, pawnPosition, setWallMode],
   );
 
   const handleBlockOver = useCallback(
@@ -159,14 +148,16 @@ export const Model = () => {
       position: pawnPosition.getDestinationFromCoords(pawnPosition.coords).position,
       withAnimation: false,
     });
-  }, [indexedPawns]);
+  }, [indexedPawns, pawnPosition]);
 
   useEffect(() => {
-    if (placeholder.current) {
-      placeholder.current.mesh.scale.copy(indexedWalls.current.Wall000.scale);
+    if (placeholder.current && walls.current) {
+      if (!walls.current.player.hasWall()) return;
+
+      placeholder.current.mesh.scale.copy(walls.current.player.getFrontWall()!.scale);
       placeholder.current.mesh.scale.multiply(new THREE.Vector3(1.01, 1.01, 1.01));
     }
-  }, [placeholder]);
+  }, [placeholder, walls]);
 
   useFrame(() => {
     if (!indexedBlocks.current.Block000) return;
@@ -180,6 +171,23 @@ export const Model = () => {
   return (
     <group dispose={null}>
       <Placeholder ref={placeholder} defaultColor={new THREE.Color(0x00ff00)} dangerColor={new THREE.Color(0xff0000)} />
+      <Walls
+        ref={walls}
+        walls={{
+          geometry: nodes.Wall000.geometry,
+          materials: {
+            player: materials.WallWhiteMaterial,
+            opponent: materials.WallBlackMaterial,
+          },
+        }}
+        containers={{
+          geometry: nodes.Container000.geometry,
+          materials: {
+            player: materials.ContainerMaterial,
+            opponent: materials.ContainerMaterial,
+          },
+        }}
+      />
       <mesh
         name="Platform"
         castShadow
@@ -1080,244 +1088,6 @@ export const Model = () => {
         position={[4.8, 0.55, -4.8]}
         scale={[0.5, 0.15, 0.5]}
       />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall000"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall000.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[6.796, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <mesh
-        name="Container000"
-        castShadow
-        receiveShadow
-        geometry={nodes.Container000.geometry}
-        material={materials.ContainerMaterial}
-        position={[6.029, -0.001, -1.3]}
-        scale={[1.6, 0.25, 1.25]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall001"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall001.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[7.036, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall002"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall002.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[7.276, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall003"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall003.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[7.516, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall004"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall004.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[7.756, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall005"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall005.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[7.996, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall006"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall006.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[8.236, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall007"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall007.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[8.476, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall008"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall008.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[8.716, 0.588, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall009"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall009.geometry}
-        material={materials.WallWhiteMaterial}
-        position={[8.956, 0.587, -1.301]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall010"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall010.geometry}
-        material={materials.WallBlackMaterial}
-        position={[6.796, 0.588, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <mesh
-        name="Container001"
-        castShadow
-        receiveShadow
-        geometry={nodes.Container001.geometry}
-        material={materials.ContainerMaterial}
-        position={[6.029, -0.001, 1.3]}
-        scale={[1.6, 0.25, 1.25]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall011"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall011.geometry}
-        material={materials.WallBlackMaterial}
-        position={[7.036, 0.588, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall012"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall012.geometry}
-        material={materials.WallBlackMaterial}
-        position={[7.276, 0.588, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall013"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall013.geometry}
-        material={materials.WallBlackMaterial}
-        position={[7.516, 0.588, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall014"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall014.geometry}
-        material={materials.WallBlackMaterial}
-        position={[7.756, 0.588, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall015"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall015.geometry}
-        material={materials.WallBlackMaterial}
-        position={[7.996, 0.588, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall016"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall016.geometry}
-        material={materials.WallBlackMaterial}
-        position={[8.236, 0.587, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall017"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall017.geometry}
-        material={materials.WallBlackMaterial}
-        position={[8.476, 0.587, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall018"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall018.geometry}
-        material={materials.WallBlackMaterial}
-        position={[8.716, 0.587, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
-      <Wall
-        ref={wallsRefCallback}
-        name="Wall019"
-        castShadow
-        receiveShadow
-        geometry={nodes.Wall019.geometry}
-        material={materials.WallBlackMaterial}
-        position={[8.956, 0.587, 1.299]}
-        rotation={[0, 0, -Math.PI / 6]}
-        scale={[0.1, 0.5, 1.1]}
-      />
       <mesh
         name="Plate001"
         castShadow
@@ -1336,6 +1106,7 @@ export const Model = () => {
         position={[7.629, 0.051, -4.181]}
         scale={[1.6, 0.05, 1.6]}
       />
+
       <Pawn
         ref={pawnsRefCallback}
         name="Pawn000"

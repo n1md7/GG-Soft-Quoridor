@@ -1,4 +1,4 @@
-import { MoveToParams } from '@src/components/game/wall/wall.type.ts';
+import { MoveToParams } from '@src/components/game/walls/wall.type.ts';
 import { Mesh } from 'three';
 
 export type ForwardedPlaceholder = {

@@ -1,5 +1,5 @@
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
-import { MoveToParams, PositionMap } from '@src/components/game/wall/wall.type.ts';
+import { MoveToParams, PositionMap } from '@src/components/game/walls/wall.type.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useLayoutEffect, useRef } from 'react';
 import { Mesh, MeshStandardMaterial } from 'three';
 import { Color } from 'three';

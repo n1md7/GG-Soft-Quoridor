@@ -1,14 +1,14 @@
 import { ThreeEvent, useFrame } from '@react-three/fiber';
-import { MoveToParams } from '@src/components/game/wall/wall.type.ts';
-import { ForwardedWall, PositionMap, WallName } from '@src/components/game/wall/wall.type.ts';
+import { MoveToParams } from '@src/components/game/walls/wall.type.ts';
+import { ForwardedWall, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { BufferGeometry, Euler, Material, Mesh, Vector3 } from 'three';
 
 type Props = {
   geometry: BufferGeometry;
-  position: [number, number, number];
   material: Material;
+  position: [number, number, number];
   rotation: [number, number, number];
   wireframe?: boolean;
   castShadow?: boolean;
