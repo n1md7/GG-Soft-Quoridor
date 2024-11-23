@@ -1,6 +1,8 @@
 import { Sparkles, useCursor } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
+import { CoordsType } from '@src/components/game/block/block.type.ts';
 import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawns/pawn.type.ts';
+import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
@@ -13,7 +15,7 @@ type Props = {
   position: [number, number, number];
   scale: [number, number, number];
   name: string;
-  handleClick?: () => void;
+  handleClick?: (coords: CoordsType) => void;
   wireframe?: boolean;
   castShadow?: boolean;
   receiveShadow?: boolean;
@@ -23,7 +25,11 @@ export const Pawn = forwardRef(
   ({ geometry, position, name, scale, material, handleClick }: Props, ref: ForwardedRef<ForwardedPawn>) => {
     const [hovered, set] = useState(false);
 
+    const { getCoordsFromDestination } = usePawnPosition();
     const percentage = usePercentage();
+
+    const vec3Position = new Vector3(position[0], position[1], position[2]);
+    const coords = useRef(getCoordsFromDestination(vec3Position));
     const mesh = useRef<Mesh>(null!);
     const sparkles = useRef<Points<BufferGeometry<NormalBufferAttributes>>>(null!);
     const moveUpAnimation = useRef<Tween<Vector3>>(null!);
@@ -42,7 +48,9 @@ export const Pawn = forwardRef(
         if (!withAnimation) {
           mesh.current.position.copy(position);
 
-          return;
+          coords.current = getCoordsFromDestination(position);
+
+          return coords.current;
         }
 
         const animationDuration = 800;
@@ -84,8 +92,12 @@ export const Pawn = forwardRef(
               .start();
           })
           .start();
+
+        coords.current = getCoordsFromDestination(position);
+
+        return coords.current;
       },
-      [percentage],
+      [getCoordsFromDestination, percentage],
     );
 
     useCursor(hovered /*'pointer', 'auto', document.body*/);
@@ -141,7 +153,7 @@ export const Pawn = forwardRef(
         onClick={(e) => {
           e.stopPropagation();
 
-          handleClick?.();
+          handleClick?.(coords.current);
         }}
       >
         <Sparkles visible={false} ref={sparkles} count={50} scale={2} size={8} speed={0.6} />

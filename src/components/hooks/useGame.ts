@@ -1,4 +1,4 @@
-import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
+import { CoordsType, CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { useModel } from '@src/components/hooks/useModel.ts';
 import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
@@ -43,7 +43,6 @@ export const useGame = ({ path }: Options) => {
 
       const wall = walls.current.player.getFrontWall();
       if (!wall) return console.info('Out of walls');
-
       if (!canAddWall(coords)) return console.info('Cannot add wall here');
 
       addWallByCoords(wall, coords);
@@ -55,13 +54,15 @@ export const useGame = ({ path }: Options) => {
 
   const handleBlockClick = useCallback(
     (coords: CoordsWithPosType) => {
+      blocks.current.hidePossibleMoves();
+
       if (isPawnMode()) {
         return handlePawnStrategy(coords);
       }
 
       return handleWallStrategy(coords);
     },
-    [isPawnMode, handleWallStrategy, handlePawnStrategy],
+    [blocks, isPawnMode, handleWallStrategy, handlePawnStrategy],
   );
 
   const handleBlockOver = useCallback(
@@ -89,13 +90,15 @@ export const useGame = ({ path }: Options) => {
     walls.current.placeholder.hide();
   }, [walls]);
 
-  const handlePawnClick = useCallback(() => {
-    toggleMode();
+  const handlePawnClick = useCallback(
+    (coords: CoordsType) => {
+      toggleMode();
 
-    pawns.current.player.setHighlight(isPawnMode());
-
-    // TODO highlight possible moves
-  }, [isPawnMode, pawns, toggleMode]);
+      pawns.current.player.setHighlight(isPawnMode());
+      blocks.current.showPossibleMoves(coords, isPawnMode());
+    },
+    [blocks, isPawnMode, pawns, toggleMode],
+  );
 
   return {
     handleBlockClick,

@@ -1,4 +1,5 @@
-import { CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
+import { CoordsType, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
+import { ForwardedPawn } from '@src/components/game/pawns/pawn.type.ts';
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
 import { useCallback } from 'react';
 
@@ -7,7 +8,7 @@ export const height = 9;
 
 // TODO: move grid into store
 const grid = (() => {
-  const rows: (ForwardedBlock | ForwardedWall | null)[][] = [];
+  const rows: (ForwardedBlock | ForwardedWall | ForwardedPawn | null)[][] = [];
   for (let row = 0; row < width * 2 - 1; row++) {
     const cols: (ForwardedBlock | null)[] = [];
 
@@ -77,6 +78,10 @@ export const useGrid = () => {
     [getNextCoordsByCurrent],
   );
 
+  const addPawnByCoords = useCallback((pawn: ForwardedPawn, coords: CoordsType) => {
+    grid[coords.row][coords.col] = pawn;
+  }, []);
+
   const toColIndex = useCallback((num: number) => {
     return num % width;
   }, []);
@@ -120,12 +125,12 @@ export const useGrid = () => {
     [getCoordinatesByName],
   );
 
-  const getBlockByCoords = useCallback((coords: CoordsWithPosType) => {
+  const getBlockByCoords = useCallback((coords: CoordsType) => {
     return grid[coords.row]?.[coords.col];
   }, []);
 
   const assertBlockByCoords = useCallback(
-    (coords: CoordsWithPosType) => {
+    (coords: CoordsType) => {
       const block = getBlockByCoords(coords);
 
       if (!block) {
@@ -133,6 +138,44 @@ export const useGrid = () => {
       }
     },
     [getBlockByCoords],
+  );
+
+  const getNeighbourBlocks = useCallback((coords: CoordsType) => {
+    const top = grid[coords.row - 2]?.[coords.col] as ForwardedBlock;
+    const bottom = grid[coords.row + 2]?.[coords.col] as ForwardedBlock;
+    const left = grid[coords.row]?.[coords.col - 2] as ForwardedBlock;
+    const right = grid[coords.row]?.[coords.col + 2] as ForwardedBlock;
+
+    return {
+      top,
+      bottom,
+      left,
+      right,
+    };
+  }, []);
+
+  const getNeighbourWalls = useCallback((coords: CoordsType) => {
+    const top = grid[coords.row - 1]?.[coords.col] as ForwardedWall;
+    const bottom = grid[coords.row + 1]?.[coords.col] as ForwardedWall;
+    const left = grid[coords.row]?.[coords.col - 1] as ForwardedWall;
+    const right = grid[coords.row]?.[coords.col + 1] as ForwardedWall;
+
+    return {
+      top,
+      bottom,
+      left,
+      right,
+    };
+  }, []);
+
+  const getNeighbours = useCallback(
+    (coords: CoordsType) => {
+      return {
+        wall: getNeighbourWalls(coords),
+        block: getNeighbourBlocks(coords),
+      };
+    },
+    [getNeighbourWalls, getNeighbourBlocks],
   );
 
   return {
@@ -143,5 +186,9 @@ export const useGrid = () => {
     assertBlockByCoords,
     addWallByCoords,
     canAddWall,
+    getNeighbourBlocks,
+    getNeighbourWalls,
+    getNeighbours,
+    addPawnByCoords,
   };
 };

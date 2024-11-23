@@ -44,7 +44,7 @@ export const Block = forwardRef(
 
     const mesh = useRef<Mesh>(null!);
     const out = useCallback(() => {
-      colorRef.current.color.setColorName(defaultColor);
+      // colorRef.current.color.setColorName(defaultColor);
       handleOut();
     }, [handleOut]);
 
@@ -55,7 +55,7 @@ export const Block = forwardRef(
         name: mesh.current.name as BlockName,
         getCoordinates: () => ({ row, col }),
         changeColor: (color: Colors) => {
-          colorRef.current.color.setColorName(color);
+          colorRef.current.color.setColorName(color === 'DEFAULT' ? defaultColor : color);
         },
       };
     }, [col, row, mesh]);
@@ -75,7 +75,9 @@ export const Block = forwardRef(
 
           handleClick({ row, col, pos });
         }}
-        onPointerMove={({ faceIndex }) => {
+        onPointerMove={({ stopPropagation, faceIndex }) => {
+          stopPropagation();
+
           if (!faceIndex) return;
 
           const pos = faceIdPositionMap.current[faceIndex];
