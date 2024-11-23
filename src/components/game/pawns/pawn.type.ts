@@ -13,11 +13,13 @@ export type ForwardedPawn = {
   name: PawnName;
   scale: Vector3;
   moveTo: (params: MoveToParams) => void;
+  setHighlight: (show: boolean) => void;
 };
 export type AnimateToParams = Pick<MoveToParams, 'position'>;
 export type PawnFn = {
   animateTo: (params: AnimateToParams) => void;
   animateToStartingPosition: () => void;
+  setHighlight: (show: boolean) => void;
 };
 export type ForwardedPawns = {
   player: PawnFn;

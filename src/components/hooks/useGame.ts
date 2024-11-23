@@ -27,18 +27,22 @@ export const useGame = ({ path }: Options) => {
   const wallPosition = useWallPosition();
   const pawnPosition = usePawnPosition();
 
-  const handleBlockClick = useCallback(
+  const handlePawnStrategy = useCallback(
     (coords: CoordsWithPosType) => {
-      if (isPawnMode()) {
-        pawns.current.player.animateTo(pawnPosition.getDestinationFromCoords(coords));
+      pawns.current.player.setHighlight(false);
+      pawns.current.player.animateTo(pawnPosition.getDestinationFromCoords(coords));
 
-        return setWallMode(); // Activate wall mode
-      }
+      return setWallMode(); // Activate wall mode
+    },
+    [pawns, pawnPosition, setWallMode],
+  );
+
+  const handleWallStrategy = useCallback(
+    (coords: CoordsWithPosType) => {
+      assertBlockByCoords(coords);
 
       const wall = walls.current.player.getFrontWall();
       if (!wall) return console.info('Out of walls');
-
-      assertBlockByCoords(coords);
 
       if (!canAddWall(coords)) return console.info('Cannot add wall here');
 
@@ -46,17 +50,18 @@ export const useGame = ({ path }: Options) => {
       wall.moveTo(wallPosition.getDestinationFromCoords(coords));
       walls.current.player.dropFrontWall();
     },
-    [
-      isPawnMode,
-      walls,
-      assertBlockByCoords,
-      canAddWall,
-      addWallByCoords,
-      wallPosition,
-      pawns,
-      pawnPosition,
-      setWallMode,
-    ],
+    [walls, assertBlockByCoords, canAddWall, addWallByCoords, wallPosition],
+  );
+
+  const handleBlockClick = useCallback(
+    (coords: CoordsWithPosType) => {
+      if (isPawnMode()) {
+        return handlePawnStrategy(coords);
+      }
+
+      return handleWallStrategy(coords);
+    },
+    [isPawnMode, handleWallStrategy, handlePawnStrategy],
   );
 
   const handleBlockOver = useCallback(
@@ -86,9 +91,11 @@ export const useGame = ({ path }: Options) => {
 
   const handlePawnClick = useCallback(() => {
     toggleMode();
+
+    pawns.current.player.setHighlight(isPawnMode());
+
     // TODO highlight possible moves
-    console.info('Pawn clicked');
-  }, [toggleMode]);
+  }, [isPawnMode, pawns, toggleMode]);
 
   return {
     handleBlockClick,

@@ -27,6 +27,7 @@ export const Pawns = forwardRef(({ geometry, materials, playerClick }: Props, re
         animateToStartingPosition() {
           player.current.moveTo(getDestinationFromCoords(coords.player));
         },
+        setHighlight: player.current.setHighlight,
       },
       opponent: {
         animateTo(params: AnimateToParams) {
@@ -35,6 +36,7 @@ export const Pawns = forwardRef(({ geometry, materials, playerClick }: Props, re
         animateToStartingPosition() {
           opponent.current.moveTo(getDestinationFromCoords(coords.opponent));
         },
+        setHighlight: opponent.current.setHighlight,
       },
     };
   });
