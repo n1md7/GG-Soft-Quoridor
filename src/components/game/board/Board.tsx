@@ -4,8 +4,9 @@ import { Blocks } from '@src/components/game/block/Blocks.tsx';
 import { Pawns } from '@src/components/game/pawns/Pawns.tsx';
 import { Walls } from '@src/components/game/walls/Walls.tsx';
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { GameContext } from '@src/context/game.context.ts';
 import { useControls } from 'leva';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 
 const path = './3D/board-v1.4.glb';
 
@@ -23,6 +24,10 @@ export const Board = () => {
     blocks,
     showWireframes,
   } = useGame({ path });
+
+  const game = useContext(GameContext);
+
+  console.info('game', game, game.getName());
 
   useControls('Board', {
     wireframe: {

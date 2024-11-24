@@ -1,27 +1,14 @@
 import { CoordsType, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
-import { useCallback } from 'react';
+import { GridContext } from '@src/context/grid.context.ts';
+import { useCallback, useContext } from 'react';
 
 export const width = 9;
 export const height = 9;
 
-// TODO: move grid into store
-const grid = (() => {
-  const rows: (ForwardedBlock | ForwardedWall | null)[][] = [];
-  for (let row = 0; row < width * 2 - 1; row++) {
-    const cols: (ForwardedBlock | null)[] = [];
-
-    for (let col = 0; col < height * 2 - 1; col++) {
-      cols.push(null);
-    }
-
-    rows.push(cols);
-  }
-
-  return rows;
-})();
-
 export const useGrid = () => {
+  const grid = useContext(GridContext);
+
   const getNextCoordsByCurrent = useCallback((coords: CoordsWithPosType) => {
     switch (coords.pos) {
       case 'TOP':
