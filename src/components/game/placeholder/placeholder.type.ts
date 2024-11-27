@@ -8,5 +8,6 @@ export type ForwardedPlaceholder = {
   hide: () => void;
   colorDanger: () => void;
   colorDefault: () => void;
+  showColor: (showDefault: boolean) => void;
   setScaleFrom: (scale: Vector3) => void;
 };

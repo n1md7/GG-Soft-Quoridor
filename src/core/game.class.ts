@@ -1,6 +1,6 @@
 import { ModelType } from '@src/components/hooks/useModel.ts';
-import { Computer } from '@src/core/entities/computer.class.ts';
-import { Player } from '@src/core/entities/player.class.ts';
+import { Computer } from '@src/core/entities/computer/computer.class.ts';
+import { Player } from '@src/core/entities/player/player.class.ts';
 import { Grid } from '@src/core/grid.class.ts';
 
 export class Game {
