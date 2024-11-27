@@ -51,14 +51,21 @@ export class Player extends Character {
   }
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
+    if (!this.isMyTurn()) return console.info('Not my turn, diba?');
+
     this.blocks.current.hidePossibleMoves();
     this.pawns.current.player.setHighlight(false);
 
-    if (this.mode.isPawn()) {
-      return this.handlePawnStrategy(coords);
+    switch (this.mode.isPawn()) {
+      case true:
+        this.handlePawnStrategy(coords);
+        break;
+      case false:
+        this.handleWallStrategy(coords);
+        break;
     }
 
-    return this.handleWallStrategy(coords);
+    this.notifyActionFinished();
   }
 
   handleBlockPointerOver(coords: CoordsWithPosType) {
@@ -87,6 +94,8 @@ export class Player extends Character {
   }
 
   handlePawnPointerClick(coords: CoordsType) {
+    if (!this.isMyTurn()) return console.info('Not my turn, diba?');
+
     this.mode.toggle();
 
     this.pawns.current.player.setHighlight(this.mode.isPawn());
