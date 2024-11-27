@@ -7,7 +7,7 @@ import {
   ForwardedBlock,
   ForwardedBlocks,
 } from '@src/components/game/block/block.type.ts';
-import { useGrid } from '@src/components/hooks/useGrid.ts';
+import { useGame } from '@src/components/hooks/useGame.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { BufferGeometry, Material } from 'three';
 
@@ -21,7 +21,7 @@ type Props = {
 
 export const Blocks = forwardRef(
   ({ geometry, material, handleOver, handleOut, handleClick }: Props, ref: ForwardedRef<ForwardedBlocks>) => {
-    const { mapByName, getNeighbours } = useGrid();
+    const { grid } = useGame();
 
     const lastHighlighted = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
     const blocks = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
@@ -30,9 +30,9 @@ export const Blocks = forwardRef(
         if (!block) return;
 
         blocks.current.push(block);
-        mapByName(block);
+        grid.mapByName(block);
       },
-      [mapByName],
+      [grid],
     );
 
     useImperativeHandle(ref, () => {
@@ -46,7 +46,7 @@ export const Blocks = forwardRef(
           lastHighlighted.current = [];
         },
         showPossibleMoves: (coords: CoordsType, show: boolean) => {
-          const neighbour = getNeighbours(coords);
+          const neighbour = grid.getNeighbors(coords);
 
           const color: Colors = show ? 'YELLOW' : 'DEFAULT';
 
@@ -70,7 +70,7 @@ export const Blocks = forwardRef(
           }
         },
       };
-    }, [getNeighbours]);
+    }, [grid]);
 
     return (
       <>

@@ -3,8 +3,6 @@ import { ForwardedBlocks } from '@src/components/game/block/block.type.ts';
 import { GLTFResult } from '@src/components/game/board/board.type.ts';
 import { ForwardedPawns } from '@src/components/game/pawns/pawn.type.ts';
 import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
-import { useClickMode } from '@src/components/hooks/useClickMode.ts';
-import { useGrid } from '@src/components/hooks/useGrid.ts';
 import { setWireframe } from '@src/components/utils/material.util.ts';
 import { useCallback, useRef } from 'react';
 
@@ -14,8 +12,6 @@ type Options = {
 
 export const useModel = (options: Options) => {
   const { nodes, materials } = useGLTF(options.path) as GLTFResult;
-  const { isPawnMode, setWallMode, toggleMode } = useClickMode();
-  const { assertBlockByCoords, canAddWall, addWallByCoords, canAddPawn, grid, getBlockByCoords } = useGrid();
 
   const pawns = useRef<ForwardedPawns>({} as ForwardedPawns);
   const walls = useRef<ForwardedWalls>({} as ForwardedWalls);
@@ -42,18 +38,11 @@ export const useModel = (options: Options) => {
   return {
     nodes,
     materials,
-    isPawnMode,
-    setWallMode,
-    toggleMode,
-    assertBlockByCoords,
-    canAddWall,
-    canAddPawn,
-    addWallByCoords,
     pawns,
     walls,
     blocks,
-    grid,
     showWireframes,
-    getBlockByCoords,
   };
 };
+
+export type ModelType = ReturnType<typeof useModel>;
