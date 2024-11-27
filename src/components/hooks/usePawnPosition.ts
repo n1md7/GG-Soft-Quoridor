@@ -1,5 +1,5 @@
 import { CoordsType } from '@src/components/game/block/block.type.ts';
-import { height, width } from '@src/components/hooks/useGrid.ts';
+import { height, width } from '@src/components/hooks/useGame.ts';
 import { useCallback, useRef } from 'react';
 import { Vector3 } from 'three';
 

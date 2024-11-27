@@ -1,7 +1,4 @@
+import { Game } from '@src/core/game.class.ts';
 import { createContext } from 'react';
 
-export const defaultValues = {
-  hola: 'mundo',
-  getName: () => 'mundo',
-};
-export const GameContext = createContext(defaultValues);
+export const GameContext = createContext<Game>(null!);
