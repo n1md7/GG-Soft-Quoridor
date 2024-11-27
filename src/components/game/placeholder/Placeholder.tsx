@@ -1,5 +1,7 @@
+import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
-import { MoveToParams, PositionMap } from '@src/components/game/walls/wall.type.ts';
+import { PositionMap } from '@src/components/game/walls/wall.type.ts';
+import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useLayoutEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Mesh, MeshStandardMaterial, Vector3 } from 'three';
@@ -15,13 +17,15 @@ type Props = {
 export const Placeholder = forwardRef(({ color }: Props, ref: ForwardedRef<ForwardedPlaceholder>) => {
   const mesh = useRef<Mesh>(null!);
   const material = useRef<MeshStandardMaterial>(null!);
+  const { getDestinationFromCoords } = useWallPosition();
 
   const moveTo = useCallback(
-    ({ position, rotation }: MoveToParams) => {
+    (coords: CoordsWithPosType) => {
+      const { position, rotation } = getDestinationFromCoords(coords);
       mesh.current.position.copy(position);
       mesh.current.rotation.y = PositionMap[rotation].y;
     },
-    [mesh],
+    [mesh, getDestinationFromCoords],
   );
   const setScaleFrom = useCallback(
     (scale: Vector3) => {
