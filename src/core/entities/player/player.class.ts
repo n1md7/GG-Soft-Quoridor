@@ -8,9 +8,9 @@ import { ForwardedPawns } from '@src/components/game/pawns/pawn.type.ts';
 import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { height, width } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
-import { Character } from '@src/core/entities/character.class.ts';
+import { Character } from '@src/core/entities/abstract/character.class.ts';
 import { Grid } from '@src/core/grid.class.ts';
-import { Mode } from '@src/core/mode.class.ts';
+import { Mode } from '@src/core/entities/player/mode.class.ts';
 import { MutableRefObject } from 'react';
 
 export class Player extends Character {
@@ -69,9 +69,11 @@ export class Player extends Character {
     this.walls.current.placeholder.wall.show();
 
     switch (this.grid.canAddWall(coords)) {
-      case true:
-        this.walls.current.placeholder.wall.colorDefault();
+      case true: {
+        const showDefault = this.walls.current.player.hasWall();
+        this.walls.current.placeholder.wall.showColor(showDefault);
         break;
+      }
       case false:
         this.walls.current.placeholder.wall.colorDanger();
         break;
@@ -95,6 +97,7 @@ export class Player extends Character {
     this.grid.assertBlockByCoords(coords);
 
     const wall = this.walls.current.player.getFrontWall();
+
     if (!wall) return console.info('Out of walls');
     if (!this.grid.canAddWall(coords)) return console.info('Cannot add wall here');
 

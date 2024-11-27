@@ -40,6 +40,12 @@ export const Placeholder = forwardRef(({ color }: Props, ref: ForwardedRef<Forwa
   const hide = useCallback(() => (mesh.current.visible = false), [mesh]);
   const colorDanger = useCallback(() => (material.current.color = color.danger), [material, color.danger]);
   const colorDefault = useCallback(() => (material.current.color = color.default), [material, color.default]);
+  const showColor = useCallback(
+    (showDefault: boolean) => {
+      material.current.color = showDefault ? color.default : color.danger;
+    },
+    [material, color],
+  );
 
   useImperativeHandle(
     ref,
@@ -51,8 +57,9 @@ export const Placeholder = forwardRef(({ color }: Props, ref: ForwardedRef<Forwa
       colorDanger,
       colorDefault,
       setScaleFrom,
+      showColor,
     }),
-    [moveTo, show, hide, colorDanger, colorDefault, setScaleFrom],
+    [moveTo, show, hide, colorDanger, colorDefault, setScaleFrom, showColor],
   );
 
   useLayoutEffect(() => {
