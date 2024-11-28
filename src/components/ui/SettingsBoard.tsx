@@ -18,7 +18,7 @@ export function SettingsBoard() {
     <div className="main-container setting-board">
       <div className="main-trapezoid">
         <div className="trapezoid settings">
-          <span className="header">Settings</span>
+          <span className="header">Lobby</span>
         </div>
       </div>
       <div className="wrapper-outline">
@@ -34,6 +34,7 @@ export function SettingsBoard() {
                 value={inputValue}
                 onChange={handleInputChange}
                 className="input-name"
+                autoComplete="off"
               />
 
               <div className="input-container">
