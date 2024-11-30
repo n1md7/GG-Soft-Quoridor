@@ -41,6 +41,8 @@ export class Computer extends Character {
   }
 
   protected makeMove() {
+    if (this.won()) return;
+
     const path = this.getShortestPath(this.getCoords());
 
     const [, ...otherCoords] = path;
@@ -91,5 +93,10 @@ export class Computer extends Character {
     }
 
     return bottomLines;
+  }
+
+  override won(): boolean {
+    const bottomLine = height * 2 - 2;
+    return this.getCoords().row === bottomLine;
   }
 }
