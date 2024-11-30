@@ -1,4 +1,4 @@
-import { ThreeEvent, useFrame } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
@@ -75,12 +75,12 @@ export const Wall = forwardRef(
           })
           .start();
       },
-      [mesh, getDestinationFromCoords],
+      [getDestinationFromCoords, percentage],
     );
 
-    const over = useCallback((e: ThreeEvent<PointerEvent>) => {
-      e.stopPropagation();
-    }, []);
+    // const over = useCallback((e: ThreeEvent<PointerEvent>) => {
+    //   e.stopPropagation();
+    // }, []);
 
     useImperativeHandle(ref, () => {
       return {
@@ -108,7 +108,7 @@ export const Wall = forwardRef(
           material={material}
           geometry={geometry}
           position={position}
-          onPointerOver={over}
+          // onPointerOver={over}
           scale={scale}
         />
       </>
