@@ -64,8 +64,6 @@ export class Player extends Character {
         this.handleWallStrategy(coords);
         break;
     }
-
-    this.notifyActionFinished();
   }
 
   handleBlockPointerOver(coords: CoordsWithPosType) {
@@ -77,8 +75,10 @@ export class Player extends Character {
 
     switch (this.grid.canAddWall(coords)) {
       case true: {
+        const isMyTurn = this.isMyTurn();
         const showDefault = this.walls.current.player.hasWall();
-        this.walls.current.placeholder.wall.showColor(showDefault);
+        const showDefaultColor = isMyTurn && showDefault;
+        this.walls.current.placeholder.wall.showColor(showDefaultColor);
         break;
       }
       case false:
@@ -113,6 +113,8 @@ export class Player extends Character {
     this.grid.addWallByCoords(wall, coords);
     wall.moveTo(coords);
     this.walls.current.player.dropFrontWall();
+
+    this.notifyTurnRotation();
   }
 
   private handlePawnStrategy(coords: CoordsWithIsHighlightedType) {
@@ -121,6 +123,8 @@ export class Player extends Character {
 
     this.pawns.current.player.setHighlight(false);
     this.pawns.current.player.animateTo(this.getDestinationFromCoords(coords));
+
+    this.notifyTurnRotation();
 
     return this.mode.setWallMode();
   }

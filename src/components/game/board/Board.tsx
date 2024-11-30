@@ -1,12 +1,13 @@
 import { Blocks } from '@src/components/game/block/Blocks.tsx';
+import { Path } from '@src/components/game/path/Path.tsx';
 import { Pawns } from '@src/components/game/pawns/Pawns.tsx';
 import { Walls } from '@src/components/game/walls/Walls.tsx';
-import { GameContext } from '@src/context/game.context.ts';
+import { useGame } from '@src/components/hooks/useGame.ts';
 import { useControls } from 'leva';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
 export const Board = () => {
-  const game = useContext(GameContext);
+  const game = useGame();
 
   console.info('game', game);
 
@@ -38,6 +39,7 @@ export const Board = () => {
 
   return (
     <group dispose={null}>
+      <Path />
       <Blocks
         ref={game.model.blocks}
         material={game.model.materials.BlockMaterial}
