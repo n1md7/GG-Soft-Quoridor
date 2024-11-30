@@ -1,6 +1,6 @@
 import { CoordsType, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
-import { height, width } from '@src/components/hooks/useGame.ts';
+import { HEIGHT, WIDTH } from '@src/components/hooks/useGame.ts';
 
 export type CellType = ForwardedBlock | ForwardedWall | null;
 
@@ -27,9 +27,9 @@ export class Grid {
 
   canAddWall(coords: CoordsWithPosType) {
     const isTopRow = coords.row === 0 && coords.pos === 'TOP';
-    const isBottomRow = coords.row === height * 2 - 2 && coords.pos === 'BOTTOM';
+    const isBottomRow = coords.row === HEIGHT * 2 - 2 && coords.pos === 'BOTTOM';
     const isLeftCol = coords.col === 0 && coords.pos === 'LEFT';
-    const isRightCol = coords.col === width * 2 - 2 && coords.pos === 'RIGHT';
+    const isRightCol = coords.col === WIDTH * 2 - 2 && coords.pos === 'RIGHT';
 
     const isEdge = isTopRow || isBottomRow || isLeftCol || isRightCol;
     const hasWall = this.getNextCoordsByCurrent(coords).some(({ row, col }) => {
@@ -194,7 +194,7 @@ export class Grid {
   }
 
   private getIdFromPoint(point: CoordsType) {
-    return point.row * width + point.col;
+    return point.row * WIDTH + point.col;
   }
 
   private equals(pointA: CoordsType, pointBs: CoordsType[]) {
@@ -245,7 +245,7 @@ export class Grid {
    * @private
    */
   private toColIndex(num: number) {
-    return num % width;
+    return num % WIDTH;
   }
 
   /**
@@ -254,16 +254,16 @@ export class Grid {
    * @private
    */
   private toRowIndex(num: number) {
-    return width - 1 - Math.floor(num / width);
+    return WIDTH - 1 - Math.floor(num / WIDTH);
   }
 
   private createGrid() {
     const rows: CellType[][] = [];
 
-    for (let row = 0; row < width * 2 - 1; row++) {
+    for (let row = 0; row < WIDTH * 2 - 1; row++) {
       const cols: CellType[] = [];
 
-      for (let col = 0; col < height * 2 - 1; col++) {
+      for (let col = 0; col < HEIGHT * 2 - 1; col++) {
         cols.push(null);
       }
 
