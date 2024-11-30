@@ -8,6 +8,7 @@ import {
   ForwardedBlocks,
 } from '@src/components/game/block/block.type.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { highlightColor } from '@src/config/highlight.config.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { BufferGeometry, Material } from 'three';
 
@@ -48,7 +49,7 @@ export const Blocks = forwardRef(
         showPossibleMoves: (coords: CoordsType, show: boolean) => {
           const neighbour = grid.getNeighbors(coords);
 
-          const color: Colors = show ? 'YELLOW' : 'DEFAULT';
+          const color: Colors = show ? highlightColor : 'DEFAULT';
 
           // TODO: get Pawn reference here and do checks to make they do no step each other
 
