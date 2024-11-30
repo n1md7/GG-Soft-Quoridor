@@ -75,11 +75,11 @@ export const Wall = forwardRef(
           })
           .start();
       },
-      [mesh, getDestinationFromCoords],
+      [getDestinationFromCoords, percentage],
     );
 
     const over = useCallback((e: ThreeEvent<PointerEvent>) => {
-      e.stopPropagation();
+      // e.stopPropagation();
     }, []);
 
     useImperativeHandle(ref, () => {
