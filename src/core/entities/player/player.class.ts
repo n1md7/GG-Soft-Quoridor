@@ -123,6 +123,7 @@ export class Player extends Character {
     if (!coords.isHighlighted) return this.mode.setWallMode();
     if (!this.grid.canAddPawn(coords)) return this.mode.setWallMode();
 
+    this.setCoords(coords);
     this.pawns.current.player.setHighlight(false);
     this.pawns.current.player.animateTo(this.getDestinationFromCoords(coords));
 
