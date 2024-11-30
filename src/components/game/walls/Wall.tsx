@@ -78,9 +78,9 @@ export const Wall = forwardRef(
       [getDestinationFromCoords, percentage],
     );
 
-    const over = useCallback((e: ThreeEvent<PointerEvent>) => {
-      // e.stopPropagation();
-    }, []);
+    // const over = useCallback((e: ThreeEvent<PointerEvent>) => {
+    //   e.stopPropagation();
+    // }, []);
 
     useImperativeHandle(ref, () => {
       return {
@@ -108,7 +108,7 @@ export const Wall = forwardRef(
           material={material}
           geometry={geometry}
           position={position}
-          onPointerOver={over}
+          // onPointerOver={over}
           scale={scale}
         />
       </>
