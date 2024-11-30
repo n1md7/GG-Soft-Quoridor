@@ -1,4 +1,4 @@
-import { ThreeEvent, useFrame } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
