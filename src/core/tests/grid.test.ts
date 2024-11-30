@@ -1,13 +1,13 @@
 import { BlockName, CoordsType, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
-import { height, width } from '@src/components/hooks/useGame.ts';
+import { HEIGHT, WIDTH } from '@src/components/hooks/useGame.ts';
 import { Grid } from '@src/core/grid.class.ts';
 import { describe, expect } from 'vitest';
 
 const getBlockNames = () => {
   const names: BlockName[] = [];
 
-  for (let i = 0; i < width * height; i++) {
+  for (let i = 0; i < WIDTH * HEIGHT; i++) {
     names.push(`Block${String(i).padStart(3, '0')}` as BlockName);
   }
 
