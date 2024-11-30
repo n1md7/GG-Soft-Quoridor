@@ -1,5 +1,5 @@
-import { Subject } from '@src/core/interfaces/subject.interface.ts';
+import { Character } from '@src/core/entities/abstract/character.class.ts';
 
 export interface Observer {
-  notify(subject: Subject): void;
+  notify(subject: Character): void;
 }

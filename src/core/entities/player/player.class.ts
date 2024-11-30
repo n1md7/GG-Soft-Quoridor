@@ -51,6 +51,7 @@ export class Player extends Character {
   }
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
+    if (this.won()) return;
     if (!this.isMyTurn()) return console.info('Not my turn, diba?');
 
     this.blocks.current.hidePossibleMoves();
@@ -94,6 +95,7 @@ export class Player extends Character {
   }
 
   handlePawnPointerClick(coords: CoordsType) {
+    if (this.won()) return;
     if (!this.isMyTurn()) return console.info('Not my turn, diba?');
 
     this.mode.toggle();
@@ -127,5 +129,9 @@ export class Player extends Character {
     this.notifyTurnRotation();
 
     return this.mode.setWallMode();
+  }
+
+  override won(): boolean {
+    return this.getCoords().row === 0;
   }
 }
