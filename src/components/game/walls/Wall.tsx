@@ -1,7 +1,9 @@
 import { ThreeEvent, useFrame } from '@react-three/fiber';
 import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
+import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
+import { animationTime } from '@src/config/animation.config.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { BufferGeometry, Euler, Material, Mesh, Vector3 } from 'three';
@@ -21,21 +23,21 @@ type Props = {
 export const Wall = forwardRef(
   ({ geometry, position, name, scale, material }: Props, ref: ForwardedRef<ForwardedWall>) => {
     const { getDestinationFromCoords } = useWallPosition();
+    const percentage = usePercentage();
     const mesh = useRef<Mesh>(null!);
     const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const moveDownAnimation = useRef<Tween<Vector3>>(null!);
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
     const rotateByAnimation = useRef<Tween<Euler>>(null!);
 
-    const animationTime = 1000;
-
     const moveTo = useCallback(
       (coords: CoordsWithPosType) => {
         const { position, rotation } = getDestinationFromCoords(coords);
+        const [moveUpTime, moveToTime] = percentage.get(animationTime, 25);
 
         moveUpAnimation.current = new Tween(mesh.current.position)
           .to({ y: 2.1 })
-          .duration(animationTime / 4)
+          .duration(moveUpTime)
           .easing(Easing.Exponential.InOut)
           .onComplete(() => {
             moveUpAnimation.current.remove();
@@ -43,7 +45,7 @@ export const Wall = forwardRef(
 
             rotateByAnimation.current = new Tween(mesh.current.rotation)
               .to({ y: PositionMap[rotation].y })
-              .duration(animationTime)
+              .duration(moveToTime)
               .easing(Easing.Exponential.InOut)
               .onComplete(() => {
                 rotateByAnimation.current.remove();
@@ -53,7 +55,7 @@ export const Wall = forwardRef(
 
             moveToAnimation.current = new Tween(mesh.current.position)
               .to({ x: position.x, z: position.z })
-              .duration(animationTime)
+              .duration(moveToTime)
               .easing(Easing.Exponential.InOut)
               .onComplete(() => {
                 moveToAnimation.current.remove();
@@ -61,7 +63,7 @@ export const Wall = forwardRef(
 
                 moveDownAnimation.current = new Tween(mesh.current.position)
                   .to({ y: position.y })
-                  .duration(animationTime / 4)
+                  .duration(moveUpTime)
                   .easing(Easing.Exponential.InOut)
                   .onComplete(() => {
                     moveDownAnimation.current.remove();

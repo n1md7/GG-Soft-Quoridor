@@ -41,7 +41,7 @@ export class Grid {
 
   canAddPawn(coords: CoordsType) {
     // Only allow pawns to be placed on blocks
-    return this.getBlockByCoords(coords)?.name.startsWith('Block');
+    return this.getBlockByCoords(coords)?.name?.startsWith('Block');
   }
 
   addWallByCoords(wall: ForwardedWall, coords: CoordsWithPosType) {
@@ -107,6 +107,98 @@ export class Grid {
       block: this.getNeighborBlocks(coords),
       wall: this.getNeighborWalls(coords),
     };
+  }
+
+  findAnyPath(startPoint: CoordsType, destinationPoints: CoordsType[]) {
+    type Target = CoordsType;
+    type Path = CoordsType;
+
+    const possiblePaths: Path[][] = [];
+    const visitedTargets = new Set<number>();
+    const queue: [Target, Path[]][] = [[startPoint, [startPoint]]];
+
+    while (queue.length > 0) {
+      const item = queue.pop();
+
+      // We want to stop when we reach the empty queue
+      if (!item) continue;
+
+      // Get current target and observe neighbors
+      const [currentPoint, existingPath] = item;
+
+      if (this.equals(currentPoint, destinationPoints)) {
+        possiblePaths.push(existingPath);
+        // We want to keep going to find all the possible scenarios, to get the best out of it.
+        continue;
+      }
+
+      const currentTargetId = this.getIdFromPoint(currentPoint);
+
+      // To make sure we don't visit already checked blocks (Avoids infinite loop)
+      if (visitedTargets.has(currentTargetId)) continue;
+
+      visitedTargets.add(currentTargetId);
+
+      const neighbors = this.getNeighbors(currentPoint);
+
+      if (neighbors.block.bottom && !neighbors.wall.bottom) {
+        const currentPoint = neighbors.block.bottom.getCoordinates();
+        if (this.canAddPawn(currentPoint)) {
+          queue.unshift([currentPoint, [...existingPath, currentPoint]]);
+        }
+      }
+      if (neighbors.block.right && !neighbors.wall.right) {
+        const currentPoint = neighbors.block.right.getCoordinates();
+        if (this.canAddPawn(currentPoint)) {
+          queue.unshift([currentPoint, [...existingPath, currentPoint]]);
+        }
+      }
+      if (neighbors.block.left && !neighbors.wall.left) {
+        const currentPoint = neighbors.block.left.getCoordinates();
+        if (this.canAddPawn(currentPoint)) {
+          queue.unshift([currentPoint, [...existingPath, currentPoint]]);
+        }
+      }
+      if (neighbors.block.top && !neighbors.wall.top) {
+        const currentPoint = neighbors.block.top.getCoordinates();
+        if (this.canAddPawn(currentPoint)) {
+          queue.unshift([currentPoint, [...existingPath, currentPoint]]);
+        }
+      }
+    }
+
+    return possiblePaths;
+  }
+
+  /**
+   * Find the shortest path to win from the given points
+   * @param {CoordsType} startPoint
+   * @param {CoordsType} destinationPoints
+   * @returns [notFound, path]
+   */
+  findShortestPath(startPoint: CoordsType, destinationPoints: CoordsType[]): [boolean, CoordsType[]] {
+    const availablePaths = this.findAnyPath(startPoint, destinationPoints);
+
+    if (availablePaths.length === 0) return [true, []];
+    if (availablePaths.length === 1) return [false, availablePaths.pop()!];
+
+    let shortestPath = availablePaths[0];
+
+    for (let i = 1; i < availablePaths.length; i++) {
+      if (shortestPath.length > availablePaths[i].length) {
+        shortestPath = availablePaths[i];
+      }
+    }
+
+    return [false, shortestPath];
+  }
+
+  private getIdFromPoint(point: CoordsType) {
+    return point.row * width + point.col;
+  }
+
+  private equals(pointA: CoordsType, pointBs: CoordsType[]) {
+    return pointBs.some((pointB) => pointA.row === pointB.row && pointA.col === pointB.col);
   }
 
   /**

@@ -4,6 +4,7 @@ import { CoordsType } from '@src/components/game/block/block.type.ts';
 import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawns/pawn.type.ts';
 import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
+import { animationTime } from '@src/config/animation.config.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
@@ -53,8 +54,6 @@ export const Pawn = forwardRef(
           return coords.current;
         }
 
-        const animationDuration = 800;
-
         const origin = new Vector3();
         origin.copy(mesh.current.position);
 
@@ -63,7 +62,7 @@ export const Pawn = forwardRef(
             x: position.x,
             z: position.z,
           })
-          .duration(animationDuration)
+          .duration(animationTime)
           .easing(Easing.Exponential.Out)
           .onComplete(() => {
             moveToAnimation.current.remove();
@@ -71,11 +70,11 @@ export const Pawn = forwardRef(
           })
           .start();
 
-        const [upTime, downTime] = percentage.get(animationDuration, 80);
+        const [moveUpTime, moveDownTime] = percentage.get(animationTime, 80);
 
         moveUpAnimation.current = new Tween(mesh.current.position)
           .to({ y: 0.9 })
-          .duration(upTime)
+          .duration(moveUpTime)
           .easing(Easing.Exponential.Out)
           .onComplete(() => {
             moveUpAnimation.current.remove();
@@ -83,7 +82,7 @@ export const Pawn = forwardRef(
 
             moveDownAnimation.current = new Tween(mesh.current.position)
               .to({ y: origin.y })
-              .duration(downTime)
+              .duration(moveDownTime)
               .easing(Easing.Exponential.In)
               .onComplete(() => {
                 moveDownAnimation.current.remove();
