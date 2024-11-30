@@ -78,7 +78,7 @@ export abstract class Character extends State implements Subject {
     this.observer = undefined;
   }
 
-  protected notifyActionFinished(): void {
+  protected notifyTurnRotation(): void {
     this.observer?.notify(this);
   }
 }
