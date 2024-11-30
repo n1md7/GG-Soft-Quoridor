@@ -6,7 +6,7 @@ import {
 } from '@src/components/game/block/block.type.ts';
 import { ForwardedPawns } from '@src/components/game/pawns/pawn.type.ts';
 import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
-import { HEIGHT, WIDTH } from '@src/components/hooks/useGame.ts';
+import { COLS, ROWS } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { Character } from '@src/core/entities/abstract/character.class.ts';
@@ -18,8 +18,8 @@ import { MutableRefObject } from 'react';
 export class Player extends Character {
   readonly mode = new Mode();
 
-  private row = WIDTH * 2 - 2;
-  private col = (HEIGHT * 2 - 2) / 2;
+  private row = ROWS;
+  private col = COLS / 2;
 
   private readonly blocks: MutableRefObject<ForwardedBlocks>;
   private readonly walls: MutableRefObject<ForwardedWalls>;
