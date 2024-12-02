@@ -54,7 +54,7 @@ export class Player extends Character {
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
     if (this.won()) return;
-    if (!this.isMyTurn()) return console.info('Not my turn, diba?');
+    if (!this.isMyTurn()) return console.info('Not your turn, dibaa?!');
 
     this.blocks.current.hidePossibleMoves();
     this.pawns.current.player.setHighlight(false);
