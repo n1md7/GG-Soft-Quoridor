@@ -123,5 +123,51 @@ describe('Grid class', () => {
         { row: 4, col: 2 },
       ]);
     });
+
+    describe('edge-cases', () => {
+      it('it should handle edge-case 1', () => {
+        // Arrange
+        const grid = new Grid();
+        const pointA: CoordsType = { row: 14, col: 8 };
+        const finishLine: CoordsType[] = [
+          { row: 16, col: 0 },
+          { row: 16, col: 2 },
+          { row: 16, col: 4 },
+          { row: 16, col: 6 },
+          { row: 16, col: 8 },
+          { row: 16, col: 10 },
+          { row: 16, col: 12 },
+          { row: 16, col: 14 },
+          { row: 16, col: 16 },
+        ];
+        const names = getBlockNames();
+
+        names.forEach((name) =>
+          grid.mapByName({
+            name,
+            getCoordinates: () => grid.getCoordsByName(name),
+          } as ForwardedBlock),
+        );
+
+        grid.addWallByCoords({ name: 'Wall000' } as ForwardedWall, { row: 16, col: 0, pos: 'TOP' });
+        grid.addWallByCoords({ name: 'Wall000' } as ForwardedWall, { row: 16, col: 4, pos: 'TOP' });
+        grid.addWallByCoords({ name: 'Wall000' } as ForwardedWall, { row: 16, col: 8, pos: 'TOP' });
+        grid.addWallByCoords({ name: 'Wall000' } as ForwardedWall, { row: 16, col: 12, pos: 'TOP' });
+
+        // Act
+        const [notFound, path] = grid.findShortestPath(pointA, finishLine);
+
+        // Assert
+        expect(notFound).toBeFalsy();
+        expect(path).toEqual([
+          { row: 14, col: 8 },
+          { row: 14, col: 10 },
+          { row: 14, col: 12 },
+          { row: 14, col: 14 },
+          { row: 14, col: 16 },
+          { row: 16, col: 16 },
+        ]);
+      });
+    });
   });
 });

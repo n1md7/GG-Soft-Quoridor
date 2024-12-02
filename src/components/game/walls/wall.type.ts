@@ -1,3 +1,4 @@
+import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { Nodes } from '@src/components/game/board/board.type.ts';
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
@@ -18,7 +19,7 @@ export type ForwardedWall = {
   mesh: Mesh;
   name: WallName;
   scale: Vector3;
-  moveTo: (params: MoveToParams) => void;
+  moveTo: (coords: CoordsWithPosType) => void;
 };
 export type PlayerFn = {
   walls: ForwardedWall[];
@@ -29,5 +30,7 @@ export type PlayerFn = {
 export type ForwardedWalls = {
   player: PlayerFn;
   opponent: PlayerFn;
-  placeholder: ForwardedPlaceholder;
+  placeholder: {
+    wall: ForwardedPlaceholder;
+  };
 };

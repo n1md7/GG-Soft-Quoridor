@@ -91,7 +91,7 @@ export class Computer extends Character {
   private getFinishLineCoords(row: number) {
     const bottomLines: CoordsType[] = [];
 
-    for (let col = 0; col < COLS; col += 2) {
+    for (let col = 0; col <= COLS; col += 2) {
       bottomLines.push({
         row,
         col,

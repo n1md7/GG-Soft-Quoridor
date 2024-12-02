@@ -1,9 +1,9 @@
 import { Placeholder } from '@src/components/game/placeholder/Placeholder.tsx';
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
-import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
+import { Wall } from '@src/components/game/walls/Wall.tsx';
 import { ForwardedWall, ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { useWalls } from '@src/components/hooks/useWalls.ts';
-import { Wall } from '@src/components/game/walls/Wall.tsx';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import * as THREE from 'three';
 import { BufferGeometry, Material } from 'three';
 
@@ -46,7 +46,9 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
 
   useImperativeHandle(ref, () => {
     return {
-      placeholder: placeholderWall.current,
+      placeholder: {
+        wall: placeholderWall.current,
+      },
       player: {
         walls: playerWalls.current,
         hasWall: () => playerWalls.current.length > 0,
