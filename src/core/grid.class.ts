@@ -1,6 +1,6 @@
 import { CoordsType, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
-import { HEIGHT, WIDTH } from '@src/components/hooks/useGame.ts';
+import { COLS, HEIGHT, ROWS, WIDTH } from '@src/components/hooks/useGame.ts';
 
 export type CellType = ForwardedBlock | ForwardedWall | null;
 
@@ -260,10 +260,10 @@ export class Grid {
   private createGrid() {
     const rows: CellType[][] = [];
 
-    for (let row = 0; row < WIDTH * 2 - 1; row++) {
+    for (let row = 0; row <= ROWS; row++) {
       const cols: CellType[] = [];
 
-      for (let col = 0; col < HEIGHT * 2 - 1; col++) {
+      for (let col = 0; col <= COLS; col++) {
         cols.push(null);
       }
 
