@@ -1,8 +1,8 @@
 import { Nodes } from '@src/components/game/board/board.type.ts';
 import { ExtractPropertiesStartingWith } from '@src/types/util.types.ts';
-import { Color, Mesh, MeshStandardMaterial } from 'three';
+import { Mesh, MeshStandardMaterial } from 'three';
 
-export type Colors = 'RED' | 'GREEN' | 'BLUE' | 'PURPLE' | 'YELLOW' | 'DEFAULT' | Color;
+export type Colors = 'RED' | 'GREEN' | 'BLUE' | 'PURPLE' | 'YELLOW' | 'DEFAULT';
 export type Positions = 'TOP' | 'LEFT' | 'BOTTOM' | 'RIGHT';
 export type CoordsType = { row: number; col: number };
 export type CoordsWithPosType = CoordsType & { pos: Positions };

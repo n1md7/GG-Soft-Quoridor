@@ -7,8 +7,7 @@ import {
   ForwardedBlock,
   ForwardedBlocks,
 } from '@src/components/game/block/block.type.ts';
-import { useGame } from '@src/components/hooks/useGame.ts';
-import { highlightColor } from '@src/config/highlight.config.ts';
+import { useGrid } from '@src/components/hooks/useGrid.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { BufferGeometry, Material } from 'three';
 
@@ -22,7 +21,7 @@ type Props = {
 
 export const Blocks = forwardRef(
   ({ geometry, material, handleOver, handleOut, handleClick }: Props, ref: ForwardedRef<ForwardedBlocks>) => {
-    const { grid } = useGame();
+    const { mapByName, getNeighbours } = useGrid();
 
     const lastHighlighted = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
     const blocks = useRef<ForwardedBlock[]>([] as ForwardedBlock[]);
@@ -31,9 +30,9 @@ export const Blocks = forwardRef(
         if (!block) return;
 
         blocks.current.push(block);
-        grid.mapByName(block);
+        mapByName(block);
       },
-      [grid],
+      [mapByName],
     );
 
     useImperativeHandle(ref, () => {
@@ -47,9 +46,9 @@ export const Blocks = forwardRef(
           lastHighlighted.current = [];
         },
         showPossibleMoves: (coords: CoordsType, show: boolean) => {
-          const neighbour = grid.getNeighbors(coords);
+          const neighbour = getNeighbours(coords);
 
-          const color: Colors = show ? highlightColor : 'DEFAULT';
+          const color: Colors = show ? 'YELLOW' : 'DEFAULT';
 
           // TODO: get Pawn reference here and do checks to make they do no step each other
 
@@ -71,7 +70,7 @@ export const Blocks = forwardRef(
           }
         },
       };
-    }, [grid]);
+    }, [getNeighbours]);
 
     return (
       <>

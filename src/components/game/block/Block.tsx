@@ -7,7 +7,7 @@ import {
   ForwardedBlock,
   Positions,
 } from '@src/components/game/block/block.type.ts';
-import { useGame } from '@src/components/hooks/useGame.ts';
+import { useGrid } from '@src/components/hooks/useGrid.ts';
 import { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
 import { BufferGeometry, Color, Material, Mesh, MeshStandardMaterial } from 'three';
 
@@ -32,10 +32,8 @@ export const Block = forwardRef(
     { geometry, position, name, scale, handleClick, handleOver, handleOut }: Props,
     ref: ForwardedRef<ForwardedBlock>,
   ) => {
-    const {
-      grid: { getCoordsByName },
-    } = useGame();
-    const { row, col } = useMemo(() => getCoordsByName(name), [getCoordsByName, name]);
+    const { getCoordinatesByName } = useGrid();
+    const { row, col } = useMemo(() => getCoordinatesByName(name), [getCoordinatesByName, name]);
 
     const colorRef = useRef<MeshStandardMaterial>(null!);
     const faceIdPositionMap = useRef<Record<number, Positions>>({
