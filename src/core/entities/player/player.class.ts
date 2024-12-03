@@ -16,6 +16,8 @@ import { delay } from '@src/utils/delay.ts';
 import { MutableRefObject } from 'react';
 
 export class Player extends Character {
+  private readonly topLine = 0;
+
   readonly mode = new Mode();
 
   private row = ROWS;
@@ -54,7 +56,12 @@ export class Player extends Character {
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
     if (this.won()) return;
-    if (!this.isMyTurn()) return console.info('Not your turn, dibaa?!');
+    if (!this.isMyTurn()) return console.info('Hold on a sec, not your turn yet, dibaa?!');
+
+    const finishLineCoords = this.getFinishLineCoords(this.topLine);
+    const [notFound] = this.grid.findShortestPath(this.getCoords(), finishLineCoords);
+
+    if (notFound) return console.info('You cannot move there, you are blocking the path completely!');
 
     this.blocks.current.hidePossibleMoves();
     this.pawns.current.player.setHighlight(false);
@@ -98,7 +105,6 @@ export class Player extends Character {
 
   handlePawnPointerClick(coords: CoordsType) {
     if (this.won()) return;
-    if (!this.isMyTurn()) return console.info('Not my turn, diba?');
 
     this.mode.toggle();
 

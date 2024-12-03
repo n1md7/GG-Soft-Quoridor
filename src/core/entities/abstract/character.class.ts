@@ -1,4 +1,5 @@
 import { CoordsType } from '@src/components/game/block/block.type.ts';
+import { COLS } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { State } from '@src/core/entities/abstract/state.class.ts';
 import { Grid } from '@src/core/grid.class.ts';
@@ -82,5 +83,18 @@ export abstract class Character extends State implements Subject {
 
   protected notifyTurnRotation(): void {
     this.observer?.notify(this);
+  }
+
+  protected getFinishLineCoords(row: number) {
+    const bottomLines: CoordsType[] = [];
+
+    for (let col = 0; col <= COLS; col += 2) {
+      bottomLines.push({
+        row,
+        col,
+      });
+    }
+
+    return bottomLines;
   }
 }
