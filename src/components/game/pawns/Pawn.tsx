@@ -1,13 +1,15 @@
-import { Sparkles, useCursor } from '@react-three/drei';
+import { Outlines, useCursor } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { CoordsType } from '@src/components/game/block/block.type.ts';
 import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawns/pawn.type.ts';
 import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
+import { animationTime } from '@src/config/animation.config.ts';
+import { highlightColor } from '@src/config/highlight.config.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
-import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Points, Vector3 } from 'three';
+import { BufferGeometry, Material, Mesh, Vector3 } from 'three';
 
 type Props = {
   geometry: BufferGeometry;
@@ -28,19 +30,19 @@ export const Pawn = forwardRef(
     const { getCoordsFromDestination } = usePawnPosition();
     const percentage = usePercentage();
 
+    const [showOutline, setShowOutline] = useState(false);
     const vec3Position = new Vector3(position[0], position[1], position[2]);
     const coords = useRef(getCoordsFromDestination(vec3Position));
     const mesh = useRef<Mesh>(null!);
-    const sparkles = useRef<Points<BufferGeometry<NormalBufferAttributes>>>(null!);
     const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const moveDownAnimation = useRef<Tween<Vector3>>(null!);
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
 
     const setHighlight = useCallback(
       (show: boolean) => {
-        sparkles.current.visible = show;
+        setShowOutline(show);
       },
-      [sparkles],
+      [setShowOutline],
     );
 
     const moveTo = useCallback(
@@ -53,8 +55,6 @@ export const Pawn = forwardRef(
           return coords.current;
         }
 
-        const animationDuration = 800;
-
         const origin = new Vector3();
         origin.copy(mesh.current.position);
 
@@ -63,7 +63,7 @@ export const Pawn = forwardRef(
             x: position.x,
             z: position.z,
           })
-          .duration(animationDuration)
+          .duration(animationTime)
           .easing(Easing.Exponential.Out)
           .onComplete(() => {
             moveToAnimation.current.remove();
@@ -71,11 +71,11 @@ export const Pawn = forwardRef(
           })
           .start();
 
-        const [upTime, downTime] = percentage.get(animationDuration, 80);
+        const [moveUpTime, moveDownTime] = percentage.get(animationTime, 80);
 
         moveUpAnimation.current = new Tween(mesh.current.position)
           .to({ y: 0.9 })
-          .duration(upTime)
+          .duration(moveUpTime)
           .easing(Easing.Exponential.Out)
           .onComplete(() => {
             moveUpAnimation.current.remove();
@@ -83,7 +83,7 @@ export const Pawn = forwardRef(
 
             moveDownAnimation.current = new Tween(mesh.current.position)
               .to({ y: origin.y })
-              .duration(downTime)
+              .duration(moveDownTime)
               .easing(Easing.Exponential.In)
               .onComplete(() => {
                 moveDownAnimation.current.remove();
@@ -157,7 +157,7 @@ export const Pawn = forwardRef(
           handleClick?.(coords.current);
         }}
       >
-        <Sparkles visible={false} ref={sparkles} count={50} scale={2} size={8} speed={0.6} />
+        <Outlines visible={showOutline} thickness={4} color={highlightColor} />
       </mesh>
     );
   },

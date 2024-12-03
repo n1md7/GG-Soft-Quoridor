@@ -14,6 +14,7 @@ type Props = {
 
 export function Gameplay(props: Readonly<Props>) {
   const { ErrorBoundary } = useErrorBoundary();
+
   return (
     <ErrorBoundary>
       <Suspense fallback={<Loading />}>
