@@ -6,7 +6,8 @@ export type CellType = ForwardedBlock | ForwardedWall | null;
 
 export class Grid {
   private grid: CellType[][] = [];
-  // TODO: add player references here
+  private restorePoints: [number, CellType][] = [];
+  private saveRestorePoints = false;
 
   constructor() {
     this.grid = this.createGrid();
@@ -26,6 +27,38 @@ export class Grid {
     this.grid = this.createGrid();
   }
 
+  /**
+   * Currently only works for Walls
+   */
+  createRestorePoint() {
+    this.saveRestorePoints = true;
+  }
+
+  resetRestorePoints() {
+    this.restorePoints = [];
+    this.saveRestorePoints = false;
+  }
+
+  /**
+   * Currently only works for Walls
+   *
+   * Restores walls to the previous state
+   */
+  restoreLatest() {
+    console.group('Restoring latest');
+    console.info(this.grid);
+    console.info(this.restorePoints);
+    for (const [idx, originalValue] of this.restorePoints) {
+      const coords = this.getPointFromId(idx);
+      console.info(coords);
+      if (undefined === this.grid[coords.row]?.[coords.col]) {
+        console.info('Invalid coords', coords);
+        console.groupEnd();
+      }
+      this.grid[coords.row][coords.col] = originalValue;
+    }
+  }
+
   canAddWall(coords: CoordsWithPosType) {
     const isTopRow = coords.row === 0 && coords.pos === 'TOP';
     const isBottomRow = coords.row === HEIGHT * 2 - 2 && coords.pos === 'BOTTOM';
@@ -33,7 +66,7 @@ export class Grid {
     const isRightCol = coords.col === WIDTH * 2 - 2 && coords.pos === 'RIGHT';
 
     const isEdge = isTopRow || isBottomRow || isLeftCol || isRightCol;
-    const hasWall = this.getNextCoordsByCurrent(coords).some(({ row, col }) => {
+    const hasWall = this.getWallCoordsByBlock(coords).some(({ row, col }) => {
       return this.grid[row]?.[col] !== null;
     });
 
@@ -45,8 +78,14 @@ export class Grid {
     return this.getBlockByCoords(coords)?.name?.startsWith('Block');
   }
 
-  addWallByCoords(wall: ForwardedWall, coords: CoordsWithPosType) {
-    this.getNextCoordsByCurrent(coords).forEach(({ row, col }) => {
+  addWallByCoords(wall: ForwardedWall, block: CoordsWithPosType) {
+    this.getWallCoordsByBlock(block).forEach(({ row, col }) => {
+      if (this.saveRestorePoints) {
+        const idx = this.getIdFromPoint({ row, col });
+        const originalValue = this.grid[row][col];
+
+        this.restorePoints.push([idx, originalValue]);
+      }
       this.grid[row][col] = wall;
     });
   }
@@ -195,7 +234,14 @@ export class Grid {
   }
 
   private getIdFromPoint(point: CoordsType) {
-    return point.row * WIDTH + point.col;
+    return point.row * (WIDTH - 1) + point.col;
+  }
+
+  private getPointFromId(id: number) {
+    return {
+      row: Math.floor(id / (WIDTH - 1)),
+      col: id % (WIDTH - 1),
+    };
   }
 
   private equals(pointA: CoordsType, pointBs: CoordsType[]) {
@@ -274,31 +320,31 @@ export class Grid {
     return rows;
   }
 
-  private getNextCoordsByCurrent(coords: CoordsWithPosType) {
-    switch (coords.pos) {
+  private getWallCoordsByBlock(block: CoordsWithPosType) {
+    switch (block.pos) {
       case 'TOP':
         return [
-          { row: coords.row - 1, col: coords.col },
-          { row: coords.row - 1, col: coords.col + 1 },
-          { row: coords.row - 1, col: coords.col + 2 },
+          { row: block.row - 1, col: block.col },
+          { row: block.row - 1, col: block.col + 1 },
+          { row: block.row - 1, col: block.col + 2 },
         ];
       case 'BOTTOM':
         return [
-          { row: coords.row + 1, col: coords.col },
-          { row: coords.row + 1, col: coords.col + 1 },
-          { row: coords.row + 1, col: coords.col + 2 },
+          { row: block.row + 1, col: block.col },
+          { row: block.row + 1, col: block.col + 1 },
+          { row: block.row + 1, col: block.col + 2 },
         ];
       case 'LEFT':
         return [
-          { row: coords.row, col: coords.col - 1 },
-          { row: coords.row + 1, col: coords.col - 1 },
-          { row: coords.row + 2, col: coords.col - 1 },
+          { row: block.row, col: block.col - 1 },
+          { row: block.row + 1, col: block.col - 1 },
+          { row: block.row + 2, col: block.col - 1 },
         ];
       case 'RIGHT':
         return [
-          { row: coords.row, col: coords.col + 1 },
-          { row: coords.row + 1, col: coords.col + 1 },
-          { row: coords.row + 2, col: coords.col + 1 },
+          { row: block.row, col: block.col + 1 },
+          { row: block.row + 1, col: block.col + 1 },
+          { row: block.row + 2, col: block.col + 1 },
         ];
     }
   }

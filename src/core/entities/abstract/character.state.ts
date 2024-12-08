@@ -1,4 +1,4 @@
-export abstract class State {
+export abstract class CharacterState {
   private myTurn: boolean = false;
 
   isMyTurn() {

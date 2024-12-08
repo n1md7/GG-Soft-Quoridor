@@ -11,12 +11,12 @@ import { ModelType } from '@src/components/hooks/useModel.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { Character } from '@src/core/entities/abstract/character.class.ts';
 import { Mode } from '@src/core/entities/player/mode.class.ts';
-import { Grid } from '@src/core/grid.class.ts';
+import { Game } from '@src/core/game.class.ts';
 import { delay } from '@src/utils/delay.ts';
 import { MutableRefObject } from 'react';
 
 export class Player extends Character {
-  private readonly topLine = 0;
+  readonly finishLine = 0;
 
   readonly mode = new Mode();
 
@@ -27,8 +27,8 @@ export class Player extends Character {
   private readonly walls: MutableRefObject<ForwardedWalls>;
   private readonly pawns: MutableRefObject<ForwardedPawns>;
 
-  constructor(model: ModelType, grid: Grid) {
-    super(model, grid);
+  constructor(model: ModelType, game: Game) {
+    super(model, game);
 
     this.blocks = model.blocks;
     this.walls = model.walls;
@@ -58,8 +58,8 @@ export class Player extends Character {
     if (this.won()) return;
     if (!this.isMyTurn()) return console.info('Hold on a sec, not your turn yet, dibaa?!');
 
-    const finishLineCoords = this.getFinishLineCoords(this.topLine);
-    const [notFound] = this.grid.findShortestPath(this.getCoords(), finishLineCoords);
+    const finishLineCoords = this.getFinishLineCoords();
+    const [notFound] = this.game.grid.findShortestPath(this.getCoords(), finishLineCoords);
 
     if (notFound) return console.info('You cannot move there, you are blocking the path completely!');
 
@@ -79,11 +79,11 @@ export class Player extends Character {
   handleBlockPointerOver(coords: CoordsWithPosType) {
     if (this.mode.isPawn()) return;
 
-    this.grid.assertBlockByCoords(coords);
+    this.game.grid.assertBlockByCoords(coords);
 
     this.walls.current.placeholder.wall.show();
 
-    switch (this.grid.canAddWall(coords)) {
+    switch (this.game.grid.canAddWall(coords)) {
       case true: {
         const isMyTurn = this.isMyTurn();
         const showDefault = this.walls.current.player.hasWall();
@@ -117,14 +117,14 @@ export class Player extends Character {
   }
 
   private handleWallStrategy(coords: CoordsWithPosType) {
-    this.grid.assertBlockByCoords(coords);
+    this.game.grid.assertBlockByCoords(coords);
 
     const wall = this.walls.current.player.getFrontWall();
 
     if (!wall) return console.info('Out of walls');
-    if (!this.grid.canAddWall(coords)) return console.info('Cannot add wall here');
+    if (!this.game.grid.canAddWall(coords)) return console.info('Cannot add wall here');
 
-    this.grid.addWallByCoords(wall, coords);
+    this.game.grid.addWallByCoords(wall, coords);
     wall.moveTo(coords);
     this.walls.current.player.dropFrontWall();
 
@@ -133,7 +133,7 @@ export class Player extends Character {
 
   private handlePawnStrategy(coords: CoordsWithIsHighlightedType) {
     if (!coords.isHighlighted) return this.mode.setWallMode();
-    if (!this.grid.canAddPawn(coords)) return this.mode.setWallMode();
+    if (!this.game.grid.canAddPawn(coords)) return this.mode.setWallMode();
 
     this.setCoords(coords);
     this.pawns.current.player.setHighlight(false);
