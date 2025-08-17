@@ -6,6 +6,7 @@ export type CellType = ForwardedBlock | ForwardedWall | null;
 
 export class Grid {
   private grid: CellType[][] = [];
+  // TODO: add player references here
 
   constructor() {
     this.grid = this.createGrid();
