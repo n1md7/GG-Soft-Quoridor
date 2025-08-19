@@ -234,13 +234,13 @@ export class Grid {
   }
 
   private getIdFromPoint(point: CoordsType) {
-    return point.row * (WIDTH - 1) + point.col;
+    return point.row * (COLS + 1) + point.col;
   }
 
   private getPointFromId(id: number) {
     return {
-      row: Math.floor(id / (WIDTH - 1)),
-      col: id % (WIDTH - 1),
+      row: Math.floor(id / (COLS + 1)),
+      col: id % (COLS + 1),
     };
   }
 
