@@ -4,7 +4,7 @@ import { ModelType } from '@src/components/hooks/useModel.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { computerMaxThinkingTime } from '@src/config/computer.config.ts';
 import { Character } from '@src/core/entities/abstract/character.class.ts';
-import { Grid } from '@src/core/grid.class.ts';
+import { Game } from '@src/core/game.class.ts';
 import { delay } from '@src/utils/delay.ts';
 import { upto } from '@src/utils/random.ts';
 import { Vector3 } from 'three';
@@ -12,15 +12,15 @@ import { Vector3 } from 'three';
 type OnPathUpdateFn = (path: Vector3[]) => void;
 
 export class Computer extends Character {
-  private readonly bottomLine = ROWS;
+  readonly finishLine = ROWS;
 
   private row = 0;
   private col = COLS / 2;
 
   private onPathUpdateFn?: OnPathUpdateFn;
 
-  constructor(model: ModelType, grid: Grid) {
-    super(model, grid);
+  constructor(model: ModelType, game: Game) {
+    super(model, game);
 
     this.getCoords = this.getCoords.bind(this);
     this.setCoords = this.setCoords.bind(this);
@@ -28,6 +28,10 @@ export class Computer extends Character {
 
   onPathUpdate(fn: OnPathUpdateFn) {
     this.onPathUpdateFn = fn;
+  }
+
+  onPathUpdateCall(pathPoints: Vector3[]) {
+    this.onPathUpdateFn?.(pathPoints);
   }
 
   getCoords() {
@@ -51,7 +55,7 @@ export class Computer extends Character {
 
     this.model.pawns.current.opponent.setHighlight(true);
     delay(upto(computerMaxThinkingTime)).then(() => {
-      this.makeMove();
+      this.game.modes.makeMove();
 
       delay(animationTime)
         .then(() => this.notifyTurnRotation())
@@ -60,31 +64,6 @@ export class Computer extends Character {
   }
 
   override won(): boolean {
-    return this.getCoords().row === this.bottomLine;
-  }
-
-  protected makeMove() {
-    if (this.won()) return;
-
-    const path = this.getShortestPath(this.getCoords());
-
-    const [, ...otherCoords] = path;
-    const [nextCoords] = otherCoords;
-
-    const shortestPathPoints = otherCoords.map((path) => this.getDestinationFromCoords(path).position);
-    const nextDestination = this.getDestinationFromCoords(this.setCoords(nextCoords));
-
-    this.model.pawns.current.opponent.animateTo(nextDestination);
-
-    this.onPathUpdateFn?.(shortestPathPoints);
-  }
-
-  private getShortestPath(start: CoordsType) {
-    const finishLineCoords = this.getFinishLineCoords(this.bottomLine);
-    const [notFound, shortestPath] = this.grid.findShortestPath(start, finishLineCoords);
-
-    if (notFound) throw new Error('No possible moves left for you!');
-
-    return shortestPath;
+    return this.getCoords().row === this.finishLine;
   }
 }

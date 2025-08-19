@@ -1,13 +1,16 @@
 import { CoordsType } from '@src/components/game/block/block.type.ts';
+import { AnimateToParams } from '@src/components/game/pawns/pawn.type.ts';
 import { COLS } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
-import { State } from '@src/core/entities/abstract/state.class.ts';
-import { Grid } from '@src/core/grid.class.ts';
+import { CharacterState } from '@src/core/entities/abstract/character.state.ts';
+import { Game } from '@src/core/game.class.ts';
 import { Observer } from '@src/core/interfaces/observer.interface.ts';
 import { Subject } from '@src/core/interfaces/subject.interface.ts';
 import { Vector3 } from 'three';
 
-export abstract class Character extends State implements Subject {
+export abstract class Character extends CharacterState implements Subject {
+  abstract readonly finishLine: number;
+
   protected readonly min = -4.8;
   protected readonly step = 1.2;
 
@@ -16,7 +19,7 @@ export abstract class Character extends State implements Subject {
 
   protected constructor(
     protected readonly model: ModelType,
-    protected readonly grid: Grid,
+    protected readonly game: Game,
   ) {
     super();
 
@@ -85,16 +88,33 @@ export abstract class Character extends State implements Subject {
     this.observer?.notify(this);
   }
 
-  protected getFinishLineCoords(row: number) {
+  getFinishLineCoords() {
     const bottomLines: CoordsType[] = [];
 
     for (let col = 0; col <= COLS; col += 2) {
       bottomLines.push({
-        row,
+        row: this.finishLine,
         col,
       });
     }
 
     return bottomLines;
+  }
+
+  getAnyPath(start: CoordsType) {
+    return this.game.grid.findAnyPath(start, this.getFinishLineCoords());
+  }
+
+  getShortestPath(start: CoordsType) {
+    const finishLineCoords = this.getFinishLineCoords();
+    const [notFound, shortestPath] = this.game.grid.findShortestPath(start, finishLineCoords);
+
+    if (notFound) throw new Error('No possible moves left for you!');
+
+    return shortestPath;
+  }
+
+  animateTo(coords: AnimateToParams) {
+    this.model.pawns.current.opponent.animateTo(coords);
   }
 }
