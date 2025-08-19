@@ -56,7 +56,7 @@ export class Player extends Character {
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
     if (this.won()) return;
-    if (!this.isMyTurn()) return console.info('Hold on a sec, not your turn yet, dibaa?!');
+    if (!this.isMyTurn()) return console.info('Hold on a sec, not your turn yet!');
 
     const finishLineCoords = this.getFinishLineCoords();
     const [notFound] = this.game.grid.findShortestPath(this.getCoords(), finishLineCoords);
@@ -123,6 +123,18 @@ export class Player extends Character {
 
     if (!wall) return console.info('Out of walls');
     if (!this.game.grid.canAddWall(coords)) return console.info('Cannot add wall here');
+
+    this.game.grid.createRestorePoint();
+    this.game.grid.addWallByCoords(wall, coords);
+
+    const computerHasMove = this.game.computer.getAnyPath(this.game.computer.getCoords()).length > 0;
+    const playerHasMove = this.game.player.getAnyPath(this.game.player.getCoords()).length > 0;
+    const gameIsBlocked = !computerHasMove || !playerHasMove;
+
+    this.game.grid.restoreLatest();
+    this.game.grid.resetRestorePoints();
+
+    if (gameIsBlocked) return console.info('Cannot place wall here, it blocks the game completely!');
 
     this.game.grid.addWallByCoords(wall, coords);
     wall.moveTo(coords);

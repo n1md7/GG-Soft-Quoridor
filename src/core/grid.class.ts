@@ -45,16 +45,8 @@ export class Grid {
    * Restores walls to the previous state
    */
   restoreLatest() {
-    console.group('Restoring latest');
-    console.info(this.grid);
-    console.info(this.restorePoints);
     for (const [idx, originalValue] of this.restorePoints) {
       const coords = this.getPointFromId(idx);
-      console.info(coords);
-      if (undefined === this.grid[coords.row]?.[coords.col]) {
-        console.info('Invalid coords', coords);
-        console.groupEnd();
-      }
       this.grid[coords.row][coords.col] = originalValue;
     }
   }
