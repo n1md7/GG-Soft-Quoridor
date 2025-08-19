@@ -1,5 +1,7 @@
+import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
-import { MoveToParams, PositionMap } from '@src/components/game/walls/wall.type.ts';
+import { PositionMap } from '@src/components/game/walls/wall.type.ts';
+import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useLayoutEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Mesh, MeshStandardMaterial, Vector3 } from 'three';
@@ -15,13 +17,15 @@ type Props = {
 export const Placeholder = forwardRef(({ color }: Props, ref: ForwardedRef<ForwardedPlaceholder>) => {
   const mesh = useRef<Mesh>(null!);
   const material = useRef<MeshStandardMaterial>(null!);
+  const { getDestinationFromCoords } = useWallPosition();
 
   const moveTo = useCallback(
-    ({ position, rotation }: MoveToParams) => {
+    (coords: CoordsWithPosType) => {
+      const { position, rotation } = getDestinationFromCoords(coords);
       mesh.current.position.copy(position);
       mesh.current.rotation.y = PositionMap[rotation].y;
     },
-    [mesh],
+    [mesh, getDestinationFromCoords],
   );
   const setScaleFrom = useCallback(
     (scale: Vector3) => {
@@ -36,6 +40,12 @@ export const Placeholder = forwardRef(({ color }: Props, ref: ForwardedRef<Forwa
   const hide = useCallback(() => (mesh.current.visible = false), [mesh]);
   const colorDanger = useCallback(() => (material.current.color = color.danger), [material, color.danger]);
   const colorDefault = useCallback(() => (material.current.color = color.default), [material, color.default]);
+  const showColor = useCallback(
+    (showDefault: boolean) => {
+      material.current.color = showDefault ? color.default : color.danger;
+    },
+    [material, color],
+  );
 
   useImperativeHandle(
     ref,
@@ -47,8 +57,9 @@ export const Placeholder = forwardRef(({ color }: Props, ref: ForwardedRef<Forwa
       colorDanger,
       colorDefault,
       setScaleFrom,
+      showColor,
     }),
-    [moveTo, show, hide, colorDanger, colorDefault, setScaleFrom],
+    [moveTo, show, hide, colorDanger, colorDefault, setScaleFrom, showColor],
   );
 
   useLayoutEffect(() => {

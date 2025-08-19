@@ -2,7 +2,7 @@
 import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
 import react from '@vitejs/plugin-react-swc';
-import tailwindcss from 'tailwindcss';
+import tailwindcss from '@tailwindcss/vite';
 import { cwd, env } from 'node:process';
 
 export default defineConfig(({ mode }) => {
@@ -18,11 +18,6 @@ export default defineConfig(({ mode }) => {
       port: 4096,
       host: '0.0.0.0',
       open: '#debug',
-    },
-    css: {
-      postcss: {
-        plugins: [tailwindcss()],
-      },
     },
     resolve: {
       alias: {
@@ -46,7 +41,13 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    plugins: [react(), glsl({ watch: true })],
+    plugins: [
+      react(),
+      tailwindcss(),
+      glsl({
+        watch: true,
+      }),
+    ],
     test: {
       clearMocks: true,
       globals: true,
