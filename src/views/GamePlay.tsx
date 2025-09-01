@@ -6,7 +6,7 @@ import { Leva } from 'leva';
 import { Suspense } from 'react';
 import { useErrorBoundary } from 'use-error-boundary';
 
-import '@styles/gameplay-view.scss';
+import '@styles/gameplay-view.css';
 
 type Props = {
   back: () => void;
