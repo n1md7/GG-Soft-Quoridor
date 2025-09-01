@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 .canvas-overlay {
   top: 0;
   left: 0;
