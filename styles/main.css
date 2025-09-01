@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import 'tailwindcss';
+@import 'tailwindcss/preflight';
+
 html,
 body,
 #root {
@@ -7,14 +11,9 @@ body,
 }
 
 /* Tailwind Directives */
-
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
 
 /* Google Fonts Imports */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @font-face {
   font-family: 'Caprasimo';
   src: url('@assets/fonts/caprasimo-regular.ttf') format('truetype');
@@ -43,13 +42,11 @@ body,
 }
 
 /* Tailwind Component Layer */
-
 @layer components {
   /* Custom component styles */
 }
 
 /* Global Styles */
-
 body {
   background-image: url('@assets/background.jpg');
   height: 100vh;
@@ -61,7 +58,8 @@ body {
 }
 
 .radio-label {
-  @apply flex cursor-pointer select-none items-center justify-center text-center text-default-gray300;
+  @apply flex cursor-pointer items-center justify-center text-center select-none;
+  color: #787878; /* Using the hex value directly */
 }
 
 /* Custom CSS */
