@@ -1,24 +1,42 @@
 import { SettingsBoard } from '@src/components/ui/SettingsBoard';
-//import { LeaderBoard } from '@src/components/ui/LeaderBoard';
+import { LeaderBoard } from '@src/components/ui/LeaderBoard';
+import { Show } from '@src/components/utils/Show.tsx';
+import { useState } from 'react';
 
 type Props = {
   next: () => void;
 };
+
 export function LobbyView({ next }: Readonly<Props>) {
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+
   return (
     <div className="lobby-view">
       <div className="main-lobby-container">
         {/* game settings */}
-        <SettingsBoard />
+        <Show when={!showLeaderboard}>
+          <SettingsBoard />
+        </Show>
 
         {/* leaderboard */}
-        {/*<LeaderBoard />*/}
+        <Show when={showLeaderboard}>
+          <LeaderBoard />
+        </Show>
       </div>
       <div className="button-grp">
-        <button className="play-button other">Check Scores</button>
-        <button onClick={next} className="play-button">
-          Start Game
-        </button>
+        <Show when={!showLeaderboard}>
+          <button onClick={() => setShowLeaderboard(true)} className="play-button other">
+            Check Scores
+          </button>
+          <button onClick={next} className="play-button">
+            Start Game
+          </button>
+        </Show>
+        <Show when={showLeaderboard}>
+          <button onClick={() => setShowLeaderboard(false)} className="play-button other">
+            Back
+          </button>
+        </Show>
       </div>
     </div>
   );
