@@ -35,7 +35,7 @@ export function Experience() {
   return (
     <GameContext.Provider value={new Game(model)}>
       <OrbitControls enableDamping enablePan target={new Vector3()} />
-      <Perf openByDefault trackGPU={true} position="bottom-right" />
+      <Perf openByDefault showGraph antialias position="bottom-right" />
 
       <Show when={!!envMap}>
         <Environment preset={envMap} background />
