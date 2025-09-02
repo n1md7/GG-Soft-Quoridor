@@ -4,6 +4,7 @@ interface ImportMetaEnv {
   VITE_BASE_URL: string;
   VITE_TITLE: string;
   VITE_DESCRIPTION: string;
+  VITE_RELEASE_VERSION: string;
 }
 
 // declare global {

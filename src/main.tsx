@@ -14,3 +14,9 @@ createRoot(documentRoot).render(
     <App />
   </StrictMode>,
 );
+
+console.info(
+  `%c Game version is %c ${import.meta.env.VITE_RELEASE_VERSION}`,
+  'color: white; background: black; padding: 4px 8px;',
+  'color: black; background: white; padding: 4px 8px; font-weight: bold;',
+);
