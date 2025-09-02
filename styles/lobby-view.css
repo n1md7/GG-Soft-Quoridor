@@ -18,6 +18,11 @@
     position: relative;
     display: flex;
     align-items: flex-start;
+    animation: fade-in 1s ease forwards;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background-color 0.2s;
 
     &.setting-board {
       .input-container:first-of-type {
