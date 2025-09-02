@@ -1,4 +1,3 @@
-import '@styles/initial-view.css';
 import LogoImg from '@assets/quoridor-logo.png';
 import { useProgress } from '@react-three/drei';
 import { ProgressBar } from '@src/components/ui/ProgressBar.tsx';

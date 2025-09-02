@@ -1,4 +1,3 @@
-import '@styles/lobby-view.css';
 import { SettingsBoard } from '@src/components/ui/SettingsBoard';
 //import { LeaderBoard } from '@src/components/ui/LeaderBoard';
 
