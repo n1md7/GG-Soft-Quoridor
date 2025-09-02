@@ -1,0 +1,26 @@
+@font-face {
+  font-family: Caprasimo;
+  src: url('@assets/fonts/caprasimo-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Bebas;
+  src: url('@assets/fonts/bebasneue-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Corporation-Regular;
+  src: url('@assets/fonts/corporation-games-straight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: Corporation-Italic;
+  src: url('@assets/fonts/corporation-games.otf') format('opentype');
+}
+
+.inter-regular {
+  font-family: Inter, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}

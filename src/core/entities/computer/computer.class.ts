@@ -1,0 +1,69 @@
+import { CoordsType } from '@src/components/game/block/block.type.ts';
+import { COLS, ROWS } from '@src/components/hooks/useGame.ts';
+import { ModelType } from '@src/components/hooks/useModel.ts';
+import { animationTime } from '@src/config/animation.config.ts';
+import { computerMaxThinkingTime } from '@src/config/computer.config.ts';
+import { Character } from '@src/core/entities/abstract/character.class.ts';
+import { Game } from '@src/core/game.class.ts';
+import { delay } from '@src/utils/delay.ts';
+import { upto } from '@src/utils/random.ts';
+import { Vector3 } from 'three';
+
+type OnPathUpdateFn = (path: Vector3[]) => void;
+
+export class Computer extends Character {
+  readonly finishLine = ROWS;
+
+  private row = 0;
+  private col = COLS / 2;
+
+  private onPathUpdateFn?: OnPathUpdateFn;
+
+  constructor(model: ModelType, game: Game) {
+    super(model, game);
+
+    this.getCoords = this.getCoords.bind(this);
+    this.setCoords = this.setCoords.bind(this);
+  }
+
+  onPathUpdate(fn: OnPathUpdateFn) {
+    this.onPathUpdateFn = fn;
+  }
+
+  onPathUpdateCall(pathPoints: Vector3[]) {
+    this.onPathUpdateFn?.(pathPoints);
+  }
+
+  getCoords() {
+    return {
+      row: this.row,
+      col: this.col,
+    };
+  }
+
+  setCoords(coords: CoordsType) {
+    this.row = coords.row;
+    this.col = coords.col;
+
+    return coords;
+  }
+
+  override setMyTurn(turn: boolean) {
+    if (!turn) return;
+
+    super.setMyTurn(turn);
+
+    this.model.pawns.current.opponent.setHighlight(true);
+    delay(upto(computerMaxThinkingTime)).then(() => {
+      this.game.modes.makeMove();
+
+      delay(animationTime)
+        .then(() => this.notifyTurnRotation())
+        .then(() => this.model.pawns.current.opponent.setHighlight(false));
+    });
+  }
+
+  override won(): boolean {
+    return this.getCoords().row === this.finishLine;
+  }
+}
