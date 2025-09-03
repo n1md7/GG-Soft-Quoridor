@@ -3,13 +3,13 @@ import { Path } from '@src/components/game/path/Path.tsx';
 import { Pawns } from '@src/components/game/pawns/Pawns.tsx';
 import { Walls } from '@src/components/game/walls/Walls.tsx';
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { useSettings } from '@src/components/hooks/useSettings.ts';
 import { useControls } from 'leva';
 import { useEffect } from 'react';
 
 export const Board = () => {
   const game = useGame();
-
-  console.info('game', game);
+  const settings = useSettings();
 
   useControls('Board', {
     wireframe: {
@@ -21,6 +21,10 @@ export const Board = () => {
       },
     },
   });
+
+  useEffect(() => {
+    game.modes.setMode(settings.value.difficulty);
+  }, [game.modes, settings.value.difficulty]);
 
   useEffect(() => {
     if (!game.model.pawns.current) return;

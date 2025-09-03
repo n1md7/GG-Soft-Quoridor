@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import { useSettings } from '@src/components/hooks/useSettings.ts';
 import { BoardElements } from '@src/components/ui/BoardElements';
+import { ModeEnum } from '@src/core/enums/mode.enum.ts';
+import React, { useState } from 'react';
 import { Parallelogram } from './Parallelogram';
 
 export function SettingsBoard() {
   const [inputValue, setInputValue] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
+  const settings = useSettings();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    settings.update({ playerName: e.target.value });
   };
 
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDifficultyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(e.target.value);
+    settings.update({ difficulty: e.target.value as ModeEnum });
   };
 
   return (
@@ -26,28 +31,26 @@ export function SettingsBoard() {
           <div className="wrapper-border">
             <div className="input-container">
               <Parallelogram />
-              {/* Input Text for Player Name */}
               <label htmlFor="playerName">Your name:</label>
               <input
                 type="text"
                 id="playerName"
                 value={inputValue}
-                onChange={handleInputChange}
+                onChange={handleNameChange}
                 className="input-name"
                 autoComplete="off"
               />
 
               <div className="input-container">
-                {/* Radio Buttons */}
                 <label htmlFor="">Difficulty:</label>
 
                 <label>
                   <input
                     type="radio"
                     name="mode"
-                    value="easy"
-                    checked={selectedOption === 'easy'}
-                    onChange={handleRadioChange}
+                    value={ModeEnum.Easy}
+                    checked={selectedOption === ModeEnum.Easy}
+                    onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
                   <div className="input-mode">Easy</div>
@@ -57,24 +60,24 @@ export function SettingsBoard() {
                   <input
                     type="radio"
                     name="mode"
-                    value="normal"
-                    checked={selectedOption === 'normal'}
-                    onChange={handleRadioChange}
+                    value={ModeEnum.Medium}
+                    checked={selectedOption === ModeEnum.Medium}
+                    onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
-                  <div className="input-mode">Normal</div>
+                  <div className="input-mode">Medium</div>
                 </label>
 
                 <label>
                   <input
                     type="radio"
                     name="mode"
-                    value="intense"
-                    checked={selectedOption === 'intense'}
-                    onChange={handleRadioChange}
+                    value={ModeEnum.Hard}
+                    checked={selectedOption === ModeEnum.Hard}
+                    onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
-                  <div className="input-mode">Intense</div>
+                  <div className="input-mode">Hard</div>
                 </label>
               </div>
             </div>
