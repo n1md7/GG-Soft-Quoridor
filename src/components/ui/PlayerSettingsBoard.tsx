@@ -4,7 +4,7 @@ import { ModeEnum } from '@src/core/enums/mode.enum.ts';
 import React, { useState } from 'react';
 import { Parallelogram } from './Parallelogram';
 
-export function SettingsBoard() {
+export function PlayerSettingsBoard() {
   const [inputValue, setInputValue] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
   const settings = useSettings();

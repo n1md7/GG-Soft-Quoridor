@@ -161,3 +161,48 @@ input[type='radio']:checked + .input-mode {
     background: #83ff00;
   }
 }
+
+/* Base slider */
+.input-slider {
+  @apply w-full cursor-pointer appearance-none bg-transparent focus:outline-none;
+}
+
+/* Track (WebKit) */
+.input-slider::-webkit-slider-runnable-track {
+  @apply h-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600;
+}
+
+/* Track (Firefox) */
+.input-slider::-moz-range-track {
+  @apply h-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600;
+}
+
+/* Thumb (WebKit) */
+.input-slider::-webkit-slider-thumb {
+  @apply h-5 w-5 appearance-none rounded-full bg-purple-300 shadow-[0_0_12px_3px_rgba(168,85,247,0.8)] transition-all;
+
+  margin-top: -5px; /* centers thumb on track */
+}
+
+/* Thumb (Firefox) */
+.input-slider::-moz-range-thumb {
+  @apply h-5 w-5 rounded-full bg-purple-300 shadow-[0_0_12px_3px_rgba(168,85,247,0.8)] transition-all;
+}
+
+/* Hover */
+.input-slider:hover::-webkit-slider-thumb {
+  @apply bg-yellow-300 shadow-[0_0_16px_4px_rgba(236,72,153,0.9)];
+}
+
+.input-slider:hover::-moz-range-thumb {
+  @apply bg-yellow-300 shadow-[0_0_16px_4px_rgba(236,72,153,0.9)];
+}
+
+/* Active (click/drag) */
+.input-slider:active::-webkit-slider-thumb {
+  @apply scale-110 bg-yellow-400 shadow-[0_0_20px_6px_rgba(250,204,21,0.9)];
+}
+
+.input-slider:active::-moz-range-thumb {
+  @apply scale-110 bg-yellow-400 shadow-[0_0_20px_6px_rgba(250,204,21,0.9)];
+}
