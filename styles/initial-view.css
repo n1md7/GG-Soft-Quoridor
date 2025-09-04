@@ -1,3 +1,8 @@
+.main-view-container {
+  display: flex;
+  justify-content: center;
+}
+
 .initial-view {
   display: flex;
   flex-direction: column;
@@ -22,7 +27,7 @@
     justify-content: center;
 
     img {
-      width: 20rem;
+      width: 15rem;
       height: auto;
     }
   }

@@ -1,4 +1,4 @@
-import { SettingsBoard } from '@src/components/ui/SettingsBoard';
+import { PlayerSettingsBoard } from '@src/components/ui/PlayerSettingsBoard.tsx';
 import { LeaderBoard } from '@src/components/ui/LeaderBoard';
 import { Show } from '@src/components/utils/Show.tsx';
 import { useState } from 'react';
@@ -15,7 +15,7 @@ export function LobbyView({ next }: Readonly<Props>) {
       <div className="main-lobby-container">
         {/* game settings */}
         <Show when={!showLeaderboard}>
-          <SettingsBoard />
+          <PlayerSettingsBoard />
         </Show>
 
         {/* leaderboard */}
