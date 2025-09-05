@@ -105,7 +105,7 @@
 
     &.settings {
       position: relative;
-      background: linear-gradient(to right, #bb77fb 1%, #7e4cf5 30%, #3850bc 80%);
+      background: linear-gradient(to right, #bb77fb 1%, #7e4cf5 30%, var(--color-app-blue) 80%);
       top: 35px;
       display: flex;
       align-items: center;
@@ -161,7 +161,7 @@
     width: 40px;
     height: 75px;
     clip-path: polygon(0% 0%, 100% 30%, 100% 100%, 0% 100%);
-    background: #8a4cff;
+    background: var(--color-app-purple);
   }
 
   .flip {
@@ -357,7 +357,7 @@
       > .arrow {
         height: 10px;
         width: 10px;
-        background: #db1f48;
+        background: var(--color-app-red);
         clip-path: polygon(0 0, 0% 100%, 100% 50%);
         margin: 15px 5px 0 0;
       }
