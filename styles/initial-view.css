@@ -43,7 +43,7 @@
     font-optical-sizing: auto;
     font-size: 1rem;
     text-align: center;
-    color: #d7d7d7;
+    color: var(--color-app-light-purple);
   }
 
   .progress-container {
@@ -58,8 +58,8 @@
 
   .progress-count {
     margin: 10px 0;
-    color: #d7d7d7;
-    font-weight: bold;
+    color: #76808f;
+    font-weight: normal;
     font-family: Inter, sans-serif;
   }
 
@@ -94,7 +94,7 @@
       text-align: center;
       width: 100%;
       margin: 10px 0;
-      color: #d7d7d7;
+      color: var(--color-app-green);
     }
 
     .errors {
