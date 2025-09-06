@@ -22,6 +22,10 @@ export class ModeManager {
     this.currentMode = this.modes.get(mode)!;
   }
 
+  get mode() {
+    return this.currentMode;
+  }
+
   makeMove() {
     this.currentMode.makeMove();
   }

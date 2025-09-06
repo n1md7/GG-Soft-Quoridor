@@ -1,22 +1,18 @@
 import { useSettings } from '@src/components/hooks/useSettings.ts';
 import { BoardElements } from '@src/components/ui/BoardElements';
 import { ModeEnum } from '@src/core/enums/mode.enum.ts';
-import React, { useState } from 'react';
+import { ChangeEvent } from 'react';
 import { Parallelogram } from './Parallelogram';
 
 export function SettingsBoard() {
-  const [inputValue, setInputValue] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
-  const settings = useSettings();
+  const { update, settings } = useSettings();
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    settings.update({ playerName: e.target.value });
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    update({ playerName: e.target.value });
   };
 
-  const handleDifficultyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(e.target.value);
-    settings.update({ difficulty: e.target.value as ModeEnum });
+  const handleDifficultyChange = (e: ChangeEvent<HTMLInputElement>) => {
+    update({ difficulty: e.target.value as ModeEnum });
   };
 
   return (
@@ -35,7 +31,7 @@ export function SettingsBoard() {
               <input
                 type="text"
                 id="playerName"
-                value={inputValue}
+                value={settings.playerName}
                 onChange={handleNameChange}
                 className="input-name"
                 autoComplete="off"
@@ -49,7 +45,7 @@ export function SettingsBoard() {
                     type="radio"
                     name="mode"
                     value={ModeEnum.Easy}
-                    checked={selectedOption === ModeEnum.Easy}
+                    checked={settings.difficulty === ModeEnum.Easy}
                     onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
@@ -61,7 +57,7 @@ export function SettingsBoard() {
                     type="radio"
                     name="mode"
                     value={ModeEnum.Medium}
-                    checked={selectedOption === ModeEnum.Medium}
+                    checked={settings.difficulty === ModeEnum.Medium}
                     onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
@@ -73,7 +69,7 @@ export function SettingsBoard() {
                     type="radio"
                     name="mode"
                     value={ModeEnum.Hard}
-                    checked={selectedOption === ModeEnum.Hard}
+                    checked={settings.difficulty === ModeEnum.Hard}
                     onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
