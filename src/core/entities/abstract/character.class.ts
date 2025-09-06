@@ -16,6 +16,8 @@ export abstract class Character extends CharacterState implements Subject {
 
   protected observer?: Observer;
   protected index = 0;
+  protected name?: string;
+  protected avatar?: string;
 
   protected constructor(
     protected readonly model: ModelType,
@@ -25,6 +27,30 @@ export abstract class Character extends CharacterState implements Subject {
 
     this.getDestinationFromCoords = this.getDestinationFromCoords.bind(this);
     this.getCoordsFromDestination = this.getCoordsFromDestination.bind(this);
+  }
+
+  getName() {
+    if (!this.name) {
+      throw new Error('Character name is not set.');
+    }
+
+    return this.name;
+  }
+
+  setName(name: string) {
+    this.name = name;
+  }
+
+  setAvatar(avatar: string) {
+    this.avatar = avatar;
+  }
+
+  getAvatar() {
+    if (!this.avatar) {
+      throw new Error('Character avatar is not set.');
+    }
+
+    return this.avatar;
   }
 
   /**

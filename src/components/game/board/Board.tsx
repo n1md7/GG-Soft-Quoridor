@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 export const Board = () => {
   const game = useGame();
-  const settings = useSettings();
+  const { settings } = useSettings();
 
   useControls('Board', {
     wireframe: {
@@ -23,8 +23,12 @@ export const Board = () => {
   });
 
   useEffect(() => {
-    game.modes.setMode(settings.value.difficulty);
-  }, [game.modes, settings.value.difficulty]);
+    game.modes.setMode(settings.difficulty);
+    game.player.setName(settings.playerName);
+    game.player.setAvatar(settings.playerAvatar);
+    game.computer.setName('Computer');
+    game.computer.setAvatar('Avatar-CPU');
+  }, [game.computer, game.modes, game.player, settings.difficulty, settings.playerAvatar, settings.playerName]);
 
   useEffect(() => {
     if (!game.model.pawns.current) return;

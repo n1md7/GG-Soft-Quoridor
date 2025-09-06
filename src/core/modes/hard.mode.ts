@@ -1,7 +1,12 @@
 import { CoordsType, CoordsWithPosType, Positions } from '@src/components/game/block/block.type.ts';
 import { GameMode } from '@src/core/entities/abstract/game.mode.ts';
+import { ModeEnum } from '@src/core/enums/mode.enum.ts';
 
 export class HardMode extends GameMode {
+  override get name() {
+    return ModeEnum.Hard;
+  }
+
   override makeMove() {
     const playerPath = this.game.player.getShortestPath(this.game.player.getCoords());
     const computerPath = this.game.computer.getShortestPath(this.game.computer.getCoords());
@@ -96,7 +101,6 @@ export class HardMode extends GameMode {
         break;
     }
 
-    console.info('currentBlocks', currentBlocks);
     return currentBlocks;
   }
 }
