@@ -4,6 +4,7 @@ import { createContext, Dispatch, SetStateAction } from 'react';
 export type Settings = {
   playerName: string;
   difficulty: ModeEnum;
+  playerAvatar: string;
 };
 
 export type SetSettings = Dispatch<SetStateAction<Settings>>;

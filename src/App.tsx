@@ -1,18 +1,22 @@
-import { ModeEnum } from '@src/core/enums/mode.enum.ts';
-import { Settings, SettingsContext } from './context/settings.context';
+import { useStorage } from '@src/components/hooks/useStorage.ts';
 import { Show } from '@src/components/utils/Show.tsx';
+import { ModeEnum } from '@src/core/enums/mode.enum.ts';
 import { Gameplay } from '@src/views/GamePlay';
 import { InitialView } from '@src/views/InitialView';
 import { LobbyView } from '@src/views/LobbyView.tsx';
 import { useState } from 'react';
+import { Settings, SettingsContext } from './context/settings.context';
 
 type GameState = 'Initial' | 'Lobby' | 'Gameplay';
 
 export function App() {
   const [gameState, setGameState] = useState<GameState>('Initial');
+  const { getName, getDifficulty, getAvatar } = useStorage();
+
   const [settings, setSettings] = useState<Settings>({
-    playerName: '',
-    difficulty: '' as ModeEnum,
+    playerName: getName('Anonymous'),
+    playerAvatar: getAvatar('TODO: default avatar src'),
+    difficulty: getDifficulty(ModeEnum.Medium),
   });
 
   const gotoLobby = () => setGameState('Lobby');
