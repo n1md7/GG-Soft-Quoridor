@@ -5,10 +5,13 @@ import { Player } from '@src/core/entities/player/player.class.ts';
 import { Grid } from '@src/core/grid.class.ts';
 import { EventManager } from '@src/core/managers/event.manager.ts';
 import { ModeManager } from '@src/core/managers/mode.manager.ts';
+import { SoundManager } from '@src/core/managers/sound.manager.ts';
 import { StateManager } from '@src/core/managers/state.manager.ts';
 import { StoreManager } from '@src/core/managers/storage.manager.ts';
 
 export class Game {
+  private static instance: Game;
+
   readonly computer: Computer;
   readonly player: Player;
   readonly grid: Grid;
@@ -16,8 +19,9 @@ export class Game {
   readonly states: StateManager;
   readonly modes: ModeManager;
   readonly storage: StoreManager;
+  readonly sounds: SoundManager;
 
-  constructor(readonly model: ModelType) {
+  private constructor(readonly model: ModelType) {
     this.player = new Player(model, this);
     this.computer = new Computer(model, this);
     this.storage = new StoreManager(GAME_SCORE_KEY);
@@ -25,6 +29,15 @@ export class Game {
     this.states = new StateManager(this);
     this.modes = new ModeManager(this);
     this.grid = new Grid();
+    this.sounds = new SoundManager();
+  }
+
+  static getInstance(model: ModelType) {
+    if (!Game.instance) {
+      Game.instance = new Game(model);
+    }
+
+    return Game.instance;
   }
 
   start() {

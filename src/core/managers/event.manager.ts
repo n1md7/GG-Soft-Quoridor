@@ -30,6 +30,7 @@ export class EventManager implements Observer {
     this.characters[nextIndex].setMyTurn(true);
 
     if (character.won()) {
+      this.game.sounds.playerWin.play();
       this.saveScore(character);
       this.celebrate();
     }
