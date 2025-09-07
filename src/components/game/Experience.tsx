@@ -33,7 +33,7 @@ export function Experience() {
   });
 
   return (
-    <GameContext.Provider value={new Game(model)}>
+    <GameContext.Provider value={Game.getInstance(model)}>
       <OrbitControls enableDamping enablePan target={new Vector3()} />
       <Perf openByDefault showGraph antialias position="bottom-right" />
 
