@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
+import { useGame } from '@src/components/hooks/useGame.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
 import { animationTime } from '@src/config/animation.config.ts';
@@ -22,6 +23,7 @@ type Props = {
 
 export const Wall = forwardRef(
   ({ geometry, position, name, scale, material }: Props, ref: ForwardedRef<ForwardedWall>) => {
+    const { sounds } = useGame();
     const { getDestinationFromCoords } = useWallPosition();
     const percentage = usePercentage();
     const mesh = useRef<Mesh>(null!);
@@ -61,6 +63,8 @@ export const Wall = forwardRef(
                 moveToAnimation.current.remove();
                 moveToAnimation.current = null!;
 
+                sounds.wallPlacement.play();
+
                 moveDownAnimation.current = new Tween(mesh.current.position)
                   .to({ y: position.y })
                   .duration(moveUpTime)
@@ -75,7 +79,7 @@ export const Wall = forwardRef(
           })
           .start();
       },
-      [getDestinationFromCoords, percentage],
+      [getDestinationFromCoords, percentage, sounds.wallPlacement],
     );
 
     // const over = useCallback((e: ThreeEvent<PointerEvent>) => {

@@ -2,6 +2,7 @@ import { Outlines, useCursor } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { CoordsType } from '@src/components/game/block/block.type.ts';
 import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawns/pawn.type.ts';
+import { useGame } from '@src/components/hooks/useGame.ts';
 import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { animationTime } from '@src/config/animation.config.ts';
@@ -29,6 +30,7 @@ export const Pawn = forwardRef(
 
     const { getCoordsFromDestination } = usePawnPosition();
     const percentage = usePercentage();
+    const { sounds } = useGame();
 
     const [showOutline, setShowOutline] = useState(false);
     const vec3Position = new Vector3(position[0], position[1], position[2]);
@@ -81,6 +83,8 @@ export const Pawn = forwardRef(
             moveUpAnimation.current.remove();
             moveUpAnimation.current = null!;
 
+            sounds.pawnMove.play();
+
             moveDownAnimation.current = new Tween(mesh.current.position)
               .to({ y: origin.y })
               .duration(moveDownTime)
@@ -97,7 +101,7 @@ export const Pawn = forwardRef(
 
         return coords.current;
       },
-      [getCoordsFromDestination, percentage],
+      [getCoordsFromDestination, percentage, sounds.pawnMove],
     );
 
     useCursor(hovered /*'pointer', 'auto', document.body*/);
