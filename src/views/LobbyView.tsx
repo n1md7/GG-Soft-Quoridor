@@ -1,7 +1,7 @@
-import { SettingsBoard } from '@src/components/ui/SettingsBoard';
 import { LeaderBoard } from '@src/components/ui/LeaderBoard';
 import { Show } from '@src/components/utils/Show.tsx';
 import { useState } from 'react';
+import { SettingsBoard } from '@src/components/ui/PlayerSettingsBoard.tsx';
 
 type Props = {
   next: () => void;
