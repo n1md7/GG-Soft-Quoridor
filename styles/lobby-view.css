@@ -12,7 +12,7 @@
   }
 
   .main-container {
-    @apply /* mobile */ w-90 justify-center sm:w-[clamp(420px,60vw,600px)]; /* tablet up */
+    @apply w-90 justify-center sm:w-[clamp(420px,60vw,600px)];
 
     height: 500px;
     position: relative;
@@ -31,7 +31,7 @@
       }
 
       .parallelograms:first-of-type {
-        @apply /* mobile */ w-90 sm:w-[clamp(420px,100vw,600px)]; /* tablet up */
+        @apply w-90 sm:w-[clamp(420px,100vw,600px)];
 
         display: none;
         position: absolute;
@@ -81,7 +81,7 @@
     border-radius: 10px;
 
     > .wrapper {
-      @apply /* mobile */ w-90 sm:w-[clamp(420px,60vw,600px)]; /* tablet up */
+      @apply w-90 sm:w-[clamp(420px,60vw,600px)];
 
       height: 500px;
       border-radius: 10px;

@@ -36,7 +36,7 @@ body,
   p,
   span,
   input[type='text'] {
-    @apply /* mobile */ /* tablet */ /* regular monitor */ /* large screen */ /* large screen */ text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
+    @apply text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
 
     font-family: Chelsea-Market, sans-serif;
   }
@@ -63,7 +63,7 @@ body,
   }
 
   .play-button {
-    @apply /* mobile */ /* tablet */ /* regular monitor */ /* large screen */ /* large screen */ text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
+    @apply text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
 
     margin-top: 3rem;
     padding: clamp(10px, 1vw, 20px);
@@ -129,7 +129,7 @@ body,
     }
 
     .input-wrapper {
-      @apply /* mobile */ my-10 px-5 sm:my-[clamp(40px,2vw,40px)] sm:px-[clamp(20px,2vw,40px)]; /* tablet up */
+      @apply my-10 px-5 sm:my-[clamp(40px,2vw,40px)] sm:px-[clamp(20px,2vw,40px)];
     }
 
     .input-mode {
@@ -258,7 +258,6 @@ body,
       }
     }
 
-    /* Checked state: glowing neon */
     input[type='radio']:checked + .radio-label::before {
       @apply border-purple-400 bg-purple-500;
 
