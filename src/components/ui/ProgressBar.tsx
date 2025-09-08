@@ -5,11 +5,11 @@ export function ProgressBar() {
   const { progress, loaded, total, errors } = useProgress();
   return (
     <div className="progress-container">
-      <div className="progress-count">
+      <p className="progress-count">
         <Show when={loaded !== total} fallback={'Done'}>
           {progress.toFixed(2)}%
         </Show>
-      </div>
+      </p>
       <div className="progress">
         <div className="bar" style={{ width: progress + '%' }}></div>
         <div className="info">

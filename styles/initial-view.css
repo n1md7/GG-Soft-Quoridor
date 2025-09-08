@@ -1,3 +1,8 @@
+.main-view-container {
+  display: flex;
+  justify-content: center;
+}
+
 .initial-view {
   display: flex;
   flex-direction: column;
@@ -22,23 +27,23 @@
     justify-content: center;
 
     img {
-      width: 20rem;
+      width: clamp(200px, 20vw, 350px);
       height: auto;
     }
   }
 
   .container {
+    @apply /* mobile */ /* tablet */ /* regular monitor */ w-[clamp(250px,80vw,400px)] sm:w-[clamp(300px,80vw,600px)] md:w-[clamp(400px,70vw,800px)] lg:w-[clamp(700px,40vw,1000px)]; /* large screen */
+
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
   .description {
-    font-family: Inter, sans-serif;
     font-optical-sizing: auto;
-    font-size: 1rem;
     text-align: center;
-    color: #d7d7d7;
+    color: var(--color-app-light-purple);
   }
 
   .progress-container {
@@ -53,9 +58,9 @@
 
   .progress-count {
     margin: 10px 0;
-    color: #d7d7d7;
-    font-weight: bold;
-    font-family: Inter, sans-serif;
+    color: #76808f;
+    font-weight: normal;
+    font-family: Chelsea-Market, sans-serif;
   }
 
   .progress {
@@ -76,7 +81,7 @@
       position: relative;
       text-align: center;
       color: #fff;
-      font-family: Inter, sans-serif;
+      font-family: Chelsea-Market, sans-serif;
       font-optical-sizing: auto;
       vertical-align: middle;
       line-height: 2.5rem;
@@ -84,17 +89,17 @@
     }
 
     .info {
-      font-family: Inter, sans-serif;
+      font-family: Chelsea-Market, sans-serif;
       font-style: normal;
       text-align: center;
       width: 100%;
       margin: 10px 0;
-      color: #d7d7d7;
+      color: var(--color-app-green);
     }
 
     .errors {
       padding: 8px;
-      font-family: Inter, sans-serif;
+      font-family: Chelsea-Market, sans-serif;
       font-optical-sizing: auto;
       font-weight: 400;
       font-style: normal;
