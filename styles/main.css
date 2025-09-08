@@ -6,10 +6,6 @@ body,
   user-select: none;
 }
 
-@layer components {
-  /* Custom component styles */
-}
-
 @layer base {
   :root {
     --color-app-purple: #8a4cff;
@@ -24,201 +20,256 @@ body,
   }
 }
 
-/* Global Styles */
-body {
-  background-image: url('@assets/background.jpg');
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  margin: 0;
-}
-
-.radio-label {
-  @apply flex cursor-pointer items-center justify-center text-center select-none;
-
-  color: var(--color-app-gray);
-}
-
-input[type='number']::-webkit-outer-spin-button,
-input[type='number']::-webkit-inner-spin-button {
-  appearance: none;
-  margin: 0;
-}
-
-::selection {
-  background-color: transparent;
-}
-
-.button-grp {
-  display: flex;
-  gap: 30px;
-}
-
-.play-button {
-  margin-top: 3rem;
-  padding: 15px;
-  background-color: var(--color-app-red);
-  color: #fff;
-  font-family: Caprasimo, sans-serif;
-  font-optical-sizing: auto;
-  font-size: 20px;
-  border-radius: 13px;
-  cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s,
-    background-color 0.2s;
-  outline: 2px solid #e9e9e9;
-  width: 12rem;
-  background-image: url('@assets/button-bg.svg');
-  background-size: cover;
-  background-position: center;
-  box-shadow: inset 0 0 0 1px #e9e9e9;
-  animation:
-    bounce 1.5s infinite 1.5s,
-    fade-in 1s ease forwards;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: inset 0 0 0 1px #e9e9e9;
+@layer components {
+  /* Global Styles */
+  body {
+    background-image: url('@assets/background.jpg');
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
   }
 
-  &.other {
-    background-color: var(--color-app-cyan);
-  }
-}
+  label,
+  p,
+  span,
+  input[type='text'] {
+    @apply /* mobile */ /* tablet */ /* regular monitor */ /* large screen */ /* large screen */ text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
 
-.input-name {
-  border-radius: 30px;
-  height: 35px;
-  box-shadow:
-    inset 0 5px 0 0 rgb(22 22 22 / 30%),
-    0 4px 0 rgb(0 0 0 / 30%);
-  background: linear-gradient(to right, #bb77fb, #7e4cf5, var(--color-app-blue));
-  z-index: 1;
-  font-family: Caprasimo, sans-serif;
-  text-align: center;
-
-  &:focus-visible {
-    outline: none;
-  }
-}
-
-.input-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: var(--color-app-light-purple);
-  gap: 15px;
-
-  > label {
-    position: relative;
+    font-family: Chelsea-Market, sans-serif;
   }
 
-  > .input-mode {
-    z-index: 1;
+  .radio-label {
+    @apply flex cursor-pointer items-center justify-center text-center select-none;
+
+    color: var(--color-app-gray);
   }
 
-  .input-mode {
-    height: 40px;
-    width: 120px;
-    background-color: var(--color-app-slate-blue);
-    border-radius: 10px;
-    border: 2px solid white;
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  ::selection {
+    background-color: transparent;
+  }
+
+  .button-grp {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 30px;
+  }
+
+  .play-button {
+    @apply /* mobile */ /* tablet */ /* regular monitor */ /* large screen */ /* large screen */ text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
+
+    margin-top: 3rem;
+    padding: clamp(10px, 1vw, 20px);
+    background-color: var(--color-app-red);
+    color: #fff;
     font-family: Caprasimo, sans-serif;
+    font-optical-sizing: auto;
+    border-radius: 13px;
+    cursor: pointer;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background-color 0.2s;
+    outline: 2px solid #e9e9e9;
+    width: clamp(130px, 13vw, 250px);
     background-image: url('@assets/button-bg.svg');
     background-size: cover;
     background-position: center;
-    cursor: pointer;
-    color: var(--color-app-yellow);
-    transition:
-      background 0.3s ease,
-      transform 0.3s ease;
+    box-shadow: inset 0 0 0 1px #e9e9e9;
+    animation:
+      bounce 1.5s infinite 1.5s,
+      fade-in 1s ease forwards;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: inset 0 0 0 1px #e9e9e9;
+    }
+
+    &.other {
+      background-color: var(--color-app-cyan);
+    }
+  }
+
+  .input-name {
+    border-radius: 30px;
+    height: 35px;
+    box-shadow:
+      inset 0 5px 0 0 rgb(22 22 22 / 30%),
+      0 4px 0 rgb(0 0 0 / 30%);
+    background: linear-gradient(to right, #bb77fb, #7e4cf5, var(--color-app-blue));
+    z-index: 1;
+    font-family: Chelsea-Market, sans-serif;
+    text-align: center;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color-app-light-purple);
+    gap: 15px;
+
+    > label {
+      position: relative;
+    }
+
+    > .input-mode {
+      z-index: 1;
+    }
+
+    .input-wrapper {
+      @apply /* mobile */ my-10 px-5 sm:my-[clamp(40px,2vw,40px)] sm:px-[clamp(20px,2vw,40px)]; /* tablet up */
+    }
+
+    .input-mode {
+      height: 40px;
+      width: 120px;
+      background-color: var(--color-app-slate-blue);
+      border-radius: 10px;
+      border: 2px solid white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Chelsea-Market, sans-serif;
+      background-image: url('@assets/button-bg.svg');
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      color: var(--color-app-yellow);
+      transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+
+      &::after {
+        content: '';
+        width: 5px;
+        height: 60%;
+        background: var(--color-app-red);
+        position: absolute;
+        left: -5px;
+        border-radius: 3px 0 0 3px;
+      }
+
+      &::before {
+        content: '';
+        width: 5px;
+        height: 60%;
+        background: var(--color-app-red);
+        position: absolute;
+        right: -5px;
+        border-radius: 0 3px 3px 0;
+      }
+    }
+  }
+
+  input[type='radio']:checked + .input-mode {
+    background-image: url('@assets/button-bg.svg'),
+      linear-gradient(to right, var(--color-app-purple), var(--color-app-blue));
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+    animation: pulse-glow 0.5s alternate 2;
 
     &::after {
-      content: '';
-      width: 5px;
-      height: 60%;
-      background: var(--color-app-red);
-      position: absolute;
-      left: -5px;
-      border-radius: 3px 0 0 3px;
+      background: var(--color-app-green);
     }
 
     &::before {
-      content: '';
-      width: 5px;
-      height: 60%;
-      background: var(--color-app-red);
-      position: absolute;
-      right: -5px;
-      border-radius: 0 3px 3px 0;
+      background: var(--color-app-green);
     }
   }
-}
 
-input[type='radio']:checked + .input-mode {
-  background-image: url('@assets/button-bg.svg'),
-    linear-gradient(to right, var(--color-app-purple), var(--color-app-blue));
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.05);
-
-  &::after {
-    background: var(--color-app-green);
+  /* Base slider */
+  .input-slider {
+    @apply w-full cursor-pointer appearance-none bg-transparent focus:outline-none;
   }
 
-  &::before {
-    background: var(--color-app-green);
+  /* Track (WebKit) */
+  .input-slider::-webkit-slider-runnable-track {
+    @apply h-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600;
   }
-}
 
-/* Base slider */
-.input-slider {
-  @apply w-full cursor-pointer appearance-none bg-transparent focus:outline-none;
-}
+  /* Track (Firefox) */
+  .input-slider::-moz-range-track {
+    @apply h-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600;
+  }
 
-/* Track (WebKit) */
-.input-slider::-webkit-slider-runnable-track {
-  @apply h-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600;
-}
+  /* Thumb (WebKit) */
+  .input-slider::-webkit-slider-thumb {
+    @apply h-5 w-5 appearance-none rounded-full bg-purple-300 shadow-[0_0_12px_3px_rgba(168,85,247,0.8)] transition-all;
 
-/* Track (Firefox) */
-.input-slider::-moz-range-track {
-  @apply h-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600;
-}
+    margin-top: -5px; /* centers thumb on track */
+  }
 
-/* Thumb (WebKit) */
-.input-slider::-webkit-slider-thumb {
-  @apply h-5 w-5 appearance-none rounded-full bg-purple-300 shadow-[0_0_12px_3px_rgba(168,85,247,0.8)] transition-all;
+  /* Thumb (Firefox) */
+  .input-slider::-moz-range-thumb {
+    @apply h-5 w-5 rounded-full bg-purple-300 shadow-[0_0_12px_3px_rgba(168,85,247,0.8)] transition-all;
+  }
 
-  margin-top: -5px; /* centers thumb on track */
-}
+  /* Hover */
+  .input-slider:hover::-webkit-slider-thumb {
+    @apply bg-yellow-300 shadow-[0_0_16px_4px_rgba(236,72,153,0.9)];
+  }
 
-/* Thumb (Firefox) */
-.input-slider::-moz-range-thumb {
-  @apply h-5 w-5 rounded-full bg-purple-300 shadow-[0_0_12px_3px_rgba(168,85,247,0.8)] transition-all;
-}
+  .input-slider:hover::-moz-range-thumb {
+    @apply bg-yellow-300 shadow-[0_0_16px_4px_rgba(236,72,153,0.9)];
+  }
 
-/* Hover */
-.input-slider:hover::-webkit-slider-thumb {
-  @apply bg-yellow-300 shadow-[0_0_16px_4px_rgba(236,72,153,0.9)];
-}
+  /* Active (click/drag) */
+  .input-slider:active::-webkit-slider-thumb {
+    @apply scale-110 bg-yellow-400 shadow-[0_0_20px_6px_rgba(250,204,21,0.9)];
+  }
 
-.input-slider:hover::-moz-range-thumb {
-  @apply bg-yellow-300 shadow-[0_0_16px_4px_rgba(236,72,153,0.9)];
-}
+  .input-slider:active::-moz-range-thumb {
+    @apply scale-110 bg-yellow-400 shadow-[0_0_20px_6px_rgba(250,204,21,0.9)];
+  }
 
-/* Active (click/drag) */
-.input-slider:active::-webkit-slider-thumb {
-  @apply scale-110 bg-yellow-400 shadow-[0_0_20px_6px_rgba(250,204,21,0.9)];
-}
+  .game-radio {
+    @apply my-3 flex cursor-pointer items-center space-x-3 text-lg font-bold text-neutral-200;
 
-.input-slider:active::-moz-range-thumb {
-  @apply scale-110 bg-yellow-400 shadow-[0_0_20px_6px_rgba(250,204,21,0.9)];
+    /* Hover: soft glow */
+    :hover .radio-label::before {
+      @apply border-pink-500;
+
+      box-shadow: 0 0 12px rgb(236 72 153 / 80%);
+    }
+
+    /* Custom radio circle */
+    input[type='radio'] {
+      @apply hidden; /* hide native circle */
+
+      + .radio-label::before {
+        content: '';
+
+        @apply mr-2 inline-block h-6 w-6 rounded-full border-2 border-purple-500 transition-all duration-300;
+
+        box-shadow: 0 0 8px rgb(168 85 247 / 60%);
+      }
+    }
+
+    /* Checked state: glowing neon */
+    input[type='radio']:checked + .radio-label::before {
+      @apply border-purple-400 bg-purple-500;
+
+      box-shadow: 0 0 15px 4px rgb(168 85 247 / 90%);
+      animation: pulse-glow 1s infinite alternate;
+    }
+
+    .radio-label {
+      @apply text-sm font-normal;
+
+      color: var(--color-app-light-purple);
+    }
+  }
 }

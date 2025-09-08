@@ -49,7 +49,7 @@ export function SettingsBoard() {
                     onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
-                  <div className="input-mode">Easy</div>
+                  <span className="input-mode">Easy</span>
                 </label>
 
                 <label>
@@ -61,7 +61,7 @@ export function SettingsBoard() {
                     onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
-                  <div className="input-mode">Medium</div>
+                  <span className="input-mode">Medium</span>
                 </label>
 
                 <label>
@@ -73,7 +73,7 @@ export function SettingsBoard() {
                     onChange={handleDifficultyChange}
                     className="radio-mode hidden"
                   />
-                  <div className="input-mode">Hard</div>
+                  <span className="input-mode">Hard</span>
                 </label>
               </div>
             </div>

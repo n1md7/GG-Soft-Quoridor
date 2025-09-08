@@ -9,6 +9,11 @@
 }
 
 @font-face {
+  font-family: Chelsea-Market;
+  src: url('@assets/fonts/chelseamarket-regular.ttf') format('truetype');
+}
+
+@font-face {
   font-family: Corporation-Regular;
   src: url('@assets/fonts/corporation-games-straight.otf') format('opentype');
 }

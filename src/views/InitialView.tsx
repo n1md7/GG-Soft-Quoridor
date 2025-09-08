@@ -30,12 +30,12 @@ export function InitialView({ next }: Readonly<Props>) {
 
       <Show when={!soundSettings}>
         <div className="main-view-container">
-          <div className="container sm:w-5/6 md:w-2/3 lg:w-2/4">
+          <div className="container">
             <div className="logo">
               <img src={LogoImg} alt="Quoridor 3D" />
             </div>
 
-            <p className="description text-sm">
+            <p className="description">
               The game of Quoridor is a strategy game where the goal is to reach the opposite side of the board. The
               catch is that you can place walls to block your opponent. The first player to reach the opposite side
               wins.

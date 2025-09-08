@@ -12,9 +12,9 @@
   }
 
   .main-container {
+    @apply /* mobile */ w-90 justify-center sm:w-[clamp(420px,60vw,600px)]; /* tablet up */
+
     height: 500px;
-    min-width: 420px;
-    max-width: 700px;
     position: relative;
     display: flex;
     align-items: flex-start;
@@ -31,6 +31,9 @@
       }
 
       .parallelograms:first-of-type {
+        @apply /* mobile */ w-90 sm:w-[clamp(420px,100vw,600px)]; /* tablet up */
+
+        display: none;
         position: absolute;
         top: 35px;
         padding: 15px;
@@ -78,9 +81,9 @@
     border-radius: 10px;
 
     > .wrapper {
+      @apply /* mobile */ w-90 sm:w-[clamp(420px,60vw,600px)]; /* tablet up */
+
       height: 500px;
-      min-width: 420px;
-      max-width: 700px;
       border-radius: 10px;
       padding: 40px 40px 75px;
       background-color: #1f2941;
@@ -286,7 +289,7 @@
 
   .header {
     font-family: Corporation-Italic, sans-serif;
-    font-size: 24px;
+    font-size: clamp(20px, 2vw, 27px);
     text-transform: uppercase;
   }
 
