@@ -10,7 +10,7 @@ type Props = {
   back: () => void;
 };
 
-export function Gameplay(props: Readonly<Props>) {
+export function Gameplay({ back }: Readonly<Props>) {
   const { ErrorBoundary } = useErrorBoundary();
 
   return (
@@ -35,7 +35,7 @@ export function Gameplay(props: Readonly<Props>) {
       </Suspense>
       <div className="canvas-overlay">
         <div className="action">
-          <button onClick={props.back} className="back-button">
+          <button onClick={back} className="back-button">
             Back to Lobby
           </button>
         </div>
