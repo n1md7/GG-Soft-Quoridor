@@ -1,4 +1,7 @@
 import { ModelType } from '@src/components/hooks/useModel.ts';
+import { RewardManager } from '@src/core/managers/reward.manager.ts';
+import { Inventory } from '@src/core/classes/inventory.class.ts';
+import { Market } from '@src/core/classes/market.class.ts';
 import { GAME_SCORE_KEY } from '@src/core/constants/storage.constants.ts';
 import { Computer } from '@src/core/entities/computer/computer.class.ts';
 import { Player } from '@src/core/entities/player/player.class.ts';
@@ -20,6 +23,9 @@ export class Game {
   readonly modes: ModeManager;
   readonly storage: StoreManager;
   readonly sounds: SoundManager;
+  readonly reward: RewardManager;
+  readonly market: Market;
+  readonly inventory: Inventory;
 
   private constructor(readonly model: ModelType) {
     this.player = new Player(model, this);
@@ -30,6 +36,9 @@ export class Game {
     this.modes = new ModeManager(this);
     this.grid = new Grid();
     this.sounds = new SoundManager();
+    this.reward = new RewardManager();
+    this.market = new Market(this);
+    this.inventory = new Inventory(this);
   }
 
   static getInstance(model: ModelType) {

@@ -13,7 +13,7 @@ export class StoreManager {
     return this.updateBy({ name, modes: {} });
   }
 
-  updateBy({ name, modes, avatar }: ItemPayload) {
+  updateBy({ name, modes, avatar, coins, ownedPowers }: ItemPayload) {
     name = this.serializeName(name);
 
     const store = this.getStore() ?? {};
@@ -25,12 +25,18 @@ export class StoreManager {
         medium: Infinity,
         hard: Infinity,
       },
+      coins: 0,
+      ownedPowers: [],
     };
     const updatedAt = Date.now();
 
-    if (modes.easy) item.modes.easy = { value: modes.easy, updatedAt };
-    if (modes.medium) item.modes.medium = { value: modes.medium, updatedAt };
-    if (modes.hard) item.modes.hard = { value: modes.hard, updatedAt };
+    if (modes) {
+      if (modes.easy) item.modes.easy = { value: modes.easy, updatedAt };
+      if (modes.medium) item.modes.medium = { value: modes.medium, updatedAt };
+      if (modes.hard) item.modes.hard = { value: modes.hard, updatedAt };
+    }
+    if (coins !== undefined) item.coins = coins;
+    if (ownedPowers !== undefined) item.ownedPowers = ownedPowers;
 
     store[name] = item;
 
