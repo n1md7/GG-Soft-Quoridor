@@ -14,7 +14,7 @@ export const useSettings = () => {
   };
 
   return {
-    settings: settings,
+    settings,
     update,
   };
 };
