@@ -43,8 +43,9 @@ export function Market({ onClose }: MarketProps) {
 
   return (
     <Html
-      position={[0, 0.8, 0]}
-      transform
+      position={[0, 0, 0]}
+      // transform
+      // occlude
       center
       style={{
         pointerEvents: 'auto',
