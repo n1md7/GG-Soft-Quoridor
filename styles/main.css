@@ -114,11 +114,9 @@ body,
   }
 
   .input-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @apply flex h-full flex-col items-center gap-4;
+
     color: var(--color-app-light-purple);
-    gap: 15px;
 
     > label {
       position: relative;
@@ -129,7 +127,7 @@ body,
     }
 
     .input-wrapper {
-      @apply my-10 px-5 sm:my-[clamp(40px,2vw,40px)] sm:px-[clamp(20px,2vw,40px)];
+      @apply my-10 flex h-full flex-col justify-between px-5 sm:my-[clamp(40px,2vw,40px)] sm:px-[clamp(20px,2vw,40px)];
     }
 
     .input-mode {

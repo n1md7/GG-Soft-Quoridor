@@ -26,6 +26,7 @@ export function App() {
 
     setGameState('Gameplay');
   };
+
   const isNameValid = () => settings.playerName.trim() !== '';
   const isModeValid = () => settings.difficulty.trim() !== '';
 

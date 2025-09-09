@@ -13,43 +13,45 @@ export function GameSettings() {
           <div className="wrapper-border">
             <div className="input-container">
               <div className="input-wrapper">
-                <div className="input-group my-2">
-                  <label htmlFor="bg-volume" className="mb-3">
-                    Background Volume:
-                  </label>
-                  <input id="bg-volume" type="range" min="1" max="100" step="1" className="input-slider" />
-                  <datalist id="datalist">
-                    <option value="1">|</option>
-                    <option value="10">|</option>
-                    <option value="20">|</option>
-                    <option value="30">|</option>
-                    <option value="40">|</option>
-                    <option value="50">|</option>
-                    <option value="60">|</option>
-                    <option value="70">|</option>
-                    <option value="80">|</option>
-                    <option value="90">|</option>
-                    <option value="100">|</option>
-                  </datalist>
-                </div>
-                <div className="input-group my-2">
-                  <label htmlFor="sound-volume" className="mb-3">
-                    Sound effects:
-                  </label>
-                  <input id="sound-volume" type="range" min="1" max="100" step="1" className="input-slider" />
-                  <datalist id="datalist">
-                    <option value="1">|</option>
-                    <option value="10">|</option>
-                    <option value="20">|</option>
-                    <option value="30">|</option>
-                    <option value="40">|</option>
-                    <option value="50">|</option>
-                    <option value="60">|</option>
-                    <option value="70">|</option>
-                    <option value="80">|</option>
-                    <option value="90">|</option>
-                    <option value="100">|</option>
-                  </datalist>
+                <div>
+                  <div className="input-group my-2">
+                    <label htmlFor="bg-volume" className="mb-3">
+                      Background Volume:
+                    </label>
+                    <input id="bg-volume" type="range" min="1" max="100" step="1" className="input-slider" />
+                    <datalist id="datalist">
+                      <option value="1">|</option>
+                      <option value="10">|</option>
+                      <option value="20">|</option>
+                      <option value="30">|</option>
+                      <option value="40">|</option>
+                      <option value="50">|</option>
+                      <option value="60">|</option>
+                      <option value="70">|</option>
+                      <option value="80">|</option>
+                      <option value="90">|</option>
+                      <option value="100">|</option>
+                    </datalist>
+                  </div>
+                  <div className="input-group my-2">
+                    <label htmlFor="sound-volume" className="mb-3">
+                      Sound effects:
+                    </label>
+                    <input id="sound-volume" type="range" min="1" max="100" step="1" className="input-slider" />
+                    <datalist id="datalist">
+                      <option value="1">|</option>
+                      <option value="10">|</option>
+                      <option value="20">|</option>
+                      <option value="30">|</option>
+                      <option value="40">|</option>
+                      <option value="50">|</option>
+                      <option value="60">|</option>
+                      <option value="70">|</option>
+                      <option value="80">|</option>
+                      <option value="90">|</option>
+                      <option value="100">|</option>
+                    </datalist>
+                  </div>
                 </div>
 
                 {/*<div className="input-group my-2">*/}
