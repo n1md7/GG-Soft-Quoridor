@@ -5,11 +5,22 @@ import { useCallback } from 'react';
 export const useStorage = () => {
   const setName = useCallback((name: string) => {
     localStorage.setItem(PLAYER_NAME_KEY, name);
+
+    return name;
   }, []);
 
-  const getName = useCallback((fallback: string) => {
-    return localStorage.getItem(PLAYER_NAME_KEY) || fallback;
-  }, []);
+  const getName = useCallback(
+    (fallback?: string) => {
+      const name = localStorage.getItem(PLAYER_NAME_KEY);
+
+      if (name) return name;
+
+      if (fallback) return setName(fallback);
+
+      throw new Error(`Player name not found in storage under key ${PLAYER_NAME_KEY}`);
+    },
+    [setName],
+  );
 
   const setAvatar = useCallback((avatar: string) => {
     localStorage.setItem(PLAYER_AVATAR_KEY, avatar);
