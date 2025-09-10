@@ -99,7 +99,7 @@ body,
 
   .input-name {
     border-radius: 30px;
-    height: 35px;
+    height: clamp(40px, 5vh, 50px);
     box-shadow:
       inset 0 5px 0 0 rgb(22 22 22 / 30%),
       0 4px 0 rgb(0 0 0 / 30%);
@@ -107,6 +107,7 @@ body,
     z-index: 1;
     font-family: Chelsea-Market, sans-serif;
     text-align: center;
+    color: white;
 
     &:focus-visible {
       outline: none;
@@ -177,7 +178,6 @@ body,
     background-size: cover;
     background-position: center;
     transform: scale(1.05);
-    animation: pulse-glow 0.5s alternate 2;
 
     &::after {
       background: var(--color-app-green);
