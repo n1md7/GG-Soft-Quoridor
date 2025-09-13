@@ -9,12 +9,14 @@ export class PlayState extends GameState {
     super.activate();
 
     this.game.start();
+    this.game.timer.start();
     this.game.sounds.background.play();
   }
 
   override deactivate() {
     super.deactivate();
 
+    this.game.timer.stop();
     this.game.sounds.background.stop();
   }
 }

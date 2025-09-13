@@ -76,10 +76,10 @@ export function Experience({ backToLobby }: Props) {
   }, [game.states, onStateChange]);
 
   return (
-    <Suspense>
-      <Market show={show.market} onClose={() => set({ market: false })} />
-      <GameOver show={show.looser} onPlayAgain={playAgain} onMainMenu={backToLobby} />
-      <Winner show={show.winner} onPlayAgain={playAgain} onMainMenu={backToLobby} />
+    <>
+      {show.market && <Market show={show.market} onClose={() => set({ market: false })} />}
+      {show.looser && <GameOver show={show.looser} onPlayAgain={playAgain} onMainMenu={backToLobby} />}
+      {show.winner && <Winner show={show.winner} onPlayAgain={playAgain} onMainMenu={backToLobby} />}
 
       <OrbitControls enableDamping enablePan target={new Vector3()} />
       <Perf openByDefault showGraph antialias position="bottom-right" />
@@ -92,8 +92,10 @@ export function Experience({ backToLobby }: Props) {
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
       <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
 
-      <Board />
-    </Suspense>
+      <Suspense>
+        <Board />
+      </Suspense>
+    </>
   );
 }
 

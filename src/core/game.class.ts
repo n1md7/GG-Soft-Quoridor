@@ -13,6 +13,7 @@ import { ModeManager } from '@src/core/managers/mode.manager.ts';
 import { SoundManager } from '@src/core/managers/sound.manager.ts';
 import { StateManager } from '@src/core/managers/state.manager.ts';
 import { StoreManager } from '@src/core/managers/storage.manager.ts';
+import { TimeManager } from '@src/core/managers/time.manager.ts';
 
 export class Game {
   private static instance: Game;
@@ -29,6 +30,7 @@ export class Game {
   readonly market: MarketManager;
   readonly inventory: InventoryManager;
   readonly performance: PerformanceManager;
+  readonly timer: TimeManager;
 
   private constructor(
     readonly model: ModelType,
@@ -47,6 +49,7 @@ export class Game {
     this.market = MarketManager.getInstance(this);
     this.inventory = InventoryManager.getInstance(this);
     this.performance = PerformanceManager.getInstance(this);
+    this.timer = TimeManager.getInstance();
   }
 
   static getInstance(model: ModelType, settings: Settings) {
@@ -63,9 +66,10 @@ export class Game {
 
   reset() {
     this.grid.reset();
+    this.timer.reset();
     this.player.reset();
-    this.computer.reset();
     this.reward.reset();
+    this.computer.reset();
     this.inventory.reset();
     this.performance.reset();
 

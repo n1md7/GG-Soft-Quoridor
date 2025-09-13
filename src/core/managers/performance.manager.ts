@@ -22,12 +22,15 @@ export class PerformanceManager {
     return PerformanceManager.instance;
   }
 
-  getTime() {
-    return this.time;
+  calculate({ time, moves }: { time: number; moves: number }) {
+    this.time = time;
+    this.moves = moves;
+
+    this.difficulty = this.game.modes.mode.name;
   }
 
-  setTime(time: number) {
-    this.time = time;
+  getTime() {
+    return this.time;
   }
 
   getMoves() {
