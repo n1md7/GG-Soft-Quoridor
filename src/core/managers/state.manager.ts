@@ -1,33 +1,56 @@
 import { GameState } from '@src/core/entities/abstract/game.state.ts';
 import { Game } from '@src/core/game.class.ts';
-import { InitState } from '@src/core/states/init.state.ts';
 import { LoseState } from '@src/core/states/lose.state.ts';
 import { PauseState } from '@src/core/states/pause.state.ts';
 import { PlayState } from '@src/core/states/play.state.ts';
 import { WinState } from '@src/core/states/win.state.ts';
+import { TinyEmitter } from 'tiny-emitter';
 
-export type StateType = 'init' | 'lose' | 'win' | 'play' | 'pause';
+export type EventType = 'state';
+export type StateType = 'lose' | 'win' | 'play' | 'pause';
+export type CallbackType = (state: StateType) => void;
 
-export class StateManager {
+export class StateManager extends TinyEmitter {
+  private static instance: StateManager;
   private readonly states = new Map<StateType, GameState>();
-
   private currentState: GameState;
 
-  constructor(game: Game) {
-    this.states.set('init', new InitState(game));
+  private constructor(game: Game) {
+    super();
+
     this.states.set('lose', new LoseState(game));
     this.states.set('win', new WinState(game));
     this.states.set('play', new PlayState(game));
     this.states.set('pause', new PauseState(game));
 
-    this.currentState = this.states.get('init')!;
-    this.currentState.activate();
+    this.currentState = this.states.get('play')!;
+  }
+
+  static getInstance(game: Game) {
+    if (!StateManager.instance) {
+      StateManager.instance = new StateManager(game);
+    }
+
+    return StateManager.instance;
+  }
+
+  override on(event: EventType, callback: CallbackType): this {
+    return super.on(event, callback);
+  }
+
+  override off(event: EventType, callback: CallbackType): this {
+    return super.off(event, callback);
+  }
+
+  override emit(event: EventType, state: StateType): this {
+    return super.emit(event, state);
   }
 
   changeState(state: StateType) {
     this.currentState.deactivate();
     this.currentState = this.states.get(state)!;
     this.currentState.activate();
+    this.emit('state', state);
   }
 
   getCurrentState() {

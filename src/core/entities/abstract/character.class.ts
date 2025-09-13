@@ -25,8 +25,15 @@ export abstract class Character extends CharacterState implements Subject {
   ) {
     super();
 
+    this.name = game.settings.playerName;
+    this.avatar = game.settings.playerAvatar;
+
     this.getDestinationFromCoords = this.getDestinationFromCoords.bind(this);
     this.getCoordsFromDestination = this.getCoordsFromDestination.bind(this);
+  }
+
+  isBot() {
+    return true;
   }
 
   getName() {
@@ -35,14 +42,6 @@ export abstract class Character extends CharacterState implements Subject {
     }
 
     return this.name;
-  }
-
-  setName(name: string) {
-    this.name = name;
-  }
-
-  setAvatar(avatar: string) {
-    this.avatar = avatar;
   }
 
   getAvatar() {
@@ -143,4 +142,6 @@ export abstract class Character extends CharacterState implements Subject {
   animateTo(coords: AnimateToParams) {
     this.model.pawns.current.opponent.animateTo(coords);
   }
+
+  abstract reset(): void;
 }

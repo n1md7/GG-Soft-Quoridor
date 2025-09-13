@@ -1,8 +1,8 @@
 import { GameState } from '@src/core/entities/abstract/game.state.ts';
 
-export class PauseState extends GameState {
+export class MarketState extends GameState {
   override get name() {
-    return 'Pause';
+    return 'Market';
   }
 
   override activate() {

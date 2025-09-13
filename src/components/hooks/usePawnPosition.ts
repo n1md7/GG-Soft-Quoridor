@@ -1,5 +1,5 @@
 import { CoordsType } from '@src/components/game/block/block.type.ts';
-import { COLS, HEIGHT, ROWS } from '@src/components/hooks/useGame.ts';
+import { getDefaultOpponentPosition, getDefaultPlayerPosition } from '@src/components/hooks/useGame.ts';
 import { useCallback, useRef } from 'react';
 import { Vector3 } from 'three';
 
@@ -10,14 +10,13 @@ type Options = {
 export const usePawnPosition = (options: Options = {}) => {
   const { min = -4.8, step = 1.2 } = options;
 
-  const playerPosition = useRef<{ row: number; col: number }>({
-    row: ROWS,
-    col: COLS / 2,
-  });
-  const opponentPosition = useRef<{ row: number; col: number }>({
-    row: 0,
-    col: (HEIGHT * 2 - 2) / 2,
-  });
+  const playerPosition = useRef(getDefaultPlayerPosition());
+  const opponentPosition = useRef(getDefaultOpponentPosition());
+
+  const reset = useCallback(() => {
+    playerPosition.current = getDefaultPlayerPosition();
+    opponentPosition.current = getDefaultOpponentPosition();
+  }, []);
 
   const getDestinationFromCoords = useCallback(
     (coords: CoordsType) => {
@@ -51,5 +50,6 @@ export const usePawnPosition = (options: Options = {}) => {
       player: playerPosition.current,
       opponent: opponentPosition.current,
     },
+    reset,
   };
 };

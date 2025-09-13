@@ -4,12 +4,14 @@ import { COLS, HEIGHT, ROWS, WIDTH } from '@src/components/hooks/useGame.ts';
 
 export type CellType = ForwardedBlock | ForwardedWall | null;
 
-export class Grid {
+export class GridManager {
+  private static instance: GridManager;
+
   private grid: CellType[][] = [];
   private restorePoints: [number, CellType][] = [];
   private saveRestorePoints = false;
 
-  constructor() {
+  private constructor() {
     this.grid = this.createGrid();
 
     this.getNeighbors = this.getNeighbors.bind(this);
@@ -21,6 +23,14 @@ export class Grid {
     this.canAddPawn = this.canAddPawn.bind(this);
     this.addWallByCoords = this.addWallByCoords.bind(this);
     this.reset = this.reset.bind(this);
+  }
+
+  static getInstance() {
+    if (!GridManager.instance) {
+      GridManager.instance = new GridManager();
+    }
+
+    return GridManager.instance;
   }
 
   reset() {

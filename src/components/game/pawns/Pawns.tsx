@@ -17,7 +17,7 @@ type Props = {
 export const Pawns = forwardRef(({ geometry, materials, playerClick }: Props, ref: ForwardedRef<ForwardedPawns>) => {
   const player = useRef<ForwardedPawn>(null!);
   const opponent = useRef<ForwardedPawn>(null!);
-  const { coords, getDestinationFromCoords } = usePawnPosition();
+  const { coords, getDestinationFromCoords, reset } = usePawnPosition();
 
   useImperativeHandle(ref, () => {
     return {
@@ -40,6 +40,11 @@ export const Pawns = forwardRef(({ geometry, materials, playerClick }: Props, re
         },
         setHighlight: opponent.current.setHighlight,
         coords: opponent.current.coords,
+      },
+      reset() {
+        reset();
+        player.current.moveTo(getDestinationFromCoords(coords.player));
+        opponent.current.moveTo(getDestinationFromCoords(coords.opponent));
       },
     };
   });

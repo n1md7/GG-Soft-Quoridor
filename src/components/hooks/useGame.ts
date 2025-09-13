@@ -23,6 +23,16 @@ export const ROWS = HEIGHT * 2 - 2;
  */
 export const COLS = WIDTH * 2 - 2;
 
+export const getDefaultPlayerPosition = () => ({
+  row: ROWS,
+  col: COLS / 2,
+});
+
+export const getDefaultOpponentPosition = () => ({
+  row: 0,
+  col: (HEIGHT * 2 - 2) / 2,
+});
+
 export const useGame = () => {
   return useContext(GameContext);
 };
