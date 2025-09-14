@@ -143,8 +143,9 @@ export class Player extends Character {
     this.row = row;
     this.col = col;
 
-    this.pawns.current.player.reset();
-    this.walls.current.player.reset();
+    // We reset CPU here too
+    this.pawns.current.reset();
+    this.walls.current.reset();
   }
 
   private handleWallStrategy(coords: CoordsWithPosType) {

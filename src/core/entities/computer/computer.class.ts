@@ -89,8 +89,5 @@ export class Computer extends Character {
 
     this.row = row;
     this.col = col;
-
-    this.model.pawns.current.opponent.reset();
-    this.model.walls.current.opponent.reset();
   }
 }

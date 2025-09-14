@@ -65,7 +65,6 @@ export class Game {
   }
 
   reset() {
-    console.info(this.grid.toString());
     this.grid.reset();
     this.timer.reset();
     this.player.reset();
@@ -74,7 +73,6 @@ export class Game {
     this.inventory.reset();
     this.performance.reset();
 
-    console.info(this.grid.toString());
     this.states.changeState('play');
     this.start();
   }

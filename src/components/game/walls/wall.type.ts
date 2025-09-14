@@ -35,4 +35,5 @@ export type ForwardedWalls = {
   placeholder: {
     wall: ForwardedPlaceholder;
   };
+  reset: () => void;
 };

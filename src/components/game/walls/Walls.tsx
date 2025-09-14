@@ -54,6 +54,16 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
           opponent.resetIndex();
         },
       },
+      /**
+       * Reset both player's and opponent's walls
+       */
+      reset: () => {
+        player.walls.forEach((wall) => wall.moveToOrigin());
+        opponent.walls.forEach((wall) => wall.moveToOrigin());
+
+        player.resetIndex();
+        opponent.resetIndex();
+      },
     };
   }, [opponent, player]);
 
