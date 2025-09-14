@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
-import { ForwardedWall, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
+import { ForwardedWall, MoveToParams, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
@@ -33,7 +33,7 @@ export const Wall = forwardRef(
     const rotateByAnimation = useRef<Tween<Euler>>(null!);
 
     const animateTo = useCallback(
-      ({ position, rotation }: ReturnType<typeof getDestinationFromCoords>) => {
+      ({ position, rotation }: MoveToParams) => {
         const [moveUpTime, moveToTime] = percentage.get(animationTime, 25);
 
         moveUpAnimation.current = new Tween(mesh.current.position)

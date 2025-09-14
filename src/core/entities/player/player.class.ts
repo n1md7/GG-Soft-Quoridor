@@ -35,7 +35,10 @@ export class Player extends Character {
     this.walls = model.walls;
     this.pawns = model.pawns;
 
-    this.reset();
+    const { row, col } = getDefaultPlayerPosition();
+
+    this.row = row;
+    this.col = col;
 
     this.getCoords = this.getCoords.bind(this);
     this.setCoords = this.setCoords.bind(this);
@@ -139,12 +142,15 @@ export class Player extends Character {
 
     this.row = row;
     this.col = col;
+
+    this.pawns.current.player.reset();
+    this.walls.current.player.reset();
   }
 
   private handleWallStrategy(coords: CoordsWithPosType) {
     this.game.grid.assertBlockByCoords(coords);
 
-    const wall = this.walls.current.player.getFrontWall();
+    const wall = this.walls.current.player.getWall();
 
     if (!wall) return console.info('Out of walls');
     if (!this.game.grid.canAddWall(coords)) {
@@ -166,7 +172,7 @@ export class Player extends Character {
 
     this.game.grid.addWallByCoords(wall, coords);
     wall.moveTo(coords);
-    this.walls.current.player.dropFrontWall();
+    this.walls.current.player.dropWall();
 
     delay(animationTime).then(() => this.notifyTurnRotation());
   }

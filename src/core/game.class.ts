@@ -74,8 +74,6 @@ export class Game {
     this.inventory.reset();
     this.performance.reset();
 
-    this.model.pawns.current?.reset?.();
-
     console.info(this.grid.toString());
     this.states.changeState('play');
     this.start();

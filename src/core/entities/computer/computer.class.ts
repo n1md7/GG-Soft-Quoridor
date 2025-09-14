@@ -23,7 +23,10 @@ export class Computer extends Character {
   private constructor(model: ModelType, game: Game) {
     super(model, game);
 
-    this.reset();
+    const { row, col } = getDefaultOpponentPosition();
+
+    this.row = row;
+    this.col = col;
 
     this.name = 'Computer';
     this.avatar = 'robot'; // TODO
@@ -86,5 +89,8 @@ export class Computer extends Character {
 
     this.row = row;
     this.col = col;
+
+    this.model.pawns.current.opponent.reset();
+    this.model.walls.current.opponent.reset();
   }
 }
