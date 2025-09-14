@@ -20,6 +20,8 @@ export class TimeManager {
     this.intervals.push({
       startedAt: new Date(),
     });
+
+    console.info('Start time snapshot');
   }
 
   stop() {
@@ -27,7 +29,11 @@ export class TimeManager {
 
     if (currentInterval && !currentInterval.endedAt) {
       currentInterval.endedAt = new Date();
+
+      console.info(`+${currentInterval.endedAt.getTime() - currentInterval.startedAt.getTime()}ms`);
     }
+
+    console.info('Stop time snapshot');
   }
 
   getElapsedTime() {
@@ -36,7 +42,7 @@ export class TimeManager {
         return total + (endedAt.getTime() - startedAt.getTime());
       }
 
-      throw new Error('Current interval has not ended yet');
+      return total;
     }, 0);
   }
 

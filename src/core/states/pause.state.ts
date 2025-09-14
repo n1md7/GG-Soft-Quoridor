@@ -4,12 +4,4 @@ export class PauseState extends GameState {
   override get name() {
     return 'Pause';
   }
-
-  override activate() {
-    super.activate();
-  }
-
-  override deactivate() {
-    super.deactivate();
-  }
 }

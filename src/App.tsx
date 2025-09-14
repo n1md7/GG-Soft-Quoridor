@@ -6,6 +6,7 @@ import { InitialView } from '@src/views/InitialView';
 import { LobbyView } from '@src/views/LobbyView';
 import { useState } from 'react';
 import { Settings, SettingsContext } from './context/settings.context';
+import { Provider } from '@radix-ui/react-tooltip';
 
 type GameState = 'Initial' | 'Lobby' | 'Gameplay';
 
@@ -31,16 +32,18 @@ export function App() {
   const isModeValid = () => settings.difficulty.trim() !== '';
 
   return (
-    <SettingsContext.Provider value={{ settings, setSettings }}>
-      <Show when={gameState === 'Initial'}>
-        <InitialView next={backToLobby} />
-      </Show>
-      <Show when={gameState === 'Lobby'}>
-        <LobbyView next={gotoGameplay} />
-      </Show>
-      <Show when={gameState === 'Gameplay'}>
-        <Gameplay backToLobby={backToLobby} />
-      </Show>
-    </SettingsContext.Provider>
+    <Provider>
+      <SettingsContext.Provider value={{ settings, setSettings }}>
+        <Show when={gameState === 'Initial'}>
+          <InitialView next={backToLobby} />
+        </Show>
+        <Show when={gameState === 'Lobby'}>
+          <LobbyView next={gotoGameplay} />
+        </Show>
+        <Show when={gameState === 'Gameplay'}>
+          <Gameplay backToLobby={backToLobby} />
+        </Show>
+      </SettingsContext.Provider>
+    </Provider>
   );
 }
