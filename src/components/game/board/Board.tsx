@@ -31,6 +31,8 @@ export const Board = () => {
     if (game.model.walls.current) {
       if (!game.model.walls.current.player.hasWall()) return;
 
+      console.info(`Player walls: `, game.model.walls.current.player.walls);
+
       game.model.walls.current.placeholder.wall.setScaleFrom(game.model.walls.current.player.getWall()!.scale);
     }
   }, [game.model.walls]);

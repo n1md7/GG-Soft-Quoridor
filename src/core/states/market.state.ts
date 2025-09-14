@@ -4,12 +4,4 @@ export class MarketState extends GameState {
   override get name() {
     return 'Market';
   }
-
-  override activate() {
-    super.activate();
-  }
-
-  override deactivate() {
-    super.deactivate();
-  }
 }
