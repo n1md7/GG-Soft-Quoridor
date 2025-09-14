@@ -1,5 +1,5 @@
 import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
-import { PositionType } from '@src/components/game/walls/wall.type.ts';
+import { MoveToParams, PositionType } from '@src/components/game/walls/wall.type.ts';
 import { useCallback } from 'react';
 import { Vector3 } from 'three';
 
@@ -22,7 +22,7 @@ export const useWallPosition = (options: Options = {}) => {
   }, []);
 
   const getDestinationFromCoords = useCallback(
-    (coords: CoordsWithPosType) => {
+    (coords: CoordsWithPosType): MoveToParams => {
       const rotation = getRotation(coords);
 
       const position = new Vector3();

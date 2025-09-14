@@ -11,6 +11,7 @@ export type StoreItem = {
   modes: Record<ModeEnum, ModeItem>;
   coins: number;
   ownedPowers: PowerEnum[];
+  gamesPlayed?: { wins: number; total: number };
 };
 export type ItemPayload = {
   name: string;
@@ -18,5 +19,6 @@ export type ItemPayload = {
   avatar?: string;
   coins?: number;
   ownedPowers?: PowerEnum[];
+  gamesPlayed?: { wins: number; total: number };
 };
 export type Store = Record<string, StoreItem>;

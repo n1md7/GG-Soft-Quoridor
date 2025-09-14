@@ -19,13 +19,15 @@ export type ForwardedWall = {
   mesh: Mesh;
   name: WallName;
   scale: Vector3;
+  moveToOrigin: () => void;
   moveTo: (coords: CoordsWithPosType) => void;
 };
 export type PlayerFn = {
   walls: ForwardedWall[];
   hasWall: () => boolean;
-  getFrontWall: () => ForwardedWall | undefined;
-  dropFrontWall: () => void;
+  getWall: () => ForwardedWall | undefined;
+  dropWall: () => void;
+  reset: () => void;
 };
 export type ForwardedWalls = {
   player: PlayerFn;
@@ -33,4 +35,5 @@ export type ForwardedWalls = {
   placeholder: {
     wall: ForwardedPlaceholder;
   };
+  reset: () => void;
 };

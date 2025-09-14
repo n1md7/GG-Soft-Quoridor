@@ -1,5 +1,5 @@
 import { CoordsType } from '@src/components/game/block/block.type.ts';
-import { COLS, ROWS } from '@src/components/hooks/useGame.ts';
+import { getDefaultOpponentPosition, ROWS } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { computerMaxThinkingTime } from '@src/config/computer.config.ts';
@@ -12,18 +12,35 @@ import { Vector3 } from 'three';
 type OnPathUpdateFn = (path: Vector3[]) => void;
 
 export class Computer extends Character {
+  private static instance: Computer;
+
   readonly finishLine = ROWS;
 
-  private row = 0;
-  private col = COLS / 2;
-
+  private row!: number;
+  private col!: number;
   private onPathUpdateFn?: OnPathUpdateFn;
 
-  constructor(model: ModelType, game: Game) {
+  private constructor(model: ModelType, game: Game) {
     super(model, game);
+
+    const { row, col } = getDefaultOpponentPosition();
+
+    this.row = row;
+    this.col = col;
+
+    this.name = 'Computer';
+    this.avatar = 'robot'; // TODO
 
     this.getCoords = this.getCoords.bind(this);
     this.setCoords = this.setCoords.bind(this);
+  }
+
+  static getInstance(model: ModelType, game: Game) {
+    if (!Computer.instance) {
+      Computer.instance = new Computer(model, game);
+    }
+
+    return Computer.instance;
   }
 
   onPathUpdate(fn: OnPathUpdateFn) {
@@ -65,5 +82,12 @@ export class Computer extends Character {
 
   override won(): boolean {
     return this.getCoords().row === this.finishLine;
+  }
+
+  override reset() {
+    const { row, col } = getDefaultOpponentPosition();
+
+    this.row = row;
+    this.col = col;
   }
 }

@@ -3,7 +3,6 @@ import { ForwardedPlaceholder } from '@src/components/game/placeholder/placehold
 import { PositionMap } from '@src/components/game/walls/wall.type.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useLayoutEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { Mesh, MeshStandardMaterial, Vector3 } from 'three';
 import { Color } from 'three';
 
@@ -31,7 +30,7 @@ export const Placeholder = forwardRef(({ color }: Props, ref: ForwardedRef<Forwa
     (scale: Vector3) => {
       mesh.current.scale.copy(scale);
       // Add a little bit to avoid z-fighting
-      mesh.current.scale.multiply(new THREE.Vector3(1.01, 1.01, 1.01));
+      mesh.current.scale.multiply(new Vector3(1.01, 1.01, 1.01));
     },
     [mesh],
   );

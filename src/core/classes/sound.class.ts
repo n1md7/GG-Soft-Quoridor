@@ -70,13 +70,13 @@ export class Sound {
           });
         }
       })
-      .catch(console.error);
+      .catch(console.trace);
 
     return () => this.stop();
   }
 
   stop(): void {
-    this.audio.pause();
+    if (this.audio.currentTime > 0) this.audio.pause();
     this.audio.currentTime = this.options.startAt;
     this.emit('stop');
   }

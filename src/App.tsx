@@ -6,6 +6,7 @@ import { InitialView } from '@src/views/InitialView';
 import { LobbyView } from '@src/views/LobbyView';
 import { useState } from 'react';
 import { Settings, SettingsContext } from './context/settings.context';
+import { Provider } from '@radix-ui/react-tooltip';
 
 type GameState = 'Initial' | 'Lobby' | 'Gameplay';
 
@@ -19,7 +20,7 @@ export function App() {
     difficulty: getDifficulty(ModeEnum.Medium),
   });
 
-  const gotoLobby = () => setGameState('Lobby');
+  const backToLobby = () => setGameState('Lobby');
   const gotoGameplay = () => {
     if (!isNameValid()) return alert('Please enter your name');
     if (!isModeValid()) return alert('Please select a difficulty');
@@ -31,16 +32,18 @@ export function App() {
   const isModeValid = () => settings.difficulty.trim() !== '';
 
   return (
-    <SettingsContext.Provider value={{ settings, setSettings }}>
-      <Show when={gameState === 'Initial'}>
-        <InitialView next={gotoLobby} />
-      </Show>
-      <Show when={gameState === 'Lobby'}>
-        <LobbyView next={gotoGameplay} />
-      </Show>
-      <Show when={gameState === 'Gameplay'}>
-        <Gameplay back={gotoLobby} />
-      </Show>
-    </SettingsContext.Provider>
+    <Provider>
+      <SettingsContext.Provider value={{ settings, setSettings }}>
+        <Show when={gameState === 'Initial'}>
+          <InitialView next={backToLobby} />
+        </Show>
+        <Show when={gameState === 'Lobby'}>
+          <LobbyView next={gotoGameplay} />
+        </Show>
+        <Show when={gameState === 'Gameplay'}>
+          <Gameplay backToLobby={backToLobby} />
+        </Show>
+      </SettingsContext.Provider>
+    </Provider>
   );
 }

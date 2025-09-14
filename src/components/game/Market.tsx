@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 
 interface MarketProps {
   onClose: () => void;
+  show: boolean;
 }
 
-export function Market({ onClose }: MarketProps) {
+export function Market({ onClose, show }: MarketProps) {
   const { getName } = useStorage();
   const { market, inventory, storage } = useGame();
   const [playerCoins, setPlayerCoins] = useState(0);
@@ -41,6 +42,8 @@ export function Market({ onClose }: MarketProps) {
     setPlayerCoins(updated.coins);
   }, [getName, storage]);
 
+  if (!show) return null;
+
   return (
     <Html
       position={[0, 0, 0]}
@@ -53,7 +56,7 @@ export function Market({ onClose }: MarketProps) {
       }}
     >
       {/* Market Popup */}
-      <div className="relative max-h-[500px] w-[600px] rounded-2xl border-2 border-slate-600 bg-slate-900/95 shadow-2xl backdrop-blur-md">
+      <div className="relative w-[600px] rounded-2xl border-2 border-slate-600 bg-slate-900/95 shadow-2xl backdrop-blur-md">
         {/* Header with Close Button */}
         <div className="relative flex items-center justify-center p-5">
           {/* Trapezoid Header */}
