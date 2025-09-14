@@ -27,4 +27,5 @@ export type PawnFn = {
 export type ForwardedPawns = {
   player: PawnFn;
   opponent: PawnFn;
+  reset: () => void;
 };

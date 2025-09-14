@@ -19,7 +19,7 @@ export function App() {
     difficulty: getDifficulty(ModeEnum.Medium),
   });
 
-  const gotoLobby = () => setGameState('Lobby');
+  const backToLobby = () => setGameState('Lobby');
   const gotoGameplay = () => {
     if (!isNameValid()) return alert('Please enter your name');
     if (!isModeValid()) return alert('Please select a difficulty');
@@ -33,13 +33,13 @@ export function App() {
   return (
     <SettingsContext.Provider value={{ settings, setSettings }}>
       <Show when={gameState === 'Initial'}>
-        <InitialView next={gotoLobby} />
+        <InitialView next={backToLobby} />
       </Show>
       <Show when={gameState === 'Lobby'}>
         <LobbyView next={gotoGameplay} />
       </Show>
       <Show when={gameState === 'Gameplay'}>
-        <Gameplay back={gotoLobby} />
+        <Gameplay backToLobby={backToLobby} />
       </Show>
     </SettingsContext.Provider>
   );

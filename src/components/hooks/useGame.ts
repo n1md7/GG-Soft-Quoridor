@@ -23,6 +23,21 @@ export const ROWS = HEIGHT * 2 - 2;
  */
 export const COLS = WIDTH * 2 - 2;
 
+export type DefaultPosition = {
+  row: number;
+  col: number;
+};
+
+export const getDefaultPlayerPosition = (): DefaultPosition => ({
+  row: ROWS,
+  col: COLS / 2,
+});
+
+export const getDefaultOpponentPosition = (): DefaultPosition => ({
+  row: 0,
+  col: (HEIGHT * 2 - 2) / 2,
+});
+
 export const useGame = () => {
   return useContext(GameContext);
 };
