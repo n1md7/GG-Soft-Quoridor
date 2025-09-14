@@ -61,7 +61,7 @@ export class Game {
   }
 
   start() {
-    this.player.setMyTurn(true); // Player always starts first. 😎
+    this.player.setMyTurn(true); // Player always starts first. 😎?
   }
 
   reset() {
