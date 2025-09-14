@@ -8,25 +8,33 @@ export const useStatistics = () => {
     return game.modes.mode.name;
   }, [game.modes.mode.name]);
 
-  const [reward, setReward] = useControls('Statistics', () => ({
-    coinsEarned: 0,
-    totalCoins: 0,
-    baseCoins: 0,
-    gamesPlayed: 0,
-    winRate: 0,
-    timeBonus: 0,
-    multiplier: 1,
-    difficultyBonus: 0,
-    hasTimeBonus: false,
-  }));
+  const [reward, setReward] = useControls(
+    'Statistics',
+    () => ({
+      coinsEarned: 0,
+      totalCoins: 0,
+      baseCoins: 0,
+      gamesPlayed: 0,
+      winRate: 0,
+      timeBonus: 0,
+      multiplier: 1,
+      difficultyBonus: 0,
+      hasTimeBonus: false,
+    }),
+    { collapsed: true },
+  );
 
-  const [performance, setPerformance] = useControls('Performance', () => ({
-    time: 0,
-    moves: 0,
-    difficulty,
-    avgMoveTime: 0,
-    color: game.performance.getDifficultyColor(),
-  }));
+  const [performance, setPerformance] = useControls(
+    'Performance',
+    () => ({
+      time: 0,
+      moves: 0,
+      difficulty,
+      avgMoveTime: 0,
+      color: game.performance.getDifficultyColor(),
+    }),
+    { collapsed: true },
+  );
 
   const getPerformanceRating = useCallback(() => {
     const avgMoveTime = performance.avgMoveTime;

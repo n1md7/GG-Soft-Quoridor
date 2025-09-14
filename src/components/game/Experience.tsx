@@ -21,6 +21,7 @@ export function Experience({ backToLobby }: Props) {
   const { map } = useControls('Environment', {
     map: {
       options: [
+        '',
         'night',
         'apartment',
         'city',
@@ -49,7 +50,7 @@ export function Experience({ backToLobby }: Props) {
         <Perf openByDefault showGraph antialias position="bottom-right" />
       </Show>
 
-      <Show when={!!map}>
+      <Show when={map.length > 0}>
         <Environment preset={map} background />
       </Show>
 
