@@ -33,8 +33,22 @@ export class GridManager {
     return GridManager.instance;
   }
 
+  /**
+   * Removes all Wall references from the grid.
+   * but keeps the Block references intact as they are static and part of 3D Board model.
+   * We do not recreate the grid as it would remove all Block references.
+   */
   reset() {
-    this.grid = this.createGrid();
+    // Remove wall references only
+    this.grid = this.grid.map((row) => {
+      return row.map((cell) => {
+        if (cell && cell.name.startsWith('Wall')) {
+          return null;
+        }
+
+        return cell;
+      });
+    });
   }
 
   /**
@@ -349,5 +363,11 @@ export class GridManager {
           { row: block.row + 2, col: block.col + 1 },
         ];
     }
+  }
+
+  toString() {
+    return this.grid
+      .map((row) => row.map((cell) => (cell ? (cell.name.startsWith('Block') ? 'B' : 'W') : '.')).join(' '))
+      .join('\n');
   }
 }

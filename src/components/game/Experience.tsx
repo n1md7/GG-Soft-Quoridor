@@ -18,7 +18,8 @@ type Props = {
 
 export function Experience({ backToLobby }: Props) {
   const game = useGame();
-  const playAgain = () => game.reset();
+  const playAgain = () => game.states.changeState('reset');
+  const onMarketClose = () => set({ market: false });
 
   const { map } = useControls('Environment', {
     map: {
@@ -62,7 +63,6 @@ export function Experience({ backToLobby }: Props) {
 
   useEffect(() => {
     game.states.changeState('play');
-    game.reset();
   }, [game, game.states]);
 
   useEffect(() => set({ market: true }), [set]);
@@ -77,9 +77,9 @@ export function Experience({ backToLobby }: Props) {
 
   return (
     <>
-      {show.market && <Market show={show.market} onClose={() => set({ market: false })} />}
-      {show.looser && <GameOver show={show.looser} onPlayAgain={playAgain} onMainMenu={backToLobby} />}
-      {show.winner && <Winner show={show.winner} onPlayAgain={playAgain} onMainMenu={backToLobby} />}
+      <Market show={show.market} onClose={onMarketClose} />
+      <GameOver show={show.looser} onPlayAgain={playAgain} onMainMenu={backToLobby} />
+      <Winner show={show.winner} onPlayAgain={playAgain} onMainMenu={backToLobby} />
 
       <OrbitControls enableDamping enablePan target={new Vector3()} />
       <Perf openByDefault showGraph antialias position="bottom-right" />

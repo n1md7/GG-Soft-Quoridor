@@ -32,9 +32,8 @@ export const Wall = forwardRef(
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
     const rotateByAnimation = useRef<Tween<Euler>>(null!);
 
-    const moveTo = useCallback(
-      (coords: CoordsWithPosType) => {
-        const { position, rotation } = getDestinationFromCoords(coords);
+    const animateTo = useCallback(
+      ({ position, rotation }: ReturnType<typeof getDestinationFromCoords>) => {
         const [moveUpTime, moveToTime] = percentage.get(animationTime, 25);
 
         moveUpAnimation.current = new Tween(mesh.current.position)
@@ -79,8 +78,22 @@ export const Wall = forwardRef(
           })
           .start();
       },
-      [getDestinationFromCoords, percentage, sounds.wallPlacement],
+      [percentage, sounds.wallPlacement],
     );
+
+    const moveTo = useCallback(
+      (coords: CoordsWithPosType) => {
+        animateTo(getDestinationFromCoords(coords));
+      },
+      [animateTo, getDestinationFromCoords],
+    );
+
+    const moveToOrigin = useCallback(() => {
+      animateTo({
+        position: new Vector3(position[0], position[1], position[2]),
+        rotation: 'Vertical',
+      });
+    }, [animateTo, position]);
 
     // const over = useCallback((e: ThreeEvent<PointerEvent>) => {
     //   e.stopPropagation();
@@ -92,8 +105,9 @@ export const Wall = forwardRef(
         name: mesh.current.name as WallName,
         scale: mesh.current.scale,
         moveTo,
+        moveToOrigin,
       };
-    }, [mesh, moveTo]);
+    }, [moveToOrigin, moveTo]);
 
     useFrame(() => {
       if (moveToAnimation.current) moveToAnimation.current.update();

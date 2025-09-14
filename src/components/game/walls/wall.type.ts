@@ -19,6 +19,7 @@ export type ForwardedWall = {
   mesh: Mesh;
   name: WallName;
   scale: Vector3;
+  moveToOrigin: () => void;
   moveTo: (coords: CoordsWithPosType) => void;
 };
 export type PlayerFn = {

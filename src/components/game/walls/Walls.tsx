@@ -2,10 +2,11 @@ import { Placeholder } from '@src/components/game/placeholder/Placeholder.tsx';
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
 import { Wall } from '@src/components/game/walls/Wall.tsx';
 import { ForwardedWall, ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
+import { useGame } from '@src/components/hooks/useGame.ts';
 import { useWalls } from '@src/components/hooks/useWalls.ts';
-import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
-import * as THREE from 'three';
-import { BufferGeometry, Material } from 'three';
+import { StateType } from '@src/core/managers/state.manager.ts';
+import { ForwardedRef, forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
+import { BufferGeometry, Material, Color } from 'three';
 
 type Props = {
   walls: {
@@ -26,6 +27,7 @@ type Props = {
 
 export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef<ForwardedWalls>) => {
   const { getIndexBy } = useWalls();
+  const { states } = useGame();
 
   const placeholderWall = useRef<ForwardedPlaceholder>(null!);
   const playerWalls = useRef<ForwardedWall[]>([] as ForwardedWall[]);
@@ -68,13 +70,28 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
     };
   }, [playerWalls, opponentWalls, placeholderWall]);
 
+  const onStateChange = useCallback((state: StateType) => {
+    if (state === 'reset') {
+      playerWalls.current.forEach((wall) => wall.moveToOrigin());
+      opponentWalls.current.forEach((wall) => wall.moveToOrigin());
+    }
+  }, []);
+
+  useEffect(() => {
+    states.on('state', onStateChange);
+
+    return () => {
+      states.off('state', onStateChange);
+    };
+  }, [states, onStateChange]);
+
   return (
     <>
       <Placeholder
         ref={placeholderWall}
         color={{
-          default: new THREE.Color(0x00ff00),
-          danger: new THREE.Color(0xff0000),
+          default: new Color(0x00ff00),
+          danger: new Color(0xff0000),
         }}
       />
       <Wall
