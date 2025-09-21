@@ -32,10 +32,10 @@ body,
     margin: 0;
   }
 
-  label,
-  p,
-  span,
-  input[type='text'] {
+  label:not([class^='leva']),
+  p:not([class^='leva']),
+  span:not([class^='leva']),
+  input[type='text']:not([class^='leva']) {
     @apply text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
 
     font-family: Chelsea-Market, sans-serif;

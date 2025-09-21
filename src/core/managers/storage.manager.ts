@@ -1,9 +1,19 @@
 import { ItemPayload, Store } from '@src/core/interfaces/store.interface.ts';
 
 export class StoreManager {
-  constructor(private readonly name: string) {}
+  private static instance: StoreManager;
 
-  getBy(name: string) {
+  private constructor(private readonly name: string) {}
+
+  static getInstance(name: string) {
+    if (!StoreManager.instance) {
+      StoreManager.instance = new StoreManager(name);
+    }
+
+    return StoreManager.instance;
+  }
+
+  getByName(name: string) {
     name = this.serializeName(name);
 
     const item = this.getStore()?.[name];
@@ -13,7 +23,7 @@ export class StoreManager {
     return this.updateBy({ name, modes: {} });
   }
 
-  updateBy({ name, modes, avatar, coins, ownedPowers }: ItemPayload) {
+  updateBy({ name, modes, avatar, coins, ownedPowers, gamesPlayed }: ItemPayload) {
     name = this.serializeName(name);
 
     const store = this.getStore() ?? {};
@@ -27,6 +37,7 @@ export class StoreManager {
       },
       coins: 0,
       ownedPowers: [],
+      gamesPlayed: { wins: 0, total: 0 },
     };
     const updatedAt = Date.now();
 
@@ -37,12 +48,18 @@ export class StoreManager {
     }
     if (coins !== undefined) item.coins = coins;
     if (ownedPowers !== undefined) item.ownedPowers = ownedPowers;
+    if (avatar) item.avatar = avatar;
+    if (gamesPlayed) item.gamesPlayed = gamesPlayed;
 
     store[name] = item;
 
     this.save(store);
 
     return item;
+  }
+
+  updateByName(name: string, data: Omit<ItemPayload, 'name'>) {
+    return this.updateBy({ name, ...data });
   }
 
   private save(store: Store) {

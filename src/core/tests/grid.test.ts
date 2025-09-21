@@ -1,7 +1,7 @@
 import { BlockName, CoordsType, CoordsWithPosType, ForwardedBlock } from '@src/components/game/block/block.type.ts';
 import { ForwardedWall } from '@src/components/game/walls/wall.type.ts';
 import { HEIGHT, WIDTH } from '@src/components/hooks/useGame.ts';
-import { Grid } from '@src/core/grid.class.ts';
+import { GridManager } from '@src/core/managers/grid.manager.ts';
 import { describe, expect } from 'vitest';
 
 const getBlockNames = () => {
@@ -18,7 +18,8 @@ describe('Grid class', () => {
   describe('canAddWall', () => {
     it('should verify edges', () => {
       // Arrange
-      const grid = new Grid();
+      const grid = GridManager.getInstance();
+      grid.reset();
       const coords: CoordsWithPosType = {
         col: 0,
         row: 0,
@@ -36,7 +37,8 @@ describe('Grid class', () => {
   describe('findAnyPath', () => {
     it('should calculate possible paths for winning', () => {
       // Arrange
-      const grid = new Grid();
+      const grid = GridManager.getInstance();
+      grid.reset();
       const pointA: CoordsType = { row: 0, col: 0 };
       const pointB: CoordsType = { row: 4, col: 2 };
       const names = getBlockNames();
@@ -60,7 +62,8 @@ describe('Grid class', () => {
   describe('findShortestPath', () => {
     it('should calculate possible shortest path for winning', () => {
       // Arrange
-      const grid = new Grid();
+      const grid = GridManager.getInstance();
+      grid.reset();
       const pointA: CoordsType = { row: 0, col: 0 };
       const pointB: CoordsType = { row: 4, col: 2 };
       const names = getBlockNames();
@@ -88,7 +91,8 @@ describe('Grid class', () => {
 
     it('should calculate possible shortest path for winning while the wall is blocking', () => {
       // Arrange
-      const grid = new Grid();
+      const grid = GridManager.getInstance();
+      grid.reset();
       const pointA: CoordsType = { row: 0, col: 0 };
       const pointB: CoordsType = { row: 4, col: 2 };
       const names = getBlockNames();
@@ -127,7 +131,8 @@ describe('Grid class', () => {
     describe('edge-cases', () => {
       it('it should handle edge-case 1', () => {
         // Arrange
-        const grid = new Grid();
+        const grid = GridManager.getInstance();
+        grid.reset();
         const pointA: CoordsType = { row: 14, col: 8 };
         const finishLine: CoordsType[] = [
           { row: 16, col: 0 },

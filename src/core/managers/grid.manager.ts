@@ -4,12 +4,14 @@ import { COLS, HEIGHT, ROWS, WIDTH } from '@src/components/hooks/useGame.ts';
 
 export type CellType = ForwardedBlock | ForwardedWall | null;
 
-export class Grid {
+export class GridManager {
+  private static instance: GridManager;
+
   private grid: CellType[][] = [];
   private restorePoints: [number, CellType][] = [];
   private saveRestorePoints = false;
 
-  constructor() {
+  private constructor() {
     this.grid = this.createGrid();
 
     this.getNeighbors = this.getNeighbors.bind(this);
@@ -23,8 +25,30 @@ export class Grid {
     this.reset = this.reset.bind(this);
   }
 
+  static getInstance() {
+    if (!GridManager.instance) {
+      GridManager.instance = new GridManager();
+    }
+
+    return GridManager.instance;
+  }
+
+  /**
+   * Removes all Wall references from the grid.
+   * but keeps the Block references intact as they are static and part of 3D Board model.
+   * We do not recreate the grid as it would remove all Block references.
+   */
   reset() {
-    this.grid = this.createGrid();
+    // Remove wall references only
+    this.grid = this.grid.map((row) => {
+      return row.map((cell) => {
+        if (cell && cell.name.startsWith('Wall')) {
+          return null;
+        }
+
+        return cell;
+      });
+    });
   }
 
   /**
@@ -339,5 +363,11 @@ export class Grid {
           { row: block.row + 2, col: block.col + 1 },
         ];
     }
+  }
+
+  toString() {
+    return this.grid
+      .map((row) => row.map((cell) => (cell ? (cell.name.startsWith('Block') ? 'B' : 'W') : '.')).join(' '))
+      .join('\n');
   }
 }

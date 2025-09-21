@@ -1,11 +1,13 @@
 import { InventoryItem } from '@src/core/classes/inventory-item.class.ts';
-import { PowerEnum } from '@src/core/enums/power.enum';
+import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { Game } from '@src/core/game.class.ts';
 
-export class Inventory {
+export class InventoryManager {
+  private static instance: InventoryManager;
+
   private readonly powers: Record<PowerEnum, InventoryItem>;
 
-  constructor(private readonly game: Game) {
+  private constructor(private readonly game: Game) {
     this.powers = {
       [PowerEnum.ShortestPath]: new InventoryItem({ key: PowerEnum.ShortestPath }),
       [PowerEnum.ExtraWall]: new InventoryItem({ key: PowerEnum.ExtraWall }),
@@ -14,8 +16,16 @@ export class Inventory {
     };
   }
 
+  static getInstance(game: Game) {
+    if (!InventoryManager.instance) {
+      InventoryManager.instance = new InventoryManager(game);
+    }
+
+    return InventoryManager.instance;
+  }
+
   restore() {
-    this.game.storage.getBy(this.game.player.getName()).ownedPowers.forEach((power) => {
+    this.game.storage.getByName(this.game.player.getName()).ownedPowers.forEach((power) => {
       this.powers[power].unlockViaStorage();
     });
   }

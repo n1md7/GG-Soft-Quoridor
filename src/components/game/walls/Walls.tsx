@@ -1,11 +1,10 @@
 import { Placeholder } from '@src/components/game/placeholder/Placeholder.tsx';
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
 import { Wall } from '@src/components/game/walls/Wall.tsx';
-import { ForwardedWall, ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
+import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { useWalls } from '@src/components/hooks/useWalls.ts';
-import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
-import * as THREE from 'three';
-import { BufferGeometry, Material } from 'three';
+import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
+import { BufferGeometry, Color, Material } from 'three';
 
 type Props = {
   walls: {
@@ -25,24 +24,10 @@ type Props = {
 };
 
 export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef<ForwardedWalls>) => {
-  const { getIndexBy } = useWalls();
-
   const placeholderWall = useRef<ForwardedPlaceholder>(null!);
-  const playerWalls = useRef<ForwardedWall[]>([] as ForwardedWall[]);
-  const opponentWalls = useRef<ForwardedWall[]>([] as ForwardedWall[]);
-  const wallsRefCallback = useCallback(
-    (wall: ForwardedWall) => {
-      if (!wall) return;
 
-      if (getIndexBy(wall.name) > 9) {
-        playerWalls.current.push(wall);
-        return;
-      }
-
-      opponentWalls.current.push(wall);
-    },
-    [getIndexBy],
-  );
+  const player = useWalls();
+  const opponent = useWalls();
 
   useImperativeHandle(ref, () => {
     return {
@@ -50,35 +35,49 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         wall: placeholderWall.current,
       },
       player: {
-        walls: playerWalls.current,
-        hasWall: () => playerWalls.current.length > 0,
-        getFrontWall: () => playerWalls.current[0],
-        dropFrontWall: () => {
-          playerWalls.current.shift();
+        walls: player.walls,
+        hasWall: () => player.hasWalls(),
+        getWall: () => player.getWall(),
+        dropWall: () => player.incrementIndex(),
+        reset: () => {
+          player.walls.forEach((wall) => wall.moveToOrigin());
+          player.resetIndex();
         },
       },
       opponent: {
-        walls: opponentWalls.current,
-        hasWall: () => opponentWalls.current.length > 0,
-        getFrontWall: () => opponentWalls.current[0],
-        dropFrontWall: () => {
-          opponentWalls.current.shift();
+        walls: opponent.walls,
+        hasWall: () => opponent.hasWalls(),
+        getWall: () => opponent.getWall(),
+        dropWall: () => opponent.incrementIndex(),
+        reset: () => {
+          opponent.walls.forEach((wall) => wall.moveToOrigin());
+          opponent.resetIndex();
         },
       },
+      /**
+       * Reset both player's and opponent's walls
+       */
+      reset: () => {
+        player.walls.forEach((wall) => wall.moveToOrigin());
+        opponent.walls.forEach((wall) => wall.moveToOrigin());
+
+        player.resetIndex();
+        opponent.resetIndex();
+      },
     };
-  }, [playerWalls, opponentWalls, placeholderWall]);
+  }, [opponent, player]);
 
   return (
     <>
       <Placeholder
         ref={placeholderWall}
         color={{
-          default: new THREE.Color(0x00ff00),
-          danger: new THREE.Color(0xff0000),
+          default: new Color(0x00ff00),
+          danger: new Color(0xff0000),
         }}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall000"
         castShadow
         receiveShadow
@@ -89,7 +88,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall001"
         castShadow
         receiveShadow
@@ -100,7 +99,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall002"
         castShadow
         receiveShadow
@@ -111,7 +110,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall003"
         castShadow
         receiveShadow
@@ -122,7 +121,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall004"
         castShadow
         receiveShadow
@@ -133,7 +132,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall005"
         castShadow
         receiveShadow
@@ -144,7 +143,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall006"
         castShadow
         receiveShadow
@@ -155,7 +154,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall007"
         castShadow
         receiveShadow
@@ -166,7 +165,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall008"
         castShadow
         receiveShadow
@@ -177,7 +176,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={opponent.callback}
         name="Wall009"
         castShadow
         receiveShadow
@@ -188,7 +187,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall010"
         castShadow
         receiveShadow
@@ -199,7 +198,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall011"
         castShadow
         receiveShadow
@@ -210,7 +209,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall012"
         castShadow
         receiveShadow
@@ -221,7 +220,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall013"
         castShadow
         receiveShadow
@@ -232,7 +231,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall014"
         castShadow
         receiveShadow
@@ -243,7 +242,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall015"
         castShadow
         receiveShadow
@@ -254,7 +253,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall016"
         castShadow
         receiveShadow
@@ -265,7 +264,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall017"
         castShadow
         receiveShadow
@@ -276,7 +275,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall018"
         castShadow
         receiveShadow
@@ -287,7 +286,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         scale={[0.1, 0.5, 1.1]}
       />
       <Wall
-        ref={wallsRefCallback}
+        ref={player.callback}
         name="Wall019"
         castShadow
         receiveShadow

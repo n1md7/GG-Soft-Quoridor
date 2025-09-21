@@ -1,9 +1,11 @@
-import { PowerEnum } from '@src/core/enums/power.enum';
+import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { Game } from '@src/core/game.class.ts';
-import { MarketItem } from './market-item.class';
-import { Power } from './power.class';
+import { MarketItem } from '../classes/market-item.class.ts';
+import { Power } from '../classes/power.class.ts';
 
-export class Market {
+export class MarketManager {
+  private static instance: MarketManager;
+
   private readonly items = {
     [PowerEnum.ShortestPath]: new MarketItem({
       power: new Power({
@@ -35,7 +37,15 @@ export class Market {
     }),
   };
 
-  constructor(private readonly game: Game) {}
+  private constructor(private readonly game: Game) {}
+
+  static getInstance(game: Game) {
+    if (!MarketManager.instance) {
+      MarketManager.instance = new MarketManager(game);
+    }
+
+    return MarketManager.instance;
+  }
 
   getItems(): MarketItem[] {
     return Object.values(this.items);
@@ -44,16 +54,15 @@ export class Market {
   purchaseItem(key: PowerEnum) {
     const item = this.items[key];
     const name = this.game.player.getName();
-    const storage = this.game.storage.getBy(name);
+    const storage = this.game.storage.getByName(name);
 
-    if (!item.canAfford(storage.coins)) {
+    if (!item.affordable(storage.coins) || !this.game.inventory.unlockViaPurchase(key)) {
       return {
         success: false,
         remainingCoins: storage.coins,
       };
     }
 
-    this.game.inventory.unlockViaPurchase(key);
     const { coins } = this.game.storage.updateBy({
       name,
       coins: storage.coins - item.cost,
