@@ -7,13 +7,10 @@ export const useWinner = () => {
 
   useEffect(() => {
     const time = game.timer.getElapsedTime();
-    // FIXME: nowt working, time
+    const moves = game.player.getMovesMade();
 
     game.reward.calculate({ won: true, time });
-    game.performance.calculate({
-      time,
-      moves: game.player.getMovesMade(),
-    });
+    game.performance.calculate({ time, moves });
 
     setReward({
       coinsEarned: game.reward.getEarnedCoins(),
@@ -28,9 +25,9 @@ export const useWinner = () => {
 
     setPerformance({
       difficulty,
-      time: game.performance.getTime(),
+      time: game.performance.getFormattedTime(),
       moves: game.performance.getMoves(),
-      avgMoveTime: game.performance.getAvgMoveTime(),
+      avgMoveTime: game.performance.getAvgMoveTimeSec(),
       color: game.performance.getDifficultyColor(),
     });
   }, [performance.time, game.reward, setReward, game.performance, setPerformance, difficulty, game.timer, game.player]);

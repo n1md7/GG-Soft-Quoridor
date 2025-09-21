@@ -55,9 +55,11 @@ export function Winner({ onPlayAgain, onMainMenu }: WinProps) {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-400">Time:</span>
-                    <span className="font-bold text-white">
-                      {performance.time}
-                      {reward.timeBonus && <span className="ml-1 text-xs text-green-400">⚡BONUS</span>}
+                    <span title="Seconds" className="font-bold text-white">
+                      {performance.time}s
+                      <Show when={reward.timeBonus > 0}>
+                        <span className="ml-1 text-xs text-green-400">⚡BONUS</span>
+                      </Show>
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -72,7 +74,9 @@ export function Winner({ onPlayAgain, onMainMenu }: WinProps) {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Avg. Move Time:</span>
-                    <span className="font-bold text-white">{performance.avgMoveTime}s</span>
+                    <span title="Seconds" className="font-bold text-white">
+                      {performance.avgMoveTime.toFixed(1)}s
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Move efficiency:</span>

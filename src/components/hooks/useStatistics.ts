@@ -26,7 +26,7 @@ export const useStatistics = () => {
   const [performance, setPerformance] = useControls(
     'Performance',
     () => ({
-      time: 0,
+      time: '',
       moves: 0,
       difficulty,
       avgMoveTime: 0,

@@ -52,7 +52,9 @@ export function GameOver({ onPlayAgain, onMainMenu }: GameOverProps) {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-400">Time:</span>
-                    <span className="font-bold text-white">{performance.time}</span>
+                    <span title="Seconds" className="font-bold text-white">
+                      {performance.time}s
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Moves:</span>
@@ -64,7 +66,9 @@ export function GameOver({ onPlayAgain, onMainMenu }: GameOverProps) {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Avg. Move Time:</span>
-                    <span className="font-bold text-white">{performance.avgMoveTime.toFixed(1)}s</span>
+                    <span title="Seconds" className="font-bold text-white">
+                      {performance.avgMoveTime.toFixed(1)}s
+                    </span>
                   </div>
                 </div>
               </div>

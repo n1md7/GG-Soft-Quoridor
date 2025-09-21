@@ -186,6 +186,7 @@ export class Player extends Character {
     if (gameIsBlocked) return console.info('Cannot place wall here, it blocks the game completely!');
 
     this.used.walls++;
+    this.used.moves++;
 
     this.game.grid.addWallByCoords(wall, coords);
     wall.moveTo(coords);
