@@ -30,7 +30,7 @@ export function Market({ onClose }: MarketProps) {
 
   useEffect(() => {
     const name = getName();
-    const { coins } = storage.getBy(name);
+    const { coins } = storage.getByName(name);
 
     if (coins > 0) return setPlayerCoins(coins);
 
@@ -53,7 +53,7 @@ export function Market({ onClose }: MarketProps) {
       }}
     >
       {/* Market Popup */}
-      <div className="relative max-h-[500px] w-[600px] rounded-2xl border-2 border-slate-600 bg-slate-900/95 shadow-2xl backdrop-blur-md">
+      <div className="relative w-[600px] rounded-2xl border-2 border-slate-600 bg-slate-900/95 shadow-2xl backdrop-blur-md">
         {/* Header with Close Button */}
         <div className="relative flex items-center justify-center p-5">
           {/* Trapezoid Header */}
@@ -89,7 +89,7 @@ export function Market({ onClose }: MarketProps) {
             <div className="grid grid-cols-2 gap-4">
               {market.getItems().map((item) => {
                 const isOwned = inventory.hasItem(item.power.key);
-                const canAfford = item.canAfford(playerCoins);
+                const canAfford = item.affordable(playerCoins);
 
                 return (
                   <div

@@ -1,23 +1,27 @@
-import { Environment, OrbitControls, useGLTF } from '@react-three/drei';
+import { Environment, OrbitControls } from '@react-three/drei';
 import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
-import { useModel } from '@src/components/hooks/useModel.ts';
+import { Modals } from '@src/components/game/Modals.tsx';
+import { useDebug } from '@src/components/hooks/useDebug.ts';
+import { useGame } from '@src/components/hooks/useGame.ts';
 import { Show } from '@src/components/utils/Show.tsx';
-import { GameContext } from '@src/context/game.context.ts';
-import { Game } from '@src/core/game.class.ts';
 import { useControls } from 'leva';
 import { Perf } from 'r3f-perf';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Vector3 } from 'three';
 import { Board } from './board/Board.tsx';
 
-const path = './3D/board-v1.4.glb';
+type Props = {
+  backToLobby: () => void;
+};
 
-export function Experience() {
-  const model = useModel({ path });
+export function Experience({ backToLobby }: Props) {
+  const game = useGame();
+  const { hidden } = useDebug();
 
-  const { envMap } = useControls('Environment', {
-    envMap: {
+  const { map } = useControls('Environment', {
+    map: {
       options: [
+        '',
         'night',
         'apartment',
         'city',
@@ -32,13 +36,27 @@ export function Experience() {
     },
   });
 
-  return (
-    <GameContext.Provider value={Game.getInstance(model)}>
-      <OrbitControls enableDamping enablePan target={new Vector3()} />
-      <Perf openByDefault showGraph antialias position="bottom-right" />
+  useEffect(() => {
+    game.states.changeState('play');
+  }, [game, game.states]);
 
-      <Show when={!!envMap}>
-        <Environment preset={envMap} background />
+  return (
+    <>
+      <Modals
+        backToLobby={() => {
+          game.reset();
+          backToLobby();
+        }}
+      />
+
+      <OrbitControls enableDamping enablePan target={new Vector3()} />
+
+      <Show when={!hidden}>
+        <Perf openByDefault showGraph antialias position="bottom-right" />
+      </Show>
+
+      <Show when={map.length > 0}>
+        <Environment preset={map} background />
       </Show>
 
       <ambientLight intensity={Math.PI / 2} />
@@ -48,8 +66,6 @@ export function Experience() {
       <Suspense>
         <Board />
       </Suspense>
-    </GameContext.Provider>
+    </>
   );
 }
-
-useGLTF.preload(path);

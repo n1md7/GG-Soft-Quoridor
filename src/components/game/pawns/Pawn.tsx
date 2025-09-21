@@ -28,8 +28,8 @@ export const Pawn = forwardRef(
   ({ geometry, position, name, scale, material, handleClick }: Props, ref: ForwardedRef<ForwardedPawn>) => {
     const [hovered, set] = useState(false);
 
-    const { getCoordsFromDestination } = usePawnPosition();
     const percentage = usePercentage();
+    const { getCoordsFromDestination } = usePawnPosition();
     const { sounds } = useGame();
 
     const [showOutline, setShowOutline] = useState(false);
