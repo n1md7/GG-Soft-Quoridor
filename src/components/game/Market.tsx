@@ -6,10 +6,9 @@ import { useEffect, useState } from 'react';
 
 interface MarketProps {
   onClose: () => void;
-  show: boolean;
 }
 
-export function Market({ onClose, show }: MarketProps) {
+export function Market({ onClose }: MarketProps) {
   const { getName } = useStorage();
   const { market, inventory, storage } = useGame();
   const [playerCoins, setPlayerCoins] = useState(0);
@@ -31,7 +30,7 @@ export function Market({ onClose, show }: MarketProps) {
 
   useEffect(() => {
     const name = getName();
-    const { coins } = storage.getBy(name);
+    const { coins } = storage.getByName(name);
 
     if (coins > 0) return setPlayerCoins(coins);
 
@@ -41,8 +40,6 @@ export function Market({ onClose, show }: MarketProps) {
     });
     setPlayerCoins(updated.coins);
   }, [getName, storage]);
-
-  if (!show) return null;
 
   return (
     <Html
@@ -92,7 +89,7 @@ export function Market({ onClose, show }: MarketProps) {
             <div className="grid grid-cols-2 gap-4">
               {market.getItems().map((item) => {
                 const isOwned = inventory.hasItem(item.power.key);
-                const canAfford = item.canAfford(playerCoins);
+                const canAfford = item.affordable(playerCoins);
 
                 return (
                   <div

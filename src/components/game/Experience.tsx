@@ -42,7 +42,12 @@ export function Experience({ backToLobby }: Props) {
 
   return (
     <>
-      <Modals backToLobby={backToLobby} />
+      <Modals
+        backToLobby={() => {
+          game.reset();
+          backToLobby();
+        }}
+      />
 
       <OrbitControls enableDamping enablePan target={new Vector3()} />
 

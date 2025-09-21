@@ -54,16 +54,15 @@ export class MarketManager {
   purchaseItem(key: PowerEnum) {
     const item = this.items[key];
     const name = this.game.player.getName();
-    const storage = this.game.storage.getBy(name);
+    const storage = this.game.storage.getByName(name);
 
-    if (!item.canAfford(storage.coins)) {
+    if (!item.affordable(storage.coins) || !this.game.inventory.unlockViaPurchase(key)) {
       return {
         success: false,
         remainingCoins: storage.coins,
       };
     }
 
-    this.game.inventory.unlockViaPurchase(key);
     const { coins } = this.game.storage.updateBy({
       name,
       coins: storage.coins - item.cost,

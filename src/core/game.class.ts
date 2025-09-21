@@ -72,8 +72,5 @@ export class Game {
     this.computer.reset();
     this.inventory.reset();
     this.performance.reset();
-
-    this.states.changeState('play');
-    this.start();
   }
 }

@@ -29,8 +29,8 @@ export class PerformanceManager {
     this.difficulty = this.game.modes.mode.name;
   }
 
-  getTime() {
-    return this.time;
+  getTimeSec() {
+    return this.time / 1000;
   }
 
   getMoves() {
@@ -38,14 +38,15 @@ export class PerformanceManager {
   }
 
   getFormattedTime() {
-    const minutes = Math.floor(this.time / 60);
-    const seconds = this.time % 60;
-
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    return this.getTimeSec().toFixed(2);
   }
 
-  getAvgMoveTime() {
+  getAvgMoveTimeMs() {
     return this.moves > 0 ? this.time / this.moves : 0;
+  }
+
+  getAvgMoveTimeSec() {
+    return Math.floor(this.getAvgMoveTimeMs() / 1000);
   }
 
   getDifficultyColor() {

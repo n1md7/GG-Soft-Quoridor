@@ -18,6 +18,7 @@ export class RewardManager {
   private winRate!: number;
   private timeBonus!: boolean;
   private multiplier!: number;
+  private mode!: ModeEnum;
 
   private constructor(private readonly game: Game) {
     this.reset();
@@ -52,48 +53,58 @@ export class RewardManager {
   }
 
   calculate({ won, time }: { won: boolean; time: number }) {
-    const reward = this.getBonus(won) + this.getSpeedBonus();
+    this.coinsTotal = this.getExistingCoins();
+    this.coinsEarned = this.getBonus(won) + this.getSpeedBonus();
 
-    this.coinsEarned += reward;
-    this.coinsTotal += reward;
     this.totalGames += 1;
     if (won) this.totalWins += 1;
+
     this.winRate = this.calculateWinRate();
 
-    // Time bonus for quick wins
-    if (time <= this.timeBonusThreshold) {
-      this.timeBonus = true;
-      this.coinsEarned += this.timeBonusValue;
-      this.coinsTotal += this.timeBonusValue;
+    if (won) {
+      // Time bonus for quick wins
+      if (time <= this.timeBonusThreshold) {
+        this.timeBonus = true;
+        this.coinsEarned += this.timeBonusValue;
+      }
     }
+
+    this.coinsTotal += this.coinsEarned;
 
     return this.updateStorage();
   }
 
   private updateStorage() {
     const name = this.game.settings.playerName;
-    const { coins } = this.game.storage.getBy(name);
 
-    return this.game.storage.updateBy({
-      name,
-      coins: this.coinsTotal + (coins || 0),
+    return this.game.storage.updateByName(name, {
+      coins: this.coinsTotal,
       gamesPlayed: {
         total: this.totalGames,
         wins: this.totalWins,
       },
+      modes: {
+        [this.mode]: {
+          value: this.game.timer.getElapsedTime(),
+        },
+      },
     });
+  }
+
+  private getExistingCoins() {
+    const name = this.game.settings.playerName;
+
+    const { coins } = this.game.storage.getByName(name);
+
+    return coins || 0;
   }
 
   getWinRate() {
     return this.winRate;
   }
 
-  getBaseWinCoins() {
+  getWinBonus() {
     return this.reward.win;
-  }
-
-  getDifficultyWinBonus() {
-    return this.getBonus(true);
   }
 
   getSpeedBonus() {
@@ -108,7 +119,7 @@ export class RewardManager {
 
   reset() {
     const name = this.game.settings.playerName;
-    const storage = this.game.storage.getBy(name);
+    const storage = this.game.storage.getByName(name);
 
     this.coinsEarned = 0;
     this.coinsTotal = storage.coins;
@@ -117,6 +128,9 @@ export class RewardManager {
     this.totalWins = storage.gamesPlayed?.wins ?? 0;
     this.winRate = this.calculateWinRate();
     this.multiplier = this.getDifficultyMultiplier();
+    this.mode = this.game.modes.mode.name;
+
+    return this;
   }
 
   private calculateWinRate() {

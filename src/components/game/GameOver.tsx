@@ -1,16 +1,13 @@
 import { Html } from '@react-three/drei';
-import { useLooser } from '@src/components/hooks/useLooser.ts';
+import { useLoser } from '@src/components/hooks/useLoser.ts';
 
 interface GameOverProps {
   onPlayAgain: () => void;
   onMainMenu: () => void;
-  show?: boolean;
 }
 
-export function GameOver({ onPlayAgain, onMainMenu, show }: GameOverProps) {
-  const { difficulty, reward, performance } = useLooser();
-
-  if (!show) return null;
+export function GameOver({ onPlayAgain, onMainMenu }: GameOverProps) {
+  const { difficulty, reward, performance } = useLoser();
 
   return (
     <Html
@@ -55,7 +52,9 @@ export function GameOver({ onPlayAgain, onMainMenu, show }: GameOverProps) {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-slate-400">Time:</span>
-                    <span className="font-bold text-white">{performance.time}</span>
+                    <span title="Seconds" className="font-bold text-white">
+                      {performance.time}s
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Moves:</span>
@@ -67,7 +66,9 @@ export function GameOver({ onPlayAgain, onMainMenu, show }: GameOverProps) {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Avg. Move Time:</span>
-                    <span className="font-bold text-white">{performance.avgMoveTime.toFixed(1)}s</span>
+                    <span title="Seconds" className="font-bold text-white">
+                      {performance.avgMoveTime.toFixed(1)}s
+                    </span>
                   </div>
                 </div>
               </div>

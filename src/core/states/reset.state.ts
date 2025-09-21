@@ -9,9 +9,12 @@ export class ResetState extends GameState {
     super.activate();
 
     this.game.reset();
+    this.game.states.changeState('play');
   }
 
   override deactivate() {
+    this.game.start();
+
     super.deactivate();
   }
 }

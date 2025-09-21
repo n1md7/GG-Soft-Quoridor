@@ -14,9 +14,9 @@ export class PlayState extends GameState {
   }
 
   override deactivate() {
-    super.deactivate();
-
     this.game.timer.stop();
     this.game.sounds.background.stop();
+
+    super.deactivate();
   }
 }
