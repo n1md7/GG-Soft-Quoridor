@@ -109,6 +109,8 @@ export class Player extends Character {
         this.handleWallStrategy(coords);
         break;
     }
+
+    this.hideShortestPath();
   }
 
   handleBlockPointerOver(coords: CoordsWithPosType) {
@@ -145,6 +147,10 @@ export class Player extends Character {
 
     this.pawns.current.player.setHighlight(this.mode.isPawn());
     this.blocks.current.showPossibleMoves(coords, this.mode.isPawn());
+
+    // TODO: When Power is equipped, show possible path, else hide
+    const shortestPath = this.getShortestPath(this.getCoords());
+    this.game.player.showShortestPath(shortestPath.map((path) => this.getDestinationFromCoords(path).position));
   }
 
   override won(): boolean {
