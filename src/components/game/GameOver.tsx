@@ -1,16 +1,67 @@
 import { Html } from '@react-three/drei';
-import { useLoser } from '@src/components/hooks/useLoser.ts';
+import { useStatistics } from '@src/components/hooks/useStatistics.ts';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useState } from 'react';
+
+export type ForwardedGameOver = {
+  show: () => void;
+  hide: () => void;
+};
 
 interface GameOverProps {
-  onPlayAgain: () => void;
   onMainMenu: () => void;
 }
 
-export function GameOver({ onPlayAgain, onMainMenu }: GameOverProps) {
-  const { difficulty, reward, performance } = useLoser();
+export const GameOver = forwardRef(({ onMainMenu }: GameOverProps, ref: ForwardedRef<ForwardedGameOver>) => {
+  const { game, difficulty, reward, performance, setReward, setPerformance } = useStatistics();
+  const [visible, setVisible] = useState(false);
+
+  const onShow = useCallback(() => {
+    const time = game.timer.getElapsedTime();
+    const moves = game.player.getMovesMade();
+
+    game.reward.calculate({ won: false, time });
+    game.performance.calculate({ time, moves });
+
+    setReward({
+      coinsEarned: game.reward.getEarnedCoins(),
+      totalCoins: game.reward.getTotalCoins(),
+      gamesPlayed: game.reward.getTotalGames(),
+      winRate: game.reward.getWinRate(),
+    });
+
+    setPerformance({
+      difficulty,
+      time: game.performance.getFormattedTime(),
+      moves: game.performance.getMoves(),
+      avgMoveTime: game.performance.getAvgMoveTimeSec(),
+      color: game.performance.getDifficultyColor(),
+    });
+
+    setVisible(true);
+  }, [game.reward, setReward, game.performance, setPerformance, difficulty, game.timer, game.player]);
+
+  const onHide = useCallback(() => {
+    setVisible(false);
+  }, [setVisible]);
+
+  const onPlayAgain = useCallback(() => {
+    game.states.changeState('reset');
+  }, [game.states]);
+
+  useImperativeHandle(ref, () => ({
+    show: () => {
+      onShow();
+    },
+    hide: () => {
+      onHide();
+    },
+  }));
+
+  if (!visible) return null;
 
   return (
     <Html
+      visible={visible}
       center
       position={[0, 0, 0]}
       style={{
@@ -117,4 +168,4 @@ export function GameOver({ onPlayAgain, onMainMenu }: GameOverProps) {
       </div>
     </Html>
   );
-}
+});
