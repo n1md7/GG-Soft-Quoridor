@@ -13,12 +13,11 @@ export const useStatistics = () => {
     () => ({
       coinsEarned: 0,
       totalCoins: 0,
-      baseCoins: 0,
+      winBonus: 0,
       gamesPlayed: 0,
       winRate: 0,
       timeBonus: 0,
       multiplier: 1,
-      difficultyBonus: 0,
       hasTimeBonus: false,
     }),
     { collapsed: true },

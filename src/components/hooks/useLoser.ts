@@ -1,13 +1,13 @@
 import { useStatistics } from '@src/components/hooks/useStatistics.ts';
 import { useEffect } from 'react';
 
-export const useLooser = () => {
+export const useLoser = () => {
   const { game, difficulty, reward, performance, setReward, setPerformance } = useStatistics();
 
   useEffect(() => {
     game.reward.calculate({
       won: false,
-      time: 123, // TODO: replace with actual game time
+      time: game.timer.getElapsedTime(),
     });
 
     setReward({
@@ -24,7 +24,7 @@ export const useLooser = () => {
       avgMoveTime: game.performance.getAvgMoveTime(),
       color: game.performance.getDifficultyColor(),
     });
-  }, [performance.time, game.reward, setReward, game.performance, setPerformance, difficulty]);
+  }, [performance.time, game.reward, setReward, game.performance, setPerformance, difficulty, game.timer]);
 
   return {
     reward,

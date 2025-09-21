@@ -2,6 +2,7 @@ import { GameOver } from '@src/components/game/GameOver.tsx';
 import { Market } from '@src/components/game/Market.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { Show } from '@src/components/utils/Show.tsx';
 import { StateType } from '@src/core/managers/state.manager.ts';
 import { useControls } from 'leva';
 import { useCallback, useEffect, useState } from 'react';
@@ -14,14 +15,14 @@ export function Modals({ backToLobby }: Props) {
   const { states } = useGame();
   const [show, set] = useState({
     winner: false,
-    looser: false,
+    loser: false,
     market: false,
   });
   const update = useCallback(
     (payload: Partial<typeof show>) => {
       set({
         winner: false,
-        looser: false,
+        loser: false,
         market: false,
         ...payload,
       });
@@ -45,14 +46,14 @@ export function Modals({ backToLobby }: Props) {
         states.changeState('play');
       },
     },
-    looser: {
+    loser: {
       value: false,
       label: 'Game Over',
       hint: 'Show the game over modal',
-      onChange: (looser) => {
-        update({ looser });
+      onChange: (loser) => {
+        update({ loser });
 
-        if (looser) return states.changeState('lose');
+        if (loser) return states.changeState('lose');
 
         states.changeState('play');
       },
@@ -75,7 +76,7 @@ export function Modals({ backToLobby }: Props) {
     (state: StateType) => {
       switch (state) {
         case 'lose':
-          update({ looser: true });
+          update({ loser: true });
           break;
         case 'win':
           update({ winner: true });
@@ -85,7 +86,7 @@ export function Modals({ backToLobby }: Props) {
           break;
 
         default:
-          update({ looser: false, winner: false, market: false });
+          update({ loser: false, winner: false, market: false });
       }
     },
     [update],
@@ -103,9 +104,15 @@ export function Modals({ backToLobby }: Props) {
 
   return (
     <>
-      <Market show={show.market} onClose={onMarketClose} />
-      <GameOver show={show.looser} onPlayAgain={playAgain} onMainMenu={backToLobby} />
-      <Winner show={show.winner} onPlayAgain={playAgain} onMainMenu={backToLobby} />
+      <Show when={show.market}>
+        <Market onClose={onMarketClose} />
+      </Show>
+      <Show when={show.loser}>
+        <GameOver onPlayAgain={playAgain} onMainMenu={backToLobby} />
+      </Show>
+      <Show when={show.winner}>
+        <Winner onPlayAgain={playAgain} onMainMenu={backToLobby} />
+      </Show>
     </>
   );
 }

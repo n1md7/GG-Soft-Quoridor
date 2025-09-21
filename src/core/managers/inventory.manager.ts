@@ -25,7 +25,7 @@ export class InventoryManager {
   }
 
   restore() {
-    this.game.storage.getBy(this.game.player.getName()).ownedPowers.forEach((power) => {
+    this.game.storage.getByName(this.game.player.getName()).ownedPowers.forEach((power) => {
       this.powers[power].unlockViaStorage();
     });
   }

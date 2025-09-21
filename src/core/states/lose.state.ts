@@ -12,7 +12,6 @@ export class LoseState extends GameState {
     super.activate();
 
     this.commiserate();
-    this.saveScore();
   }
 
   override deactivate() {
@@ -26,18 +25,5 @@ export class LoseState extends GameState {
         confettiColors: ['#180542', '#2c0735', '#3e0a39', '#4e0d3a', '#5e103b', '#7f1941'],
       })
       .catch(console.trace);
-  }
-
-  private saveScore() {
-    const player = this.game.player;
-    const name = player.getName();
-    const mode = this.game.modes.mode.name;
-
-    this.game.storage.updateBy({
-      name,
-      modes: {
-        [mode]: 45, // TODO: Add actual score calculation.
-      },
-    });
   }
 }

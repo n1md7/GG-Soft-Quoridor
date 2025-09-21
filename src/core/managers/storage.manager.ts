@@ -13,7 +13,7 @@ export class StoreManager {
     return StoreManager.instance;
   }
 
-  getBy(name: string) {
+  getByName(name: string) {
     name = this.serializeName(name);
 
     const item = this.getStore()?.[name];
@@ -56,6 +56,10 @@ export class StoreManager {
     this.save(store);
 
     return item;
+  }
+
+  updateByName(name: string, data: Omit<ItemPayload, 'name'>) {
+    return this.updateBy({ name, ...data });
   }
 
   private save(store: Store) {

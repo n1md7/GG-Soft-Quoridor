@@ -5,15 +5,12 @@ import { Show } from '@src/components/utils/Show.tsx';
 interface WinProps {
   onPlayAgain: () => void;
   onMainMenu: () => void;
-  show?: boolean;
 }
 
-export function Winner({ onPlayAgain, onMainMenu, show }: WinProps) {
+export function Winner({ onPlayAgain, onMainMenu }: WinProps) {
   const { difficulty, reward, performance, getVictoryMessage, getPerformanceRating } = useWinner();
 
   const { efficiency } = getPerformanceRating();
-
-  if (!show) return null;
 
   return (
     <Html
@@ -89,13 +86,15 @@ export function Winner({ onPlayAgain, onMainMenu, show }: WinProps) {
                 <h3 className="mb-3 text-lg font-bold text-white">Rewards</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Base Coins:</span>
-                    <span className="font-bold text-yellow-400">+{reward.baseCoins}</span>
+                    <span className="text-slate-400">Win Bonus:</span>
+                    <span className="font-bold text-yellow-400">+{reward.winBonus}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Difficulty Bonus:</span>
-                    <span className="font-bold text-yellow-400">{reward.difficultyBonus}</span>
-                  </div>
+                  <Show when={reward.multiplier > 0}>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Difficulty Bonus:</span>
+                      <span className="font-bold text-blue-400">x{reward.multiplier}</span>
+                    </div>
+                  </Show>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Speed Bonus:</span>
                     <Show when={reward.hasTimeBonus} fallback={<span className="font-bold text-slate-400">0</span>}>

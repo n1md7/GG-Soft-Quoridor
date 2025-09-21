@@ -1,16 +1,13 @@
 import { Html } from '@react-three/drei';
-import { useLooser } from '@src/components/hooks/useLooser.ts';
+import { useLoser } from '@src/components/hooks/useLoser.ts';
 
 interface GameOverProps {
   onPlayAgain: () => void;
   onMainMenu: () => void;
-  show?: boolean;
 }
 
-export function GameOver({ onPlayAgain, onMainMenu, show }: GameOverProps) {
-  const { difficulty, reward, performance } = useLooser();
-
-  if (!show) return null;
+export function GameOver({ onPlayAgain, onMainMenu }: GameOverProps) {
+  const { difficulty, reward, performance } = useLoser();
 
   return (
     <Html

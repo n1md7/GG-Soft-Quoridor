@@ -12,7 +12,7 @@ export const useWinner = () => {
     game.reward.calculate({ won: true, time });
     game.performance.calculate({
       time,
-      moves: 16, // TODO: replace with actual game moves
+      moves: game.player.getMovesMade(),
     });
 
     setReward({
@@ -22,8 +22,7 @@ export const useWinner = () => {
       winRate: game.reward.getWinRate(),
       timeBonus: game.reward.getSpeedBonus(),
       multiplier: game.reward.getMultiplier(),
-      difficultyBonus: game.reward.getDifficultyWinBonus(),
-      baseCoins: game.reward.getBaseWinCoins(),
+      winBonus: game.reward.getWinBonus(),
       hasTimeBonus: game.reward.hasTimeBonus(),
     });
 
@@ -34,7 +33,7 @@ export const useWinner = () => {
       avgMoveTime: game.performance.getAvgMoveTime(),
       color: game.performance.getDifficultyColor(),
     });
-  }, [performance.time, game.reward, setReward, game.performance, setPerformance, difficulty, game.timer]);
+  }, [performance.time, game.reward, setReward, game.performance, setPerformance, difficulty, game.timer, game.player]);
 
   return {
     getVictoryMessage,

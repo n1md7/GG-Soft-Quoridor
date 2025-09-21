@@ -14,7 +14,7 @@ export class MarketItem {
     this.cost = cost;
   }
 
-  canAfford(coins: number): boolean {
+  affordable(coins: number): boolean {
     return coins >= this.cost;
   }
 

@@ -21,6 +21,11 @@ export class Player extends Character {
   readonly finishLine = 0;
   readonly mode = new Mode();
 
+  private readonly used: {
+    walls: number;
+    moves: number;
+  };
+
   private row!: number;
   private col!: number;
 
@@ -40,6 +45,11 @@ export class Player extends Character {
     this.row = row;
     this.col = col;
 
+    this.used = {
+      walls: 0,
+      moves: 0,
+    };
+
     this.getCoords = this.getCoords.bind(this);
     this.setCoords = this.setCoords.bind(this);
     this.handlePawnPointerClick = this.handlePawnPointerClick.bind(this);
@@ -58,6 +68,10 @@ export class Player extends Character {
 
   override isBot(): boolean {
     return false;
+  }
+
+  getMovesMade(): number {
+    return this.used.moves;
   }
 
   getCoords() {
@@ -171,6 +185,8 @@ export class Player extends Character {
 
     if (gameIsBlocked) return console.info('Cannot place wall here, it blocks the game completely!');
 
+    this.used.walls++;
+
     this.game.grid.addWallByCoords(wall, coords);
     wall.moveTo(coords);
     this.walls.current.player.dropWall();
@@ -181,6 +197,8 @@ export class Player extends Character {
   private handlePawnStrategy(coords: CoordsWithIsHighlightedType) {
     if (!coords.isHighlighted) return this.mode.setWallMode();
     if (!this.game.grid.canAddPawn(coords)) return this.mode.setWallMode();
+
+    this.used.moves++;
 
     this.setCoords(coords);
     this.pawns.current.player.setHighlight(false);
