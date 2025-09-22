@@ -6,7 +6,6 @@ import { Winner } from '@src/components/game/Winner.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { Show } from '@src/components/utils/Show.tsx';
-import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { button, useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { Suspense, useEffect } from 'react';
