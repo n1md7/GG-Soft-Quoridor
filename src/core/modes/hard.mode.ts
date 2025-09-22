@@ -1,8 +1,19 @@
 import { CoordsType, CoordsWithPosType, Positions } from '@src/components/game/block/block.type.ts';
+import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { GameMode } from '@src/core/entities/abstract/game.mode.ts';
 import { ModeEnum } from '@src/core/enums/mode.enum.ts';
+import { Game } from '@src/core/game.class.ts';
+import { MutableRefObject } from 'react';
 
 export class HardMode extends GameMode {
+  private readonly walls: MutableRefObject<ForwardedWalls>;
+
+  constructor(game: Game) {
+    super(game);
+
+    this.walls = game.model.walls;
+  }
+
   override get name() {
     return ModeEnum.Hard;
   }
@@ -13,11 +24,12 @@ export class HardMode extends GameMode {
 
     if (this.isCpuWinning(computerPath, playerPath)) return this.movePawn(computerPath);
 
-    const wall = this.game.model.walls.current.opponent.walls.shift()!;
+    const wall = this.walls.current.opponent.getWall();
     const block = this.getBlockPositionForWall(computerPath, playerPath);
 
     if (wall && block) {
       this.game.grid.addWallByCoords(wall, block);
+      this.walls.current.opponent.dropWall();
       return wall.moveTo(block);
     }
 

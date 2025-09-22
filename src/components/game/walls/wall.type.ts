@@ -27,7 +27,6 @@ export type PlayerFn = {
   hasWall: () => boolean;
   getWall: () => ForwardedWall | undefined;
   dropWall: () => void;
-  reset: () => void;
 };
 export type ForwardedWalls = {
   player: PlayerFn;
