@@ -22,6 +22,6 @@ export class EasyMode extends GameMode {
     const nextDestination = this.game.computer.getDestinationFromCoords(this.game.computer.setCoords(nextCoords));
 
     this.game.computer.animateTo(nextDestination);
-    this.game.computer.onPathUpdateCall(shortestPathPoints);
+    this.game.computer.showShortestPath(shortestPathPoints);
   }
 }

@@ -12,9 +12,12 @@ export class WinState extends GameState {
     super.activate();
 
     this.celebrate();
+    this.game.model.modals.winner.current.show();
   }
 
   override deactivate() {
+    this.game.model.modals.winner.current.hide();
+
     super.deactivate();
   }
 

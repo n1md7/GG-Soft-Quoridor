@@ -39,20 +39,12 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         hasWall: () => player.hasWalls(),
         getWall: () => player.getWall(),
         dropWall: () => player.incrementIndex(),
-        reset: () => {
-          player.walls.forEach((wall) => wall.moveToOrigin());
-          player.resetIndex();
-        },
       },
       opponent: {
         walls: opponent.walls,
         hasWall: () => opponent.hasWalls(),
         getWall: () => opponent.getWall(),
         dropWall: () => opponent.incrementIndex(),
-        reset: () => {
-          opponent.walls.forEach((wall) => wall.moveToOrigin());
-          opponent.resetIndex();
-        },
       },
       /**
        * Reset both player's and opponent's walls

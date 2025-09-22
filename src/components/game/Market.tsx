@@ -1,48 +1,77 @@
 import { Html } from '@react-three/drei';
 import { useGame } from '@src/components/hooks/useGame.ts';
-import { useStorage } from '@src/components/hooks/useStorage.ts';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
-import { useEffect, useState } from 'react';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 
-interface MarketProps {
-  onClose: () => void;
-}
+export type ForwardedMarket = {
+  show: () => void;
+  hide: () => void;
+};
 
-export function Market({ onClose }: MarketProps) {
-  const { getName } = useStorage();
-  const { market, inventory, storage } = useGame();
+export const Market = forwardRef((_, ref: ForwardedRef<ForwardedMarket>) => {
+  const { market, inventory, storage, player, states } = useGame();
   const [playerCoins, setPlayerCoins] = useState(0);
+  const [visible, setVisible] = useState(false);
 
-  const buy = (key: PowerEnum) => {
-    if (inventory.hasItem(key)) return console.info('Item already owned');
+  const buy = useCallback(
+    (key: PowerEnum) => {
+      if (inventory.hasItem(key)) return console.info('Item already owned');
 
-    const transaction = market.purchaseItem(key);
-    if (transaction.success) {
-      setPlayerCoins(transaction.remainingCoins);
-    }
-  };
+      const transaction = market.purchaseItem(key);
+      if (transaction.success) {
+        setPlayerCoins(transaction.remainingCoins);
+      }
+    },
+    [inventory, market],
+  );
 
-  useEffect(() => {
+  const sync = useCallback(() => {
     // Sync from storage on mount
     inventory.reset();
     inventory.restore();
   }, [inventory]);
 
-  useEffect(() => {
-    const name = getName();
+  const update = useCallback(() => {
+    const name = player.getName();
     const { coins } = storage.getByName(name);
 
     if (coins > 0) return setPlayerCoins(coins);
 
     const updated = storage.updateBy({
-      name: getName(),
-      coins: 1000,
+      name,
+      coins: 100, // Grant initial coins if none exist
     });
     setPlayerCoins(updated.coins);
-  }, [getName, storage]);
+  }, [player, storage]);
+
+  const onClose = useCallback(() => {
+    states.changeState('play');
+  }, [states]);
+
+  const onShow = useCallback(() => {
+    sync();
+    update();
+    setVisible(true);
+  }, [sync, update]);
+
+  const onHide = useCallback(() => {
+    setVisible(false);
+  }, [setVisible]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      show: onShow,
+      hide: onHide,
+    }),
+    [onShow, onHide],
+  );
+
+  if (!visible) return null;
 
   return (
     <Html
+      visible={visible}
       position={[0, 0, 0]}
       // transform
       // occlude
@@ -134,4 +163,4 @@ export function Market({ onClose }: MarketProps) {
       </div>
     </Html>
   );
-}
+});

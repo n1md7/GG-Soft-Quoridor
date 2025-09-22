@@ -1,19 +1,76 @@
 import { Html } from '@react-three/drei';
-import { useWinner } from '@src/components/hooks/useWinner.ts';
+import { useStatistics } from '@src/components/hooks/useStatistics.ts';
 import { Show } from '@src/components/utils/Show.tsx';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 
-interface WinProps {
-  onPlayAgain: () => void;
+export type ForwardedWinner = {
+  show: () => void;
+  hide: () => void;
+};
+
+type Props = {
   onMainMenu: () => void;
-}
+};
 
-export function Winner({ onPlayAgain, onMainMenu }: WinProps) {
-  const { difficulty, reward, performance, getVictoryMessage, getPerformanceRating } = useWinner();
+export const Winner = forwardRef(({ onMainMenu }: Props, ref: ForwardedRef<ForwardedWinner>) => {
+  const { game, difficulty, reward, performance, setReward, setPerformance, getVictoryMessage, getPerformanceRating } =
+    useStatistics();
 
   const { efficiency } = getPerformanceRating();
 
+  const [visible, setVisible] = useState(false);
+
+  const onShow = useCallback(() => {
+    const time = game.timer.getElapsedTime();
+    const moves = game.player.getMovesMade();
+
+    game.reward.calculate({ won: true, time });
+    game.performance.calculate({ time, moves });
+
+    setReward({
+      coinsEarned: game.reward.getEarnedCoins(),
+      totalCoins: game.reward.getTotalCoins(),
+      gamesPlayed: game.reward.getTotalGames(),
+      winRate: game.reward.getWinRate(),
+      timeBonus: game.reward.getSpeedBonus(),
+      multiplier: game.reward.getMultiplier(),
+      winBonus: game.reward.getWinBonus(),
+      hasTimeBonus: game.reward.hasTimeBonus(),
+    });
+
+    setPerformance({
+      difficulty,
+      time: game.performance.getFormattedTime(),
+      moves: game.performance.getMoves(),
+      avgMoveTime: game.performance.getAvgMoveTimeSec(),
+      color: game.performance.getDifficultyColor(),
+    });
+
+    setVisible(true);
+  }, [game.reward, setReward, game.performance, setPerformance, difficulty, game.timer, game.player]);
+
+  const onHide = useCallback(() => {
+    setVisible(false);
+  }, [setVisible]);
+
+  const onPlayAgain = useCallback(() => {
+    game.states.changeState('reset');
+  }, [game.states]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      show: onShow,
+      hide: onHide,
+    }),
+    [onHide, onPlayAgain, onShow],
+  );
+
+  if (!visible) return null;
+
   return (
     <Html
+      visible={visible}
       position={[0, 0, 0]}
       center
       style={{
@@ -139,4 +196,4 @@ export function Winner({ onPlayAgain, onMainMenu }: WinProps) {
       </div>
     </Html>
   );
-}
+});

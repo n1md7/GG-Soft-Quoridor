@@ -109,10 +109,6 @@ export abstract class Character extends CharacterState implements Subject {
 
   abstract won(): boolean;
 
-  protected notifyTurnRotation(): void {
-    this.observer?.notify(this);
-  }
-
   getFinishLineCoords() {
     const bottomLines: CoordsType[] = [];
 
@@ -143,5 +139,25 @@ export abstract class Character extends CharacterState implements Subject {
     this.model.pawns.current.opponent.animateTo(coords);
   }
 
+  showShortestPath(coords: Vector3[]) {
+    if (this.isBot()) {
+      return this.model.path.opponent.current.show(coords);
+    }
+
+    return this.model.path.player.current.show(coords);
+  }
+
+  hideShortestPath() {
+    if (this.isBot()) {
+      return this.model.path.opponent.current.hide();
+    }
+
+    return this.model.path.player.current.hide();
+  }
+
   abstract reset(): void;
+
+  protected notifyTurnRotation(): void {
+    this.observer?.notify(this);
+  }
 }

@@ -7,9 +7,6 @@ import { Character } from '@src/core/entities/abstract/character.class.ts';
 import { Game } from '@src/core/game.class.ts';
 import { delay } from '@src/utils/delay.ts';
 import { upto } from '@src/utils/random.ts';
-import { Vector3 } from 'three';
-
-type OnPathUpdateFn = (path: Vector3[]) => void;
 
 export class Computer extends Character {
   private static instance: Computer;
@@ -18,7 +15,6 @@ export class Computer extends Character {
 
   private row!: number;
   private col!: number;
-  private onPathUpdateFn?: OnPathUpdateFn;
 
   private constructor(model: ModelType, game: Game) {
     super(model, game);
@@ -41,14 +37,6 @@ export class Computer extends Character {
     }
 
     return Computer.instance;
-  }
-
-  onPathUpdate(fn: OnPathUpdateFn) {
-    this.onPathUpdateFn = fn;
-  }
-
-  onPathUpdateCall(pathPoints: Vector3[]) {
-    this.onPathUpdateFn?.(pathPoints);
   }
 
   getCoords() {
