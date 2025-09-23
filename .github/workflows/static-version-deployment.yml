@@ -3,9 +3,9 @@ name: Publish to GitHub with Versioning
 on:
   release:
     types: [created]
-    push:
-      branches:
-        - '*' # Match all branches to enable versioning for each branch
+  #    push:
+  #      branches:
+  #        - '*' # Match all branches to enable versioning for each branch
   pull_request:
     branches:
       - '*' # Also run on pull requests
