@@ -6,10 +6,16 @@ import { useGame } from '@src/components/hooks/useGame.ts';
 import { opponentPathColor, playerPathColor } from '@src/config/highlight.config.ts';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { button, useControls } from 'leva';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Board = () => {
   const game = useGame();
+  const [disabled, setDisabled] = useState({
+    pathVision: game.inventory.canUse(PowerEnum.ShortestPath),
+    extraWall: game.inventory.canUse(PowerEnum.ExtraWall),
+    undoMove: game.inventory.canUse(PowerEnum.Undo),
+    blockOpponent: game.inventory.canUse(PowerEnum.BlockMove),
+  });
 
   useControls('Board', {
     wireframe: {
@@ -22,12 +28,48 @@ export const Board = () => {
     },
   });
 
-  useControls('Inventory', () => ({
-    'Path Vision': button(() => game.inventory.use(PowerEnum.ShortestPath)),
-    'Extra Wall': button(() => game.inventory.use(PowerEnum.ExtraWall)),
-    'Undo Move': button(() => game.inventory.use(PowerEnum.Undo)),
-    'Block Opponent': button(() => game.inventory.use(PowerEnum.BlockMove)),
-  }));
+  useControls(
+    'Inventory',
+    () => ({
+      'Path Vision': button(
+        () => {
+          game.inventory.use(PowerEnum.ShortestPath);
+          setDisabled((s) => ({ ...s, pathVision: true }));
+        },
+        {
+          disabled: disabled.pathVision,
+        },
+      ),
+      'Extra Wall': button(
+        () => {
+          game.inventory.use(PowerEnum.ExtraWall);
+          setDisabled((s) => ({ ...s, extraWall: true }));
+        },
+        {
+          disabled: disabled.extraWall,
+        },
+      ),
+      'Undo Move': button(
+        () => {
+          game.inventory.use(PowerEnum.Undo);
+          setDisabled((s) => ({ ...s, undoMove: true }));
+        },
+        {
+          disabled: disabled.undoMove,
+        },
+      ),
+      'Block Opponent': button(
+        () => {
+          game.inventory.use(PowerEnum.BlockMove);
+          setDisabled((s) => ({ ...s, blockOpponent: true }));
+        },
+        {
+          disabled: disabled.blockOpponent,
+        },
+      ),
+    }),
+    [disabled],
+  );
 
   useEffect(() => {
     if (!game.model.pawns.current) return;
