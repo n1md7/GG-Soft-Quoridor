@@ -43,7 +43,15 @@ export class InventoryManager {
   }
 
   use(power: PowerEnum): boolean {
-    return this.powers[power].use();
+    if (!this.powers[power].use()) return false;
+
+    const name = this.game.player.getName();
+    const { ownedPowers } = this.game.storage.getByName(name);
+    this.game.storage.updateByName(name, {
+      ownedPowers: ownedPowers.filter((p) => p !== power),
+    });
+
+    return true;
   }
 
   unlockViaAd(power: PowerEnum): boolean {

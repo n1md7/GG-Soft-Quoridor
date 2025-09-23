@@ -3,11 +3,19 @@ import { Path } from '@src/components/game/path/Path.tsx';
 import { Pawns } from '@src/components/game/pawns/Pawns.tsx';
 import { Walls } from '@src/components/game/walls/Walls.tsx';
 import { useGame } from '@src/components/hooks/useGame.ts';
-import { useControls } from 'leva';
-import { useEffect } from 'react';
+import { opponentPathColor, playerPathColor } from '@src/config/highlight.config.ts';
+import { PowerEnum } from '@src/core/enums/power.enum.ts';
+import { button, useControls } from 'leva';
+import { useEffect, useState } from 'react';
 
 export const Board = () => {
   const game = useGame();
+  const [disabled, setDisabled] = useState({
+    pathVision: game.inventory.canUse(PowerEnum.ShortestPath),
+    extraWall: game.inventory.canUse(PowerEnum.ExtraWall),
+    undoMove: game.inventory.canUse(PowerEnum.Undo),
+    blockOpponent: game.inventory.canUse(PowerEnum.BlockMove),
+  });
 
   useControls('Board', {
     wireframe: {
@@ -19,6 +27,49 @@ export const Board = () => {
       },
     },
   });
+
+  useControls(
+    'Inventory',
+    () => ({
+      'Path Vision': button(
+        () => {
+          game.inventory.use(PowerEnum.ShortestPath);
+          setDisabled((s) => ({ ...s, pathVision: true }));
+        },
+        {
+          disabled: disabled.pathVision,
+        },
+      ),
+      'Extra Wall': button(
+        () => {
+          game.inventory.use(PowerEnum.ExtraWall);
+          setDisabled((s) => ({ ...s, extraWall: true }));
+        },
+        {
+          disabled: disabled.extraWall,
+        },
+      ),
+      'Undo Move': button(
+        () => {
+          game.inventory.use(PowerEnum.Undo);
+          setDisabled((s) => ({ ...s, undoMove: true }));
+        },
+        {
+          disabled: disabled.undoMove,
+        },
+      ),
+      'Block Opponent': button(
+        () => {
+          game.inventory.use(PowerEnum.BlockMove);
+          setDisabled((s) => ({ ...s, blockOpponent: true }));
+        },
+        {
+          disabled: disabled.blockOpponent,
+        },
+      ),
+    }),
+    [disabled],
+  );
 
   useEffect(() => {
     if (!game.model.pawns.current) return;
@@ -39,7 +90,8 @@ export const Board = () => {
 
   return (
     <group dispose={null}>
-      <Path />
+      <Path h={0.07} name="Path Opponent" color={opponentPathColor} show={true} ref={game.model.path.opponent} />
+      <Path h={0.08} name="Path Player" color={playerPathColor} show={true} ref={game.model.path.player} />
       <Blocks
         ref={game.model.blocks}
         material={game.model.materials.BlockMaterial}

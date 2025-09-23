@@ -12,9 +12,12 @@ export class LoseState extends GameState {
     super.activate();
 
     this.commiserate();
+    this.game.model.modals.gameOver.current.show();
   }
 
   override deactivate() {
+    this.game.model.modals.gameOver.current.hide();
+
     super.deactivate();
   }
 

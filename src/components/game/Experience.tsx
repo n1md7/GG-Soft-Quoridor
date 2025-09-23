@@ -1,10 +1,12 @@
 import { Environment, OrbitControls } from '@react-three/drei';
 import type { PresetsType } from '@react-three/drei/helpers/environment-assets';
-import { Modals } from '@src/components/game/Modals.tsx';
+import { GameOver } from '@src/components/game/GameOver.tsx';
+import { Market } from '@src/components/game/Market.tsx';
+import { Winner } from '@src/components/game/Winner.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { Show } from '@src/components/utils/Show.tsx';
-import { useControls } from 'leva';
+import { button, useControls } from 'leva';
 import { Perf } from 'r3f-perf';
 import { Suspense, useEffect } from 'react';
 import { Vector3 } from 'three';
@@ -36,18 +38,36 @@ export function Experience({ backToLobby }: Props) {
     },
   });
 
+  useControls('States', () => ({
+    'Game Over': button(() => {
+      game.states.changeState('lose');
+    }),
+    'Win Game': button(() => {
+      game.states.changeState('win');
+    }),
+    'Reset Game': button(() => {
+      game.states.changeState('reset');
+    }),
+    'Play Game': button(() => {
+      game.states.changeState('play');
+    }),
+    'Pause Game': button(() => {
+      game.states.changeState('pause');
+    }),
+    'Open Market': button(() => {
+      game.states.changeState('market');
+    }),
+  }));
+
   useEffect(() => {
-    game.states.changeState('play');
+    game.states.changeState('market');
   }, [game, game.states]);
 
   return (
     <>
-      <Modals
-        backToLobby={() => {
-          game.reset();
-          backToLobby();
-        }}
-      />
+      <Winner ref={game.model.modals.winner} onMainMenu={backToLobby} />
+      <GameOver ref={game.model.modals.gameOver} onMainMenu={backToLobby} />
+      <Market ref={game.model.modals.market} />
 
       <OrbitControls enableDamping enablePan target={new Vector3()} />
 

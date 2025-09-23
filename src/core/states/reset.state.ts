@@ -9,6 +9,7 @@ export class ResetState extends GameState {
     super.activate();
 
     this.game.reset();
+    // this.game.model.walls.current.reset();
     this.game.states.changeState('play');
   }
 
