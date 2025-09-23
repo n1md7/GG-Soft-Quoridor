@@ -3,12 +3,10 @@ name: Publish to GitHub with Versioning
 on:
   release:
     types: [created]
-  #    push:
-  #      branches:
-  #        - '*' # Match all branches to enable versioning for each branch
   pull_request:
+    types: [opened, reopened, synchronize]
     branches:
-      - '*' # Also run on pull requests
+      - '*' # Run on PRs targeting any branch
 
 jobs:
   comment-on-pr:
