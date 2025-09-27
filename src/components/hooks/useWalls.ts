@@ -27,6 +27,10 @@ export const useWalls = () => {
     return walls.current[index.current];
   }, []);
 
+  const decrementIndex = useCallback(() => {
+    index.current -= 1;
+  }, []);
+
   const incrementIndex = useCallback(() => {
     index.current += 1;
   }, []);
@@ -46,6 +50,7 @@ export const useWalls = () => {
     hasWalls,
     getWall,
     incrementIndex,
+    decrementIndex,
     resetIndex,
     getIndexBy,
   };

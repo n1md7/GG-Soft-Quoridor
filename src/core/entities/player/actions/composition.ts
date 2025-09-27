@@ -7,14 +7,29 @@ export class Actions {
   private readonly pawn: PawnAction;
   private readonly wall: WallAction;
 
+  private previousAction?: PawnAction | WallAction;
+
   constructor(game: Game) {
     this.pawn = new PawnAction(game);
     this.wall = new WallAction(game);
   }
 
   getBy(mode: Mode) {
-    if (mode.isPawn()) return this.pawn;
+    if (mode.isPawn()) {
+      this.previousAction = this.pawn;
+
+      return this.pawn;
+    }
+
+    this.previousAction = this.wall;
 
     return this.wall;
+  }
+
+  undo() {
+    if (!this.previousAction) return;
+
+    this.previousAction.undo();
+    this.previousAction = undefined;
   }
 }

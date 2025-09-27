@@ -10,48 +10,36 @@ import { getDefaultPlayerPosition } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { Character } from '@src/core/entities/abstract/character.class.ts';
 import { Actions } from '@src/core/entities/player/actions/composition.ts';
+import { Coordinates } from '@src/core/entities/player/coordinates.class.ts';
 import { Mode } from '@src/core/entities/player/mode.class.ts';
+import { Statistics } from '@src/core/entities/player/statistics.class.ts';
 import { Game } from '@src/core/game.class.ts';
 import { MutableRefObject } from 'react';
 
 export class Player extends Character {
   private static instance: Player;
 
-  readonly finishLine = 0;
+  readonly finishLine: number;
 
   readonly mode: Mode;
   readonly actions: Actions;
-
-  private readonly used: {
-    walls: number;
-    moves: number;
-  };
-
-  private row!: number;
-  private col!: number;
+  readonly stats: Statistics;
 
   private readonly blocks: MutableRefObject<ForwardedBlocks>;
   private readonly walls: MutableRefObject<ForwardedWalls>;
   private readonly pawns: MutableRefObject<ForwardedPawns>;
 
   private constructor(model: ModelType, game: Game) {
-    super(model, game);
+    super(model, game, new Coordinates(getDefaultPlayerPosition));
+
+    this.finishLine = this.coords.getTopLine();
 
     this.blocks = model.blocks;
     this.walls = model.walls;
     this.pawns = model.pawns;
 
-    const { row, col } = getDefaultPlayerPosition();
-
-    this.row = row;
-    this.col = col;
-
-    this.used = {
-      walls: 0,
-      moves: 0,
-    };
-
     this.mode = new Mode();
+    this.stats = new Statistics();
     this.actions = new Actions(game);
 
     this.getCoords = this.getCoords.bind(this);
@@ -75,19 +63,7 @@ export class Player extends Character {
   }
 
   getMovesMade(): number {
-    return this.used.moves;
-  }
-
-  getCoords() {
-    return {
-      row: this.row,
-      col: this.col,
-    };
-  }
-
-  setCoords(coords: CoordsType) {
-    this.row = coords.row;
-    this.col = coords.col;
+    return this.stats.getMoves();
   }
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
@@ -151,14 +127,12 @@ export class Player extends Character {
   }
 
   override won(): boolean {
-    return this.getCoords().row === 0;
+    return this.coords.isTopLine();
   }
 
   override reset() {
-    const { row, col } = getDefaultPlayerPosition();
-
-    this.row = row;
-    this.col = col;
+    this.coords.reset();
+    this.stats.reset();
 
     // We reset CPU here too
     this.pawns.current.reset();

@@ -24,4 +24,6 @@ export class EasyMode extends GameMode {
     this.game.computer.animateTo(nextDestination);
     this.game.computer.showShortestPath(shortestPathPoints);
   }
+
+  override undo() {}
 }

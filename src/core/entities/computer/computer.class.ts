@@ -1,31 +1,27 @@
-import { CoordsType } from '@src/components/game/block/block.type.ts';
-import { getDefaultOpponentPosition, ROWS } from '@src/components/hooks/useGame.ts';
+import { getDefaultOpponentPosition } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { computerMaxThinkingTime } from '@src/config/computer.config.ts';
 import { Character } from '@src/core/entities/abstract/character.class.ts';
+import { Coordinates } from '@src/core/entities/player/coordinates.class.ts';
 import { Game } from '@src/core/game.class.ts';
+import { ModeManager } from '@src/core/managers/mode.manager.ts';
 import { delay } from '@src/utils/delay.ts';
 import { upto } from '@src/utils/random.ts';
 
 export class Computer extends Character {
   private static instance: Computer;
-
-  readonly finishLine = ROWS;
-
-  private row!: number;
-  private col!: number;
+  readonly modes: ModeManager;
+  readonly finishLine: number;
 
   private constructor(model: ModelType, game: Game) {
-    super(model, game);
+    super(model, game, new Coordinates(getDefaultOpponentPosition));
 
-    const { row, col } = getDefaultOpponentPosition();
-
-    this.row = row;
-    this.col = col;
-
+    this.finishLine = this.coords.getBottomLine();
     this.name = 'Computer';
     this.avatar = 'robot'; // TODO
+
+    this.modes = ModeManager.getInstance(game);
 
     this.getCoords = this.getCoords.bind(this);
     this.setCoords = this.setCoords.bind(this);
@@ -39,20 +35,6 @@ export class Computer extends Character {
     return Computer.instance;
   }
 
-  getCoords() {
-    return {
-      row: this.row,
-      col: this.col,
-    };
-  }
-
-  setCoords(coords: CoordsType) {
-    this.row = coords.row;
-    this.col = coords.col;
-
-    return coords;
-  }
-
   override setMyTurn(turn: boolean) {
     if (!turn) return;
 
@@ -60,7 +42,7 @@ export class Computer extends Character {
 
     this.model.pawns.current.opponent.setHighlight(true);
     delay(upto(computerMaxThinkingTime)).then(() => {
-      this.game.modes.makeMove();
+      this.modes.makeMove();
 
       delay(animationTime)
         .then(() => this.notifyTurnRotation())
@@ -69,13 +51,10 @@ export class Computer extends Character {
   }
 
   override won(): boolean {
-    return this.getCoords().row === this.finishLine;
+    return this.coords.isBottomLine();
   }
 
   override reset() {
-    const { row, col } = getDefaultOpponentPosition();
-
-    this.row = row;
-    this.col = col;
+    this.coords.reset();
   }
 }

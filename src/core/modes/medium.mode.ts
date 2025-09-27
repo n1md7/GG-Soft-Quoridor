@@ -9,4 +9,6 @@ export class MediumMode extends GameMode {
   makeMove(): void {
     throw new Error('Method not implemented.');
   }
+
+  override undo() {}
 }

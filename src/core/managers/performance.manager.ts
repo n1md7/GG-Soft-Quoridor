@@ -11,7 +11,7 @@ export class PerformanceManager {
   private constructor(private readonly game: Game) {
     this.time = 0;
     this.moves = 0;
-    this.difficulty = game.modes.mode.name;
+    this.difficulty = game.computer.modes.mode.name;
   }
 
   static getInstance(game: Game) {
@@ -26,7 +26,7 @@ export class PerformanceManager {
     this.time = time;
     this.moves = moves;
 
-    this.difficulty = this.game.modes.mode.name;
+    this.difficulty = this.game.computer.modes.mode.name;
   }
 
   getTimeSec() {
@@ -65,6 +65,6 @@ export class PerformanceManager {
   reset() {
     this.time = 0;
     this.moves = 0;
-    this.difficulty = this.game.modes.mode.name;
+    this.difficulty = this.game.computer.modes.mode.name;
   }
 }

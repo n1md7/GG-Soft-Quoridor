@@ -1,5 +1,5 @@
 import { CoordsType, CoordsWithPosType, Positions } from '@src/components/game/block/block.type.ts';
-import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
+import { ForwardedWall, ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { GameMode } from '@src/core/entities/abstract/game.mode.ts';
 import { ModeEnum } from '@src/core/enums/mode.enum.ts';
 import { Game } from '@src/core/game.class.ts';
@@ -7,6 +7,11 @@ import { MutableRefObject } from 'react';
 
 export class HardMode extends GameMode {
   private readonly walls: MutableRefObject<ForwardedWalls>;
+
+  private previousPawnCoords?: CoordsType;
+  private previousWallCoords?: CoordsWithPosType;
+  private previousWall?: ForwardedWall;
+  private previousAction?: 'Wall' | 'Pawn';
 
   constructor(game: Game) {
     super(game);
@@ -28,9 +33,7 @@ export class HardMode extends GameMode {
     const block = this.getBlockPositionForWall(computerPath, playerPath);
 
     if (wall && block) {
-      this.game.grid.addWallByCoords(wall, block);
-      this.walls.current.opponent.dropWall();
-      return wall.moveTo(block);
+      return this.placeWall(wall, block);
     }
 
     // Fall back to moving the pawn if the wall wasn't able to be placed
@@ -41,7 +44,21 @@ export class HardMode extends GameMode {
     return cpu.length < player.length;
   }
 
+  private placeWall(wall: ForwardedWall, coords: CoordsWithPosType) {
+    this.previousWall = wall;
+    this.previousWallCoords = coords;
+    this.previousAction = 'Wall';
+
+    this.game.grid.addWallByCoords(wall, coords);
+    this.walls.current.opponent.dropWall();
+
+    return wall.moveTo(coords);
+  }
+
   private movePawn(path: CoordsType[]) {
+    this.previousPawnCoords = this.game.computer.getCoords();
+    this.previousAction = 'Pawn';
+
     const [, ...otherCoords] = path;
     const [nextCoords] = otherCoords;
 
@@ -114,5 +131,33 @@ export class HardMode extends GameMode {
     }
 
     return currentBlocks;
+  }
+
+  override undo() {
+    switch (this.previousAction) {
+      case 'Wall':
+        if (!this.previousWall) break;
+        if (!this.previousWallCoords) break;
+
+        this.game.grid.removeWallByCoords(this.previousWallCoords);
+        this.walls.current.opponent.undoWallIndex();
+        this.previousWall.moveToOrigin();
+
+        this.previousWall = undefined;
+        this.previousWallCoords = undefined;
+
+        break;
+
+      case 'Pawn':
+        if (!this.previousPawnCoords) break;
+
+        this.game.computer.setCoords(this.previousPawnCoords);
+        this.game.model.pawns.current.opponent.setHighlight(false);
+        this.game.computer.animateTo(this.game.computer.getDestinationFromCoords(this.previousPawnCoords));
+
+        this.previousPawnCoords = undefined;
+
+        break;
+    }
   }
 }

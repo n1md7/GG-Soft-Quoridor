@@ -36,12 +36,14 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
       },
       player: {
         walls: player.walls,
+        undoWallIndex: () => player.decrementIndex(),
         hasWall: () => player.hasWalls(),
         getWall: () => player.getWall(),
         dropWall: () => player.incrementIndex(),
       },
       opponent: {
         walls: opponent.walls,
+        undoWallIndex: () => opponent.decrementIndex(),
         hasWall: () => opponent.hasWalls(),
         getWall: () => opponent.getWall(),
         dropWall: () => opponent.incrementIndex(),

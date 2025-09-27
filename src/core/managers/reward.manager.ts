@@ -128,7 +128,7 @@ export class RewardManager {
     this.totalWins = storage.gamesPlayed?.wins ?? 0;
     this.winRate = this.calculateWinRate();
     this.multiplier = this.getDifficultyMultiplier();
-    this.mode = this.game.modes.mode.name;
+    this.mode = this.game.computer.modes.mode.name;
 
     return this;
   }
@@ -138,7 +138,7 @@ export class RewardManager {
   }
 
   private getDifficultyMultiplier() {
-    switch (this.game.modes.mode.name) {
+    switch (this.game.computer.modes.mode.name) {
       case ModeEnum.Easy:
         return 1.0;
       case ModeEnum.Medium:
