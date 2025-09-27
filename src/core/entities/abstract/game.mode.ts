@@ -9,4 +9,6 @@ export abstract class GameMode {
   abstract get name(): ModeEnum;
 
   abstract makeMove(): void;
+
+  abstract undo(): void;
 }

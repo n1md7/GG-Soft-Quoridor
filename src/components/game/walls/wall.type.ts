@@ -24,6 +24,7 @@ export type ForwardedWall = {
 };
 export type PlayerFn = {
   walls: ForwardedWall[];
+  undoWallIndex: () => void;
   hasWall: () => boolean;
   getWall: () => ForwardedWall | undefined;
   dropWall: () => void;

@@ -8,47 +8,39 @@ import { ForwardedPawns } from '@src/components/game/pawns/pawn.type.ts';
 import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { getDefaultPlayerPosition } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
-import { animationTime } from '@src/config/animation.config.ts';
 import { Character } from '@src/core/entities/abstract/character.class.ts';
+import { Actions } from '@src/core/entities/player/actions/composition.ts';
+import { Coordinates } from '@src/core/entities/player/coordinates.class.ts';
 import { Mode } from '@src/core/entities/player/mode.class.ts';
+import { Statistics } from '@src/core/entities/player/statistics.class.ts';
 import { Game } from '@src/core/game.class.ts';
-import { delay } from '@src/utils/delay.ts';
 import { MutableRefObject } from 'react';
 
 export class Player extends Character {
   private static instance: Player;
 
-  readonly finishLine = 0;
-  readonly mode = new Mode();
+  readonly finishLine: number;
 
-  private readonly used: {
-    walls: number;
-    moves: number;
-  };
-
-  private row!: number;
-  private col!: number;
+  readonly mode: Mode;
+  readonly actions: Actions;
+  readonly stats: Statistics;
 
   private readonly blocks: MutableRefObject<ForwardedBlocks>;
   private readonly walls: MutableRefObject<ForwardedWalls>;
   private readonly pawns: MutableRefObject<ForwardedPawns>;
 
   private constructor(model: ModelType, game: Game) {
-    super(model, game);
+    super(model, game, new Coordinates(getDefaultPlayerPosition));
+
+    this.finishLine = this.coords.getTopLine();
 
     this.blocks = model.blocks;
     this.walls = model.walls;
     this.pawns = model.pawns;
 
-    const { row, col } = getDefaultPlayerPosition();
-
-    this.row = row;
-    this.col = col;
-
-    this.used = {
-      walls: 0,
-      moves: 0,
-    };
+    this.mode = new Mode();
+    this.stats = new Statistics();
+    this.actions = new Actions(game);
 
     this.getCoords = this.getCoords.bind(this);
     this.setCoords = this.setCoords.bind(this);
@@ -71,19 +63,7 @@ export class Player extends Character {
   }
 
   getMovesMade(): number {
-    return this.used.moves;
-  }
-
-  getCoords() {
-    return {
-      row: this.row,
-      col: this.col,
-    };
-  }
-
-  setCoords(coords: CoordsType) {
-    this.row = coords.row;
-    this.col = coords.col;
+    return this.stats.getMoves();
   }
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
@@ -101,14 +81,7 @@ export class Player extends Character {
     this.blocks.current.hidePossibleMoves();
     this.pawns.current.player.setHighlight(false);
 
-    switch (this.mode.isPawn()) {
-      case true:
-        this.handlePawnStrategy(coords);
-        break;
-      case false:
-        this.handleWallStrategy(coords);
-        break;
-    }
+    this.actions.getBy(this.mode).move(coords);
 
     this.hideShortestPath();
   }
@@ -154,65 +127,15 @@ export class Player extends Character {
   }
 
   override won(): boolean {
-    return this.getCoords().row === 0;
+    return this.coords.isTopLine();
   }
 
   override reset() {
-    const { row, col } = getDefaultPlayerPosition();
-
-    this.row = row;
-    this.col = col;
+    this.coords.reset();
+    this.stats.reset();
 
     // We reset CPU here too
     this.pawns.current.reset();
     this.walls.current.reset();
-  }
-
-  private handleWallStrategy(coords: CoordsWithPosType) {
-    this.game.grid.assertBlockByCoords(coords);
-
-    const wall = this.walls.current.player.getWall();
-
-    if (!wall) return console.info('Out of walls');
-    if (!this.game.grid.canAddWall(coords)) {
-      this.game.sounds.playerError.play();
-      return console.info('Cannot add wall here');
-    }
-
-    this.game.grid.createRestorePoint();
-    this.game.grid.addWallByCoords(wall, coords);
-
-    const computerHasMove = this.game.computer.getAnyPath(this.game.computer.getCoords()).length > 0;
-    const playerHasMove = this.game.player.getAnyPath(this.game.player.getCoords()).length > 0;
-    const gameIsBlocked = !computerHasMove || !playerHasMove;
-
-    this.game.grid.restoreLatest();
-    this.game.grid.resetRestorePoints();
-
-    if (gameIsBlocked) return console.info('Cannot place wall here, it blocks the game completely!');
-
-    this.used.walls++;
-    this.used.moves++;
-
-    this.game.grid.addWallByCoords(wall, coords);
-    wall.moveTo(coords);
-    this.walls.current.player.dropWall();
-
-    delay(animationTime).then(() => this.notifyTurnRotation());
-  }
-
-  private handlePawnStrategy(coords: CoordsWithIsHighlightedType) {
-    if (!coords.isHighlighted) return this.mode.setWallMode();
-    if (!this.game.grid.canAddPawn(coords)) return this.mode.setWallMode();
-
-    this.used.moves++;
-
-    this.setCoords(coords);
-    this.pawns.current.player.setHighlight(false);
-    this.pawns.current.player.animateTo(this.getDestinationFromCoords(coords));
-
-    this.notifyTurnRotation();
-
-    return this.mode.setWallMode();
   }
 }

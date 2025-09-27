@@ -53,6 +53,8 @@ export const Board = () => {
         () => {
           game.inventory.use(PowerEnum.Undo);
           setDisabled((s) => ({ ...s, undoMove: true }));
+          game.player.actions.undo();
+          game.computer.modes.undo();
         },
         {
           disabled: disabled.undoMove,

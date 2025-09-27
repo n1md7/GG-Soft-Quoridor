@@ -5,8 +5,8 @@ import { useCallback, useMemo } from 'react';
 export const useStatistics = () => {
   const game = useGame();
   const difficulty = useMemo(() => {
-    return game.modes.mode.name;
-  }, [game.modes.mode.name]);
+    return game.computer.modes.mode.name;
+  }, [game.computer.modes.mode.name]);
 
   const [reward, setReward] = useControls(
     'Statistics',

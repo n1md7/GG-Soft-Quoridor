@@ -38,4 +38,8 @@ export class ModeManager {
   makeMove() {
     this.currentMode.makeMove();
   }
+
+  undo() {
+    this.mode.undo();
+  }
 }
