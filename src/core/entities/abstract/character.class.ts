@@ -157,7 +157,7 @@ export abstract class Character extends CharacterState implements Subject {
 
   abstract reset(): void;
 
-  protected notifyTurnRotation(): void {
+  notifyTurnRotation(): void {
     this.observer?.notify(this);
   }
 }
