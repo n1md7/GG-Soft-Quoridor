@@ -3,6 +3,7 @@ import { AnimateToParams } from '@src/components/game/pawns/pawn.type.ts';
 import { COLS } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { CharacterState } from '@src/core/entities/abstract/character.state.ts';
+import { Coordinates } from '@src/core/entities/player/coordinates.class.ts';
 import { Game } from '@src/core/game.class.ts';
 import { Observer } from '@src/core/interfaces/observer.interface.ts';
 import { Subject } from '@src/core/interfaces/subject.interface.ts';
@@ -22,6 +23,7 @@ export abstract class Character extends CharacterState implements Subject {
   protected constructor(
     protected readonly model: ModelType,
     protected readonly game: Game,
+    protected readonly coords: Coordinates,
   ) {
     super();
 
@@ -94,9 +96,13 @@ export abstract class Character extends CharacterState implements Subject {
     return this.index;
   }
 
-  abstract getCoords(): CoordsType;
+  getCoords() {
+    return this.coords.get();
+  }
 
-  abstract setCoords(coords: CoordsType): void;
+  setCoords(coords: CoordsType) {
+    return this.coords.set(coords);
+  }
 
   attach(observer: Observer, index: number): void {
     this.observer = observer;
@@ -136,6 +142,7 @@ export abstract class Character extends CharacterState implements Subject {
   }
 
   animateTo(coords: AnimateToParams) {
+    this.game.computer.hideShortestPath();
     this.model.pawns.current.opponent.animateTo(coords);
   }
 
@@ -148,16 +155,13 @@ export abstract class Character extends CharacterState implements Subject {
   }
 
   hideShortestPath() {
-    if (this.isBot()) {
-      return this.model.path.opponent.current.hide();
-    }
-
-    return this.model.path.player.current.hide();
+    this.model.path.opponent.current.hide();
+    this.model.path.player.current.hide();
   }
 
   abstract reset(): void;
 
-  protected notifyTurnRotation(): void {
+  notifyTurnRotation(): void {
     this.observer?.notify(this);
   }
 }

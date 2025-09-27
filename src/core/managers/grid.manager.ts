@@ -106,6 +106,12 @@ export class GridManager {
     });
   }
 
+  removeWallByCoords(block: CoordsWithPosType) {
+    this.getWallCoordsByBlock(block).forEach(({ row, col }) => {
+      this.grid[row][col] = null;
+    });
+  }
+
   getCoordsByName(name: string) {
     const [, numStr] = name.split('Block', 2);
 

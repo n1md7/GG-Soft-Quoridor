@@ -1,15 +1,14 @@
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { Settings } from '@src/context/settings.context.ts';
-import { PerformanceManager } from '@src/core/managers/performance.manager.ts';
-import { RewardManager } from '@src/core/managers/reward.manager.ts';
-import { InventoryManager } from '@src/core/managers/inventory.manager.ts';
-import { MarketManager } from '@src/core/managers/market.manager.ts';
 import { GAME_SCORE_KEY } from '@src/core/constants/storage.constants.ts';
 import { Computer } from '@src/core/entities/computer/computer.class.ts';
 import { Player } from '@src/core/entities/player/player.class.ts';
-import { GridManager } from '@src/core/managers/grid.manager.ts';
 import { EventManager } from '@src/core/managers/event.manager.ts';
-import { ModeManager } from '@src/core/managers/mode.manager.ts';
+import { GridManager } from '@src/core/managers/grid.manager.ts';
+import { InventoryManager } from '@src/core/managers/inventory.manager.ts';
+import { MarketManager } from '@src/core/managers/market.manager.ts';
+import { PerformanceManager } from '@src/core/managers/performance.manager.ts';
+import { RewardManager } from '@src/core/managers/reward.manager.ts';
 import { SoundManager } from '@src/core/managers/sound.manager.ts';
 import { StateManager } from '@src/core/managers/state.manager.ts';
 import { StoreManager } from '@src/core/managers/storage.manager.ts';
@@ -23,7 +22,6 @@ export class Game {
   readonly grid: GridManager;
   readonly events: EventManager;
   readonly states: StateManager;
-  readonly modes: ModeManager;
   readonly storage: StoreManager;
   readonly sounds: SoundManager;
   readonly reward: RewardManager;
@@ -42,7 +40,6 @@ export class Game {
     this.storage = StoreManager.getInstance(GAME_SCORE_KEY);
     this.events = EventManager.getInstance([this.player, this.computer], this);
     this.states = StateManager.getInstance(this);
-    this.modes = ModeManager.getInstance(this);
     this.grid = GridManager.getInstance();
     this.sounds = SoundManager.getInstance();
     this.reward = RewardManager.getInstance(this);
