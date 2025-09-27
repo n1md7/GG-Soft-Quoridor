@@ -9,7 +9,7 @@ import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { getDefaultPlayerPosition } from '@src/components/hooks/useGame.ts';
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { Character } from '@src/core/entities/abstract/character.class.ts';
-import { Actions } from '@src/core/entities/player/actions/actions.composition.ts';
+import { Actions } from '@src/core/entities/player/actions/composition.ts';
 import { Mode } from '@src/core/entities/player/mode.class.ts';
 import { Game } from '@src/core/game.class.ts';
 import { MutableRefObject } from 'react';

@@ -1,7 +1,7 @@
 import { CoordsWithIsHighlightedType } from '@src/components/game/block/block.type.ts';
 import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { animationTime } from '@src/config/animation.config.ts';
-import { Action } from '@src/core/entities/player/actions/abstract.move.ts';
+import { Action } from '@src/core/entities/player/actions/abstract.ts';
 import { Game } from '@src/core/game.class.ts';
 import { delay } from '@src/utils/delay.ts';
 import { MutableRefObject } from 'react';

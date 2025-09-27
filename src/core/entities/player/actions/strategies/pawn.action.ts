@@ -1,6 +1,6 @@
 import { CoordsWithIsHighlightedType } from '@src/components/game/block/block.type.ts';
 import { ForwardedPawns } from '@src/components/game/pawns/pawn.type.ts';
-import { Action } from '@src/core/entities/player/actions/abstract.move.ts';
+import { Action } from '@src/core/entities/player/actions/abstract.ts';
 import { Game } from '@src/core/game.class.ts';
 import { MutableRefObject } from 'react';
 
