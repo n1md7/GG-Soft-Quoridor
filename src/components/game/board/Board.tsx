@@ -64,6 +64,7 @@ export const Board = () => {
         () => {
           game.inventory.use(PowerEnum.BlockMove);
           setDisabled((s) => ({ ...s, blockOpponent: true }));
+          game.computer.blockNextMove();
         },
         {
           disabled: disabled.blockOpponent,

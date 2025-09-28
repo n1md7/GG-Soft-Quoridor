@@ -3,6 +3,7 @@ import { ModelType } from '@src/components/hooks/useModel.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { computerMaxThinkingTime } from '@src/config/computer.config.ts';
 import { Character } from '@src/core/entities/abstract/character.class.ts';
+import { SkipManager } from '@src/core/entities/computer/skip.manager.ts';
 import { Coordinates } from '@src/core/entities/player/coordinates.class.ts';
 import { Game } from '@src/core/game.class.ts';
 import { ModeManager } from '@src/core/managers/mode.manager.ts';
@@ -14,6 +15,8 @@ export class Computer extends Character {
   readonly modes: ModeManager;
   readonly finishLine: number;
 
+  private readonly skip: SkipManager;
+
   private constructor(model: ModelType, game: Game) {
     super(model, game, new Coordinates(getDefaultOpponentPosition));
 
@@ -22,6 +25,7 @@ export class Computer extends Character {
     this.avatar = 'robot'; // TODO
 
     this.modes = ModeManager.getInstance(game);
+    this.skip = SkipManager.getInstance();
 
     this.getCoords = this.getCoords.bind(this);
     this.setCoords = this.setCoords.bind(this);
@@ -42,7 +46,8 @@ export class Computer extends Character {
 
     this.model.pawns.current.opponent.setHighlight(true);
     delay(upto(computerMaxThinkingTime)).then(() => {
-      this.modes.makeMove();
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      this.skip.isRequested() ? this.skip.reset() : this.modes.makeMove();
 
       delay(animationTime)
         .then(() => this.notifyTurnRotation())
@@ -56,5 +61,10 @@ export class Computer extends Character {
 
   override reset() {
     this.coords.reset();
+    this.skip.reset();
+  }
+
+  blockNextMove() {
+    this.skip.activate();
   }
 }
