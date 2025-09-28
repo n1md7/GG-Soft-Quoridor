@@ -4,6 +4,7 @@ import { Experience } from '@src/components/game/Experience.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useModel } from '@src/components/hooks/useModel.ts';
 import { useSettings } from '@src/components/hooks/useSettings.ts';
+import { InGamePowerBar } from '@src/components/ui/InGamePowerBar.tsx';
 import { Loading } from '@src/components/ui/Loading.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
 import { GameContext } from '@src/context/game.context.ts';
@@ -72,6 +73,7 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
             <Experience backToLobby={backToLobby} />
           </Canvas>
         </Suspense>
+        <InGamePowerBar />
         <div className="canvas-overlay">
           <div className="action">
             <button onClick={backToLobby} className="back-button">

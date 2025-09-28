@@ -5,6 +5,7 @@ import { Market } from '@src/components/game/Market.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { InGamePowerBar } from '@src/components/ui/InGamePowerBar.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
 import { button, useControls } from 'leva';
 import { Perf } from 'r3f-perf';
