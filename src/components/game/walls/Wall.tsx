@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { CoordsWithPosType } from '@src/components/game/block/block.type.ts';
-import { ForwardedWall, MoveToParams, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
+import { Fn, ForwardedWall, MoveToParams, PositionMap, WallName } from '@src/components/game/walls/wall.type.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
@@ -17,12 +17,13 @@ type Props = {
   wireframe?: boolean;
   castShadow?: boolean;
   receiveShadow?: boolean;
+  hidden?: boolean;
   name: string;
   scale: [number, number, number];
 };
 
 export const Wall = forwardRef(
-  ({ geometry, position, name, scale, material }: Props, ref: ForwardedRef<ForwardedWall>) => {
+  ({ geometry, position, name, scale, material, hidden }: Props, ref: ForwardedRef<ForwardedWall>) => {
     const { sounds } = useGame();
     const { getDestinationFromCoords } = useWallPosition();
     const percentage = usePercentage();
@@ -33,7 +34,7 @@ export const Wall = forwardRef(
     const rotateByAnimation = useRef<Tween<Euler>>(null!);
 
     const animateTo = useCallback(
-      ({ position, rotation }: MoveToParams) => {
+      ({ position, rotation, fn }: MoveToParams) => {
         const [moveUpTime, moveToTime] = percentage.get(animationTime, 25);
 
         moveUpAnimation.current = new Tween(mesh.current.position)
@@ -71,6 +72,7 @@ export const Wall = forwardRef(
                   .onComplete(() => {
                     moveDownAnimation.current.remove();
                     moveDownAnimation.current = null!;
+                    if (fn) fn();
                   })
                   .start();
               })
@@ -88,12 +90,26 @@ export const Wall = forwardRef(
       [animateTo, getDestinationFromCoords],
     );
 
-    const moveToOrigin = useCallback(() => {
-      animateTo({
-        position: new Vector3(position[0], position[1], position[2]),
-        rotation: 'Vertical',
-      });
-    }, [animateTo, position]);
+    const moveToAxisX = useCallback(
+      (xValue: number) => {
+        animateTo({
+          position: new Vector3(position[0] - xValue, position[1], position[2]),
+          rotation: 'Vertical',
+        });
+      },
+      [animateTo, position],
+    );
+
+    const moveToOrigin = useCallback(
+      (fn?: Fn) => {
+        animateTo({
+          position: new Vector3(position[0], position[1], position[2]),
+          rotation: 'Vertical',
+          fn,
+        });
+      },
+      [animateTo, position],
+    );
 
     // const over = useCallback((e: ThreeEvent<PointerEvent>) => {
     //   e.stopPropagation();
@@ -105,9 +121,16 @@ export const Wall = forwardRef(
         name: mesh.current.name as WallName,
         scale: mesh.current.scale,
         moveTo,
+        moveToAxisX,
         moveToOrigin,
+        hide: () => {
+          mesh.current.visible = false;
+        },
+        show: () => {
+          mesh.current.visible = true;
+        },
       };
-    }, [moveToOrigin, moveTo]);
+    }, [moveTo, moveToAxisX, moveToOrigin]);
 
     useFrame(() => {
       if (moveToAnimation.current) moveToAnimation.current.update();
@@ -123,6 +146,7 @@ export const Wall = forwardRef(
           name={name}
           castShadow={true}
           receiveShadow={true}
+          visible={!hidden}
           material={material}
           geometry={geometry}
           position={position}
