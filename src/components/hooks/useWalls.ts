@@ -43,6 +43,14 @@ export const useWalls = () => {
     return parseInt(numStr, 10);
   }, []);
 
+  const getUnusedWalls = useCallback(() => {
+    return walls.current.reduce((acc: ForwardedWall[], wall, i) => {
+      if (i >= index.current) acc.push(wall);
+
+      return acc;
+    }, [] as ForwardedWall[]);
+  }, [index]);
+
   return {
     walls: walls.current,
     moveToOrigin,
@@ -53,5 +61,6 @@ export const useWalls = () => {
     decrementIndex,
     resetIndex,
     getIndexBy,
+    getUnusedWalls,
   };
 };

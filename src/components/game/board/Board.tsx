@@ -6,16 +6,10 @@ import { useGame } from '@src/components/hooks/useGame.ts';
 import { opponentPathColor, playerPathColor } from '@src/config/highlight.config.ts';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { button, useControls } from 'leva';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export const Board = () => {
   const game = useGame();
-  const [disabled, setDisabled] = useState({
-    pathVision: game.inventory.canUse(PowerEnum.ShortestPath),
-    extraWall: game.inventory.canUse(PowerEnum.ExtraWall),
-    undoMove: game.inventory.canUse(PowerEnum.Undo),
-    blockOpponent: game.inventory.canUse(PowerEnum.BlockMove),
-  });
 
   useControls('Board', {
     wireframe: {
@@ -28,51 +22,24 @@ export const Board = () => {
     },
   });
 
-  useControls(
-    'Inventory',
-    () => ({
-      'Path Vision': button(
-        () => {
-          game.inventory.use(PowerEnum.ShortestPath);
-          setDisabled((s) => ({ ...s, pathVision: true }));
-        },
-        {
-          disabled: disabled.pathVision,
-        },
-      ),
-      'Extra Wall': button(
-        () => {
-          game.inventory.use(PowerEnum.ExtraWall);
-          setDisabled((s) => ({ ...s, extraWall: true }));
-        },
-        {
-          disabled: disabled.extraWall,
-        },
-      ),
-      'Undo Move': button(
-        () => {
-          game.inventory.use(PowerEnum.Undo);
-          setDisabled((s) => ({ ...s, undoMove: true }));
-          game.player.actions.undo();
-          game.computer.modes.undo();
-        },
-        {
-          disabled: disabled.undoMove,
-        },
-      ),
-      'Block Opponent': button(
-        () => {
-          game.inventory.use(PowerEnum.BlockMove);
-          setDisabled((s) => ({ ...s, blockOpponent: true }));
-          game.computer.blockNextMove();
-        },
-        {
-          disabled: disabled.blockOpponent,
-        },
-      ),
+  useControls('Inventory', () => ({
+    'Path Vision': button(() => {
+      game.inventory.use(PowerEnum.ShortestPath);
     }),
-    [disabled],
-  );
+    'Extra Wall': button(() => {
+      game.inventory.use(PowerEnum.ExtraWall);
+      game.model.walls.current.player?.addExtraWall?.();
+    }),
+    'Undo Move': button(() => {
+      game.inventory.use(PowerEnum.Undo);
+      game.player.actions.undo();
+      game.computer.modes.undo();
+    }),
+    'Block Opponent': button(() => {
+      game.inventory.use(PowerEnum.BlockMove);
+      game.computer.blockNextMove();
+    }),
+  }));
 
   useEffect(() => {
     if (!game.model.pawns.current) return;
