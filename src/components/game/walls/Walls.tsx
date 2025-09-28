@@ -1,7 +1,7 @@
 import { Placeholder } from '@src/components/game/placeholder/Placeholder.tsx';
 import { ForwardedPlaceholder } from '@src/components/game/placeholder/placeholder.type.ts';
 import { Wall } from '@src/components/game/walls/Wall.tsx';
-import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
+import { ForwardedWall, ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { useWalls } from '@src/components/hooks/useWalls.ts';
 import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
 import { BufferGeometry, Color, Material } from 'three';
@@ -28,6 +28,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
 
   const player = useWalls();
   const opponent = useWalls();
+  const extraWall = useRef<ForwardedWall>(null!);
 
   useImperativeHandle(ref, () => {
     return {
@@ -40,6 +41,14 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         hasWall: () => player.hasWalls(),
         getWall: () => player.getWall(),
         dropWall: () => player.incrementIndex(),
+        addExtraWall: () => {
+          if (extraWall.current) {
+            player.getUnusedWalls().forEach((wall) => wall.moveToAxisX(0.24));
+            player.callback(extraWall.current); // Register the extra wall
+            extraWall.current.moveToAxisX(0.24);
+            extraWall.current.show();
+          }
+        },
       },
       opponent: {
         walls: opponent.walls,
@@ -57,6 +66,12 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
 
         player.resetIndex();
         opponent.resetIndex();
+
+        if (extraWall.current) {
+          extraWall.current.moveToOrigin(() => {
+            extraWall.current.hide();
+          });
+        }
       },
     };
   }, [opponent, player]);
@@ -287,6 +302,18 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         geometry={walls.geometry}
         material={walls.materials.player}
         position={[8.956, 0.587, 1.299]}
+        rotation={[0, 0, -Math.PI / 6]}
+        scale={[0.1, 0.5, 1.1]}
+      />
+      <Wall
+        hidden
+        castShadow
+        receiveShadow
+        name="Wall020"
+        ref={extraWall}
+        geometry={walls.geometry}
+        material={walls.materials.player}
+        position={[9.196, 0.587, 1.299]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
