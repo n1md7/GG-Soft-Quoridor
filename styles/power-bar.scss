@@ -44,7 +44,8 @@
     }
 
     .power-item {
-      @apply flex items-center;
+      display: flex;
+      align-items: center;
 
       .vertical-divider {
         margin: 0 0.5rem; /* mx-2 */
