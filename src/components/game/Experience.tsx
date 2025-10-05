@@ -1,4 +1,4 @@
-import { Grid, OrbitControls } from '@react-three/drei';
+import { Grid, OrbitControls, Environment } from '@react-three/drei';
 import { GameOver } from '@src/components/game/GameOver.tsx';
 import { Market } from '@src/components/game/Market.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
@@ -52,6 +52,7 @@ export function Experience({ backToLobby }: Props) {
       </Show>
 
       <Lights />
+      <EnvironmentSetup />
       <Background />
       <GridHelper />
 
@@ -111,6 +112,25 @@ function GridHelper() {
       cellColor={cellColor}
     />
   );
+}
+
+function EnvironmentSetup() {
+  const { preset, intensity } = useControls('Environment', {
+    preset: {
+      value: 'sunset',
+      options: ['sunset', 'dawn', 'night', 'warehouse', 'forest', 'apartment', 'studio', 'city'],
+      label: 'HDRI Preset',
+    },
+    intensity: {
+      value: 0.4,
+      min: 0,
+      max: 2,
+      step: 0.1,
+      label: 'Environment Intensity',
+    },
+  });
+
+  return <Environment preset={preset} environmentIntensity={intensity} />;
 }
 
 function Background() {

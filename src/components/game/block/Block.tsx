@@ -96,7 +96,16 @@ export const Block = forwardRef(
         position={position}
         scale={scale}
       >
-        <meshStandardMaterial ref={colorRef} color={defaultColor} attach="material" />
+        <meshStandardMaterial
+          ref={colorRef}
+          color={defaultColor}
+          attach="material"
+          metalness={0.8}
+          roughness={0.2}
+          envMapIntensity={1.5}
+          clearcoat={0.3}
+          clearcoatRoughness={0.1}
+        />
       </mesh>
     );
   },
