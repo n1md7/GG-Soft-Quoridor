@@ -24,20 +24,16 @@ export const Board = () => {
 
   useControls('Inventory', () => ({
     'Path Vision': button(() => {
-      game.inventory.use(PowerEnum.ShortestPath);
+      game.powers.use(PowerEnum.ShortestPath);
     }),
     'Extra Wall': button(() => {
-      game.inventory.use(PowerEnum.ExtraWall);
-      game.model.walls.current.player?.addExtraWall?.();
+      game.powers.use(PowerEnum.ExtraWall);
     }),
     'Undo Move': button(() => {
-      game.inventory.use(PowerEnum.Undo);
-      game.player.actions.undo();
-      game.computer.modes.undo();
+      game.powers.use(PowerEnum.Undo);
     }),
     'Block Opponent': button(() => {
-      game.inventory.use(PowerEnum.BlockMove);
-      game.computer.blockNextMove();
+      game.powers.use(PowerEnum.BlockMove);
     }),
   }));
 

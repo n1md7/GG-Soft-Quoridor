@@ -1,5 +1,6 @@
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { Game } from '@src/core/game.class.ts';
+import { TinyEmitter } from 'tiny-emitter';
 import { MarketItem } from '../classes/market-item.class.ts';
 import { Power } from '../classes/power.class.ts';
 
@@ -37,7 +38,11 @@ export class MarketManager {
     }),
   };
 
-  private constructor(private readonly game: Game) {}
+  private readonly events: TinyEmitter;
+
+  private constructor(private readonly game: Game) {
+    this.events = new TinyEmitter();
+  }
 
   static getInstance(game: Game) {
     if (!MarketManager.instance) {
@@ -45,6 +50,14 @@ export class MarketManager {
     }
 
     return MarketManager.instance;
+  }
+
+  on(event: 'purchase', callback: (power: PowerEnum, remainingCoins: number) => void) {
+    this.events.on(event, callback);
+  }
+
+  off(event: 'purchase', callback: (power: PowerEnum, remainingCoins: number) => void) {
+    this.events.off(event, callback);
   }
 
   getItems(): MarketItem[] {
@@ -68,6 +81,8 @@ export class MarketManager {
       coins: storage.coins - item.cost,
       ownedPowers: [...storage.ownedPowers, key],
     });
+
+    this.events.emit('purchase', key, coins);
 
     return {
       success: true,

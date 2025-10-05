@@ -1,5 +1,6 @@
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { Settings } from '@src/context/settings.context.ts';
+import { PowerManager } from '@src/core/managers/powers.manager.ts';
 import { GAME_SCORE_KEY } from '@src/core/constants/storage.constants.ts';
 import { Computer } from '@src/core/entities/computer/computer.class.ts';
 import { Player } from '@src/core/entities/player/player.class.ts';
@@ -29,6 +30,7 @@ export class Game {
   readonly inventory: InventoryManager;
   readonly performance: PerformanceManager;
   readonly timer: TimeManager;
+  readonly powers: PowerManager;
 
   private constructor(
     readonly model: ModelType,
@@ -47,6 +49,7 @@ export class Game {
     this.inventory = InventoryManager.getInstance(this);
     this.performance = PerformanceManager.getInstance(this);
     this.timer = TimeManager.getInstance();
+    this.powers = PowerManager.getInstance(this);
   }
 
   static getInstance(model: ModelType, settings: Settings) {
