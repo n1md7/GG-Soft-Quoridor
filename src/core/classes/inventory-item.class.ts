@@ -55,8 +55,6 @@ export class InventoryItem {
     this.used = true;
     this.usedAt = Date.now();
 
-    console.info(`Power used: ${this.key}`);
-
     return true;
   }
 
