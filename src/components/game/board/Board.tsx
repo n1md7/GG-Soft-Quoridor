@@ -106,7 +106,7 @@ export const Board = () => {
         castShadow
         receiveShadow
         geometry={game.model.nodes.Plate001.geometry}
-        material={game.model.nodes.Plate001.material}
+        material={game.model.materials.PlatformMaterial}
         position={[7.629, 0.051, 4.179]}
         scale={[1.6, 0.05, 1.6]}
       />
@@ -115,7 +115,7 @@ export const Board = () => {
         castShadow
         receiveShadow
         geometry={game.model.nodes.Plate000.geometry}
-        material={game.model.nodes.Plate000.material}
+        material={game.model.materials.PlatformMaterial}
         position={[7.629, 0.051, -4.181]}
         scale={[1.6, 0.05, 1.6]}
       />
