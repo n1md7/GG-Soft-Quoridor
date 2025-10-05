@@ -55,7 +55,7 @@ export function Experience({ backToLobby }: Props) {
       <Lights />
       <EnvironmentSetup />
       <Background />
-      <GridHelper />
+      {/*<GridHelper />*/}
 
       <Suspense>
         <Board />
