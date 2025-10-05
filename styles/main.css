@@ -177,7 +177,8 @@ body,
       linear-gradient(to right, var(--color-app-purple), var(--color-app-blue));
     background-size: cover;
     background-position: center;
-    transform: scale(1.05);
+    transform: scale(1.1);
+    box-shadow: 0 0 25px 6px rgb(56 67 110);
 
     &::after {
       background: var(--color-app-green);

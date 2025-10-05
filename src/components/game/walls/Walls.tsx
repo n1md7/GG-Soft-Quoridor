@@ -3,8 +3,8 @@ import { ForwardedPlaceholder } from '@src/components/game/placeholder/placehold
 import { Wall } from '@src/components/game/walls/Wall.tsx';
 import { ForwardedWall, ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
 import { useWalls } from '@src/components/hooks/useWalls.ts';
-import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
-import { BufferGeometry, Color, Material } from 'three';
+import { ForwardedRef, forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
+import { BufferGeometry, Color, Material, MeshStandardMaterial } from 'three';
 
 type Props = {
   walls: {
@@ -29,6 +29,21 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
   const player = useWalls();
   const opponent = useWalls();
   const extraWall = useRef<ForwardedWall>(null!);
+
+  useEffect(() => {
+    // Enhance container materials with metallic effects
+    const enhanceMaterial = (material: Material) => {
+      if (material instanceof MeshStandardMaterial) {
+        material.metalness = 0.7;
+        material.roughness = 0.3;
+        material.envMapIntensity = 1.8;
+        material.needsUpdate = true;
+      }
+    };
+
+    enhanceMaterial(containers.materials.player);
+    enhanceMaterial(containers.materials.opponent);
+  }, [containers.materials]);
 
   useImperativeHandle(ref, () => {
     return {

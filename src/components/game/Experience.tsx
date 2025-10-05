@@ -1,13 +1,18 @@
-import { Grid, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
+import { useThree } from '@react-three/fiber';
+import { Background } from '@src/components/game/Background.tsx';
+import { Environment } from '@src/components/game/Environment.tsx';
 import { GameOver } from '@src/components/game/GameOver.tsx';
+import { Lights } from '@src/components/game/Lights.tsx';
 import { Market } from '@src/components/game/Market.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { Show } from '@src/components/utils/Show.tsx';
+import { StateType } from '@src/core/managers/state.manager.ts';
 import { button, useControls } from 'leva';
 import { Perf } from 'r3f-perf';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import { Board } from './board/Board.tsx';
 
@@ -45,107 +50,241 @@ export function Experience({ backToLobby }: Props) {
       <GameOver ref={game.model.modals.gameOver} onMainMenu={backToLobby} />
       <Market ref={game.model.modals.market} />
 
-      <OrbitControls enableDamping enablePan target={new Vector3()} />
+      <CameraControls />
 
       <Show when={!hidden}>
         <Perf openByDefault showGraph antialias position="bottom-left" />
       </Show>
 
       <Lights />
+      <Environment />
       <Background />
-      <GridHelper />
+      {/*<GridHelper />*/}
 
       <Suspense>
         <Board />
+        <ModalBlocker />
       </Suspense>
     </>
   );
 }
 
-function GridHelper() {
-  const { fadeDistance, fadeStrength, cellSize, sectionSize, sectionColor, cellColor } = useControls(
-    'Grid',
+function CameraControls() {
+  const { states } = useGame();
+  const { camera } = useThree();
+  const [currentState, setCurrentState] = useState<string>('play');
+  const controlsRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleStateChange = (state: StateType) => {
+      setCurrentState(state);
+    };
+
+    states.on('state', handleStateChange);
+
+    return () => {
+      states.off('state', handleStateChange);
+    };
+  }, [states]);
+
+  const shouldEnableControls = currentState === 'play';
+
+  const {
+    enableDamping,
+    dampingFactor,
+    minDistance,
+    maxDistance,
+    minPolarAngle,
+    maxPolarAngle,
+    minAzimuthAngle,
+    maxAzimuthAngle,
+    enablePan,
+    panSpeed,
+    rotateSpeed,
+    target,
+  } = useControls(
+    'Camera Controls',
     {
-      fadeDistance: {
-        value: 500,
-        min: 100,
-        max: 1000,
-        step: 10,
-      },
-      fadeStrength: {
-        value: 5,
-        min: 1,
-        max: 10,
-        step: 1,
-      },
-      cellSize: {
-        value: 0.6,
-        min: 0.1,
-        max: 2,
+      target: {
+        value: [0, 0, 0],
         step: 0.1,
+        label: 'Look At Target',
       },
-      sectionSize: {
-        value: 3,
-        min: 1,
-        max: 10,
+      enableDamping: {
+        value: true,
+        label: 'Enable Damping',
+      },
+      dampingFactor: {
+        value: 0.05,
+        min: 0.01,
+        max: 0.2,
+        step: 0.01,
+        label: 'Damping Factor',
+      },
+      minDistance: {
+        value: 8,
+        min: 6,
+        max: 15,
+        step: 0.5,
+        label: 'Min Zoom Distance',
+      },
+      maxDistance: {
+        value: 18,
+        min: 10,
+        max: 25,
         step: 1,
+        label: 'Max Zoom Distance',
       },
-      sectionColor: '#d0cfeb',
-      cellColor: '#6c6666',
+      minPolarAngle: {
+        value: Math.PI / 8,
+        min: 0,
+        max: Math.PI / 4,
+        step: 0.01,
+        label: 'Min Vertical Angle (22.5°)',
+      },
+      maxPolarAngle: {
+        value: Math.PI / 2,
+        min: Math.PI / 3,
+        max: Math.PI * 0.6,
+        step: 0.01,
+        label: 'Max Vertical Angle (90°)',
+      },
+      minAzimuthAngle: {
+        value: -Math.PI / 2,
+        min: -Math.PI,
+        max: 0,
+        step: 0.01,
+        label: 'Min Horizontal Angle (-90°)',
+      },
+      maxAzimuthAngle: {
+        value: Math.PI / 2,
+        min: 0,
+        max: Math.PI,
+        step: 0.01,
+        label: 'Max Horizontal Angle (90°)',
+      },
+      enablePan: {
+        value: true,
+        label: 'Enable Pan',
+      },
+      panSpeed: {
+        value: 1,
+        min: 0.1,
+        max: 5,
+        step: 0.1,
+        label: 'Pan Speed',
+      },
+      rotateSpeed: {
+        value: 1,
+        min: 0.1,
+        max: 5,
+        step: 0.1,
+        label: 'Rotate Speed',
+      },
     },
     {
-      order: 1,
       collapsed: true,
-      color: '#797171',
+      color: '#2d5a87',
     },
   );
 
+  const setCameraPosition = useCallback(
+    (position: [number, number, number], lookAt: [number, number, number]) => {
+      camera.position.set(position[0], position[1], position[2]);
+      if (controlsRef.current) {
+        controlsRef.current.target.set(lookAt[0], lookAt[1], lookAt[2]);
+        controlsRef.current.update();
+      }
+    },
+    [camera],
+  );
+
+  useControls(
+    'Camera Presets',
+    {
+      'Optimal Gaming View': button(() => {
+        setCameraPosition([0, 8, 12], [0, 0, 0]);
+      }),
+      'Strategic Overview': button(() => {
+        setCameraPosition([0, 12, 4], [0, 0, 0]);
+      }),
+      'Side Analysis': button(() => {
+        setCameraPosition([10, 6, 0], [0, 0, 0]);
+      }),
+      'Player Perspective': button(() => {
+        setCameraPosition([2, 4, 8], [0, 0, 0]);
+      }),
+    },
+    {
+      collapsed: true,
+      color: '#4a90e2',
+    },
+  );
+
+  useEffect(() => {
+    setCameraPosition([0, 8, 12], [0, 0, 0]);
+  }, [setCameraPosition]);
+
   return (
-    <Grid
-      infiniteGrid
-      fadeDistance={fadeDistance}
-      fadeStrength={fadeStrength}
-      cellSize={cellSize}
-      sectionSize={sectionSize}
-      sectionColor={sectionColor}
-      cellColor={cellColor}
+    <OrbitControls
+      ref={controlsRef}
+      enabled={shouldEnableControls}
+      enableDamping={enableDamping}
+      dampingFactor={dampingFactor}
+      minDistance={minDistance}
+      maxDistance={maxDistance}
+      minPolarAngle={minPolarAngle}
+      maxPolarAngle={maxPolarAngle}
+      minAzimuthAngle={minAzimuthAngle}
+      maxAzimuthAngle={maxAzimuthAngle}
+      enablePan={enablePan && shouldEnableControls}
+      panSpeed={panSpeed}
+      rotateSpeed={rotateSpeed}
+      target={new Vector3(target[0], target[1], target[2])}
     />
   );
 }
 
-function Background() {
-  return <color attach="background" args={['#060612']} />;
-}
+function ModalBlocker() {
+  const game = useGame();
+  const [currentState, setCurrentState] = useState<string>('play');
 
-function Lights() {
-  const { color, position, intensity } = useControls(
-    'Directional Light',
-    {
-      color: {
-        value: '#ffffff',
-        label: 'Color',
-        hint: 'Color of the directional light',
-      },
-      intensity: {
-        value: 6,
-        min: 0,
-        max: 50,
-        step: 0.1,
-      },
-      position: {
-        value: [4, 3, 1],
-        joystick: 'invertY',
-      },
-    },
-    {
-      collapsed: true,
-      color: '#70a6dc',
-    },
-  );
+  // Listen for state changes
+  useEffect(() => {
+    const handleStateChange = (state: string) => {
+      setCurrentState(state);
+    };
+
+    game.states.on('state', handleStateChange);
+
+    return () => {
+      game.states.off('state', handleStateChange);
+    };
+  }, [game.states]);
+
+  // Show blocker for modal states (not play or pause)
+  const shouldShowBlocker = !['play', 'pause'].includes(currentState);
+
+  if (!shouldShowBlocker) return null;
 
   return (
-    <>
-      <directionalLight castShadow color={color} intensity={intensity} position={position} />
-    </>
+    <mesh
+      position={[0, 0, 0]}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+      }}
+      onPointerUp={(e) => {
+        e.stopPropagation();
+      }}
+      onPointerMove={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <planeGeometry args={[100, 100]} />
+      <meshBasicMaterial transparent opacity={0} />
+    </mesh>
   );
 }
