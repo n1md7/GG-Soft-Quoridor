@@ -3,6 +3,7 @@ import { Show } from '@src/components/utils/Show.tsx';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
+import '@styles/power-bar.scss';
 
 type StateType = 'is-usable' | 'ad-available' | 'disabled';
 type PowerProps = {
