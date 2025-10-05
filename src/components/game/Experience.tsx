@@ -1,4 +1,5 @@
 import { Grid, OrbitControls, Environment } from '@react-three/drei';
+import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { GameOver } from '@src/components/game/GameOver.tsx';
 import { Market } from '@src/components/game/Market.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
@@ -115,20 +116,27 @@ function GridHelper() {
 }
 
 function EnvironmentSetup() {
-  const { preset, intensity } = useControls('Environment', {
-    preset: {
-      value: 'sunset',
-      options: ['sunset', 'dawn', 'night', 'warehouse', 'forest', 'apartment', 'studio', 'city'],
-      label: 'HDRI Preset',
+  const { preset, intensity } = useControls(
+    'Environment',
+    {
+      preset: {
+        value: 'sunset' as PresetsType,
+        options: ['sunset', 'dawn', 'night', 'warehouse', 'forest', 'apartment', 'studio', 'city'] as PresetsType[],
+        label: 'HDRI Preset',
+      },
+      intensity: {
+        value: 0.4,
+        min: 0,
+        max: 2,
+        step: 0.1,
+        label: 'Environment Intensity',
+      },
     },
-    intensity: {
-      value: 0.4,
-      min: 0,
-      max: 2,
-      step: 0.1,
-      label: 'Environment Intensity',
+    {
+      collapsed: true,
+      color: '#70a6dc',
     },
-  });
+  );
 
   return <Environment preset={preset} environmentIntensity={intensity} />;
 }
@@ -196,44 +204,51 @@ function Lights() {
     },
   );
 
-  const { near, far, top, right, bottom, left } = useControls('Shadow Camera', {
-    near: {
-      value: 0.1,
-      min: 0.1,
-      max: 20,
-      step: 0.1,
+  const { near, far, top, right, bottom, left } = useControls(
+    'Shadow Camera',
+    {
+      near: {
+        value: 0.1,
+        min: 0.1,
+        max: 20,
+        step: 0.1,
+      },
+      far: {
+        value: 50,
+        min: 10,
+        max: 100,
+        step: 1,
+      },
+      top: {
+        value: 15,
+        min: 1,
+        max: 50,
+        step: 1,
+      },
+      right: {
+        value: 15,
+        min: 1,
+        max: 50,
+        step: 1,
+      },
+      bottom: {
+        value: -15,
+        min: -50,
+        max: -1,
+        step: 1,
+      },
+      left: {
+        value: -15,
+        min: -50,
+        max: -1,
+        step: 1,
+      },
     },
-    far: {
-      value: 50,
-      min: 10,
-      max: 100,
-      step: 1,
+    {
+      collapsed: true,
+      color: '#70a6dc',
     },
-    top: {
-      value: 15,
-      min: 1,
-      max: 50,
-      step: 1,
-    },
-    right: {
-      value: 15,
-      min: 1,
-      max: 50,
-      step: 1,
-    },
-    bottom: {
-      value: -15,
-      min: -50,
-      max: -1,
-      step: 1,
-    },
-    left: {
-      value: -15,
-      min: -50,
-      max: -1,
-      step: 1,
-    },
-  });
+  );
 
   const ref = useRef<DirectionalLight>(null);
 
@@ -260,7 +275,7 @@ function Lights() {
 
   const { ambientIntensity, ambientColor, fillLightIntensity } = useControls('Ambient Lighting', {
     ambientIntensity: {
-      value: 1.2,
+      value: 1.8,
       min: 0,
       max: 3,
       step: 0.1,
@@ -268,12 +283,12 @@ function Lights() {
       hint: 'Overall scene brightness',
     },
     ambientColor: {
-      value: '#4a5568',
+      value: '#c36120',
       label: 'Ambient Color',
       hint: 'Cool blue-gray for evening atmosphere',
     },
     fillLightIntensity: {
-      value: 0.8,
+      value: 1.8,
       min: 0,
       max: 2,
       step: 0.1,

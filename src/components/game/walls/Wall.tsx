@@ -6,8 +6,8 @@ import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { useWallPosition } from '@src/components/hooks/useWallPosition.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
-import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
-import { BufferGeometry, Euler, Material, Mesh, Vector3 } from 'three';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef, useEffect } from 'react';
+import { BufferGeometry, Euler, Material, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 
 type Props = {
   geometry: BufferGeometry;
@@ -110,6 +110,18 @@ export const Wall = forwardRef(
       },
       [animateTo, position],
     );
+
+    useEffect(() => {
+      if (mesh.current && mesh.current.material && material instanceof MeshStandardMaterial) {
+        const wallMaterial = material as MeshStandardMaterial;
+        wallMaterial.metalness = 0.9;
+        wallMaterial.roughness = 0.15;
+        wallMaterial.envMapIntensity = 2.0;
+        wallMaterial.clearcoat = 0.5;
+        wallMaterial.clearcoatRoughness = 0.05;
+        wallMaterial.needsUpdate = true;
+      }
+    }, [material]);
 
     // const over = useCallback((e: ThreeEvent<PointerEvent>) => {
     //   e.stopPropagation();
