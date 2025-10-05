@@ -69,7 +69,7 @@ export function InGamePowerBar() {
       }}
     >
       <div className="relative">
-        <div className="container">
+        <div className="bar-container">
           <div className="top-line" />
           <div className="bottom-line" />
           {powers.map((power, index) => (
