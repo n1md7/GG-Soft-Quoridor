@@ -7,8 +7,8 @@ import { useGame } from '@src/components/hooks/useGame.ts';
 import { Show } from '@src/components/utils/Show.tsx';
 import { button, useControls } from 'leva';
 import { Perf } from 'r3f-perf';
-import { Suspense, useEffect } from 'react';
-import { Vector3 } from 'three';
+import { Suspense, useEffect, useRef } from 'react';
+import { DirectionalLight, Vector3 } from 'three';
 import { Board } from './board/Board.tsx';
 
 type Props = {
@@ -118,23 +118,56 @@ function Background() {
 }
 
 function Lights() {
-  const { color, position, intensity } = useControls(
+  const { color, position, intensity, mapSize, bias, normalBias, radius } = useControls(
     'Directional Light',
     {
       color: {
-        value: '#ffffff',
+        value: '#ffb366',
         label: 'Color',
-        hint: 'Color of the directional light',
+        hint: 'Evening sun color',
       },
       intensity: {
-        value: 6,
+        value: 3.5,
         min: 0,
         max: 50,
         step: 0.1,
       },
       position: {
-        value: [4, 3, 1],
+        value: [12, 8, 6],
+        step: 0.1,
         joystick: 'invertY',
+      },
+      mapSize: {
+        value: [2048, 2048],
+        step: 1,
+        max: 10000,
+        min: 0,
+        label: 'Shadow Map Size',
+        hint: 'Width and height of the shadow map',
+      },
+      bias: {
+        value: -0.002,
+        min: -0.01,
+        max: 0.01,
+        step: 0.0001,
+        label: 'Shadow Bias',
+        hint: 'Fixes shadow acne/stripes',
+      },
+      normalBias: {
+        value: 0.04,
+        min: 0,
+        max: 0.1,
+        step: 0.001,
+        label: 'Normal Bias',
+        hint: 'Additional bias based on surface normal',
+      },
+      radius: {
+        value: 6,
+        min: 1,
+        max: 20,
+        step: 1,
+        label: 'Shadow Radius',
+        hint: 'Shadow blur/softness',
       },
     },
     {
@@ -143,9 +176,110 @@ function Lights() {
     },
   );
 
+  const { near, far, top, right, bottom, left } = useControls('Shadow Camera', {
+    near: {
+      value: 0.1,
+      min: 0.1,
+      max: 20,
+      step: 0.1,
+    },
+    far: {
+      value: 50,
+      min: 10,
+      max: 100,
+      step: 1,
+    },
+    top: {
+      value: 15,
+      min: 1,
+      max: 50,
+      step: 1,
+    },
+    right: {
+      value: 15,
+      min: 1,
+      max: 50,
+      step: 1,
+    },
+    bottom: {
+      value: -15,
+      min: -50,
+      max: -1,
+      step: 1,
+    },
+    left: {
+      value: -15,
+      min: -50,
+      max: -1,
+      step: 1,
+    },
+  });
+
+  const ref = useRef<DirectionalLight>(null);
+
+  useEffect(() => {
+    if (ref.current?.shadow?.camera) {
+      const camera = ref.current.shadow.camera;
+      camera.near = near;
+      camera.far = far;
+      camera.top = top;
+      camera.right = right;
+      camera.bottom = bottom;
+      camera.left = left;
+      camera.updateProjectionMatrix();
+    }
+  }, [near, far, top, right, bottom, left]);
+
+  useEffect(() => {
+    if (ref.current?.shadow) {
+      ref.current.shadow.bias = bias;
+      ref.current.shadow.normalBias = normalBias;
+      ref.current.shadow.radius = radius;
+    }
+  }, [bias, normalBias, radius]);
+
+  const { ambientIntensity, ambientColor, fillLightIntensity } = useControls('Ambient Lighting', {
+    ambientIntensity: {
+      value: 1.2,
+      min: 0,
+      max: 3,
+      step: 0.1,
+      label: 'Ambient Intensity',
+      hint: 'Overall scene brightness',
+    },
+    ambientColor: {
+      value: '#4a5568',
+      label: 'Ambient Color',
+      hint: 'Cool blue-gray for evening atmosphere',
+    },
+    fillLightIntensity: {
+      value: 0.8,
+      min: 0,
+      max: 2,
+      step: 0.1,
+      label: 'Fill Light',
+      hint: 'Brightens shadows from opposite side',
+    },
+  });
+
   return (
     <>
-      <directionalLight castShadow color={color} intensity={intensity} position={position} />
+      <directionalLight
+        ref={ref}
+        castShadow
+        color={color}
+        intensity={intensity}
+        position={position}
+        shadow-mapSize={mapSize}
+        shadow-camera-near={near}
+        shadow-camera-far={far}
+        shadow-camera-top={top}
+        shadow-camera-right={right}
+        shadow-camera-bottom={bottom}
+        shadow-camera-left={left}
+      />
+      <ambientLight color={ambientColor} intensity={ambientIntensity} />
+      <directionalLight color="#87ceeb" intensity={fillLightIntensity} position={[-8, 4, -4]} />
     </>
   );
 }
