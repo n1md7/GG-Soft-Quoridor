@@ -117,8 +117,6 @@ export const Wall = forwardRef(
         wallMaterial.metalness = 0.9;
         wallMaterial.roughness = 0.15;
         wallMaterial.envMapIntensity = 2.0;
-        wallMaterial.clearcoat = 0.5;
-        wallMaterial.clearcoatRoughness = 0.05;
         wallMaterial.needsUpdate = true;
       }
     }, [material]);

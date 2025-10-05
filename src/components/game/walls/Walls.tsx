@@ -37,8 +37,6 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         material.metalness = 0.7;
         material.roughness = 0.3;
         material.envMapIntensity = 1.8;
-        material.clearcoat = 0.4;
-        material.clearcoatRoughness = 0.1;
         material.needsUpdate = true;
       }
     };
