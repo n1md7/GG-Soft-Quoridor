@@ -69,11 +69,11 @@ export function InGamePowerBar() {
       }}
     >
       <div className="relative">
-        <div className="bar-container">
+        <div className="container">
           <div className="top-line" />
           <div className="bottom-line" />
           {powers.map((power, index) => (
-            <div key={power.key} className="item">
+            <div key={power.key} className="power-item">
               <PowerButton power={power} />
               <Show when={index < powers.length - 1}>
                 <div className="vertical-divider" />
