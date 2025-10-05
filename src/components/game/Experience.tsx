@@ -9,9 +9,10 @@ import { Winner } from '@src/components/game/Winner.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { Show } from '@src/components/utils/Show.tsx';
+import { StateType } from '@src/core/managers/state.manager.ts';
 import { button, useControls } from 'leva';
 import { Perf } from 'r3f-perf';
-import { Suspense, useCallback, useEffect, useRef } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import { Board } from './board/Board.tsx';
 
@@ -62,14 +63,31 @@ export function Experience({ backToLobby }: Props) {
 
       <Suspense>
         <Board />
+        <ModalBlocker />
       </Suspense>
     </>
   );
 }
 
 function CameraControls() {
+  const { states } = useGame();
   const { camera } = useThree();
+  const [currentState, setCurrentState] = useState<string>('play');
   const controlsRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleStateChange = (state: StateType) => {
+      setCurrentState(state);
+    };
+
+    states.on('state', handleStateChange);
+
+    return () => {
+      states.off('state', handleStateChange);
+    };
+  }, [states]);
+
+  const shouldEnableControls = currentState === 'play';
 
   const {
     enableDamping,
@@ -210,6 +228,7 @@ function CameraControls() {
   return (
     <OrbitControls
       ref={controlsRef}
+      enabled={shouldEnableControls}
       enableDamping={enableDamping}
       dampingFactor={dampingFactor}
       minDistance={minDistance}
@@ -218,10 +237,54 @@ function CameraControls() {
       maxPolarAngle={maxPolarAngle}
       minAzimuthAngle={minAzimuthAngle}
       maxAzimuthAngle={maxAzimuthAngle}
-      enablePan={enablePan}
+      enablePan={enablePan && shouldEnableControls}
       panSpeed={panSpeed}
       rotateSpeed={rotateSpeed}
       target={new Vector3(target[0], target[1], target[2])}
     />
+  );
+}
+
+function ModalBlocker() {
+  const game = useGame();
+  const [currentState, setCurrentState] = useState<string>('play');
+
+  // Listen for state changes
+  useEffect(() => {
+    const handleStateChange = (state: string) => {
+      setCurrentState(state);
+    };
+
+    game.states.on('state', handleStateChange);
+
+    return () => {
+      game.states.off('state', handleStateChange);
+    };
+  }, [game.states]);
+
+  // Show blocker for modal states (not play or pause)
+  const shouldShowBlocker = !['play', 'pause'].includes(currentState);
+
+  if (!shouldShowBlocker) return null;
+
+  return (
+    <mesh
+      position={[0, 0, 0]}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+      }}
+      onPointerUp={(e) => {
+        e.stopPropagation();
+      }}
+      onPointerMove={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <planeGeometry args={[100, 100]} />
+      <meshBasicMaterial transparent opacity={0} />
+    </mesh>
   );
 }
