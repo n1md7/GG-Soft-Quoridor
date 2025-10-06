@@ -100,9 +100,9 @@ export const Block = forwardRef(
           ref={colorRef}
           color={defaultColor}
           attach="material"
-          metalness={0.8}
-          roughness={0.2}
-          envMapIntensity={1.5}
+          metalness={0.1}
+          roughness={0.8}
+          envMapIntensity={2.0}
         />
       </mesh>
     );
