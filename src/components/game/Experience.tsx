@@ -18,9 +18,10 @@ import { Board } from './board/Board.tsx';
 
 type Props = {
   backToLobby: () => void;
+  lightingMode?: 'day' | 'night';
 };
 
-export function Experience({ backToLobby }: Props) {
+export function Experience({ backToLobby, lightingMode }: Props) {
   const game = useGame();
   const { hidden } = useDebug();
 
@@ -56,7 +57,7 @@ export function Experience({ backToLobby }: Props) {
         <Perf openByDefault showGraph antialias position="bottom-left" />
       </Show>
 
-      <Lights />
+      <Lights mode={lightingMode} />
       <Environment />
       <Background />
       {/*<GridHelper />*/}
