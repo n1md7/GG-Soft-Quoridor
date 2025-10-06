@@ -64,7 +64,7 @@ export function Experience({ backToLobby, lightingMode }: Props) {
 
       <Suspense>
         <Board />
-        <ModalBlocker />
+        {/*<ModalBlocker />*/}
       </Suspense>
     </>
   );
@@ -88,7 +88,7 @@ function CameraControls() {
     };
   }, [states]);
 
-  const shouldEnableControls = currentState === 'play';
+  // const shouldEnableControls = currentState === 'play';
 
   const {
     enableDamping,
@@ -229,7 +229,7 @@ function CameraControls() {
   return (
     <OrbitControls
       ref={controlsRef}
-      enabled={shouldEnableControls}
+      // enabled={shouldEnableControls}
       enableDamping={enableDamping}
       dampingFactor={dampingFactor}
       minDistance={minDistance}
@@ -238,7 +238,7 @@ function CameraControls() {
       maxPolarAngle={maxPolarAngle}
       minAzimuthAngle={minAzimuthAngle}
       maxAzimuthAngle={maxAzimuthAngle}
-      enablePan={enablePan && shouldEnableControls}
+      // enablePan={enablePan && shouldEnableControls}
       panSpeed={panSpeed}
       rotateSpeed={rotateSpeed}
       target={new Vector3(target[0], target[1], target[2])}
