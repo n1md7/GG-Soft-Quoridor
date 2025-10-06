@@ -44,13 +44,16 @@ export function DayLight() {
       />
 
       {/* Ambient light for overall scene brightness */}
-      <ambientLight color="#e6f3ff" intensity={0.8} />
+      <ambientLight color="#e6f3ff" intensity={0.6} />
 
       {/* Sky light - soft blue fill light from above */}
-      <directionalLight color="#87ceeb" intensity={2} position={[0, 10, 0]} />
+      <directionalLight color="#87ceeb" intensity={1.5} position={[0, 10, 0]} />
 
       {/* Bounce light - subtle warm light from opposite side */}
-      <directionalLight color="#fff8dc" intensity={1} position={[-6, 4, -8]} />
+      <directionalLight color="#fff8dc" intensity={0.8} position={[-6, 4, -8]} />
+
+      {/* Rim light for better object separation */}
+      <directionalLight color="#ffffff" intensity={0.5} position={[8, 2, -6]} />
     </>
   );
 }

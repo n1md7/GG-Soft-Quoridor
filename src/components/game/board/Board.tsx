@@ -3,6 +3,7 @@ import { Path } from '@src/components/game/path/Path.tsx';
 import { Pawns } from '@src/components/game/pawns/Pawns.tsx';
 import { Walls } from '@src/components/game/walls/Walls.tsx';
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { useMaterialEnhancements } from '@src/components/hooks/useMaterialEnhancements.ts';
 import { opponentPathColor, playerPathColor } from '@src/config/highlight.config.ts';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { button, useControls } from 'leva';
@@ -10,6 +11,9 @@ import { useEffect } from 'react';
 
 export const Board = () => {
   const game = useGame();
+
+  // Enhance all materials with better PBR properties
+  useMaterialEnhancements(game.model.materials);
 
   useControls('Board', {
     wireframe: {
@@ -107,8 +111,8 @@ export const Board = () => {
         receiveShadow
         geometry={game.model.nodes.Plate001.geometry}
         material={game.model.materials.PlatformMaterial}
-        position={[7.629, 0.051, 4.179]}
-        scale={[1.6, 0.05, 1.6]}
+        position={[7.629, 0.251, 4.179 + 0.22]}
+        scale={[1.6, 0.25, 1.6]}
       />
       <mesh
         name="Plate000"
@@ -116,8 +120,8 @@ export const Board = () => {
         receiveShadow
         geometry={game.model.nodes.Plate000.geometry}
         material={game.model.materials.PlatformMaterial}
-        position={[7.629, 0.051, -4.181]}
-        scale={[1.6, 0.05, 1.6]}
+        position={[7.629, 0.251, -4.181 - 0.22]}
+        scale={[1.6, 0.25, 1.6]}
       />
     </group>
   );
