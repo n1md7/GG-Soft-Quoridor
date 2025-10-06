@@ -107,7 +107,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[6.796, 0.588, -1.301]}
+        position={[6.796, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -118,7 +118,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[7.036, 0.588, -1.301]}
+        position={[7.036, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -129,7 +129,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[7.276, 0.588, -1.301]}
+        position={[7.276, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -140,7 +140,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[7.516, 0.588, -1.301]}
+        position={[7.516, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -151,7 +151,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[7.756, 0.588, -1.301]}
+        position={[7.756, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -162,7 +162,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[7.996, 0.588, -1.301]}
+        position={[7.996, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -173,7 +173,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[8.236, 0.588, -1.301]}
+        position={[8.236, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -184,7 +184,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[8.476, 0.588, -1.301]}
+        position={[8.476, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -195,7 +195,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[8.716, 0.588, -1.301]}
+        position={[8.716, 0.588, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -206,7 +206,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.opponent}
-        position={[8.956, 0.587, -1.301]}
+        position={[8.956, 0.587, -1.301 + -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -217,7 +217,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[6.796, 0.588, 1.299]}
+        position={[6.796, 0.588, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -228,7 +228,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[7.036, 0.588, 1.299]}
+        position={[7.036, 0.588, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -239,7 +239,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[7.276, 0.588, 1.299]}
+        position={[7.276, 0.588, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -250,7 +250,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[7.516, 0.588, 1.299]}
+        position={[7.516, 0.588, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -261,7 +261,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[7.756, 0.588, 1.299]}
+        position={[7.756, 0.588, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -272,7 +272,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[7.996, 0.588, 1.299]}
+        position={[7.996, 0.588, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -283,7 +283,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[8.236, 0.587, 1.299]}
+        position={[8.236, 0.587, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -294,7 +294,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[8.476, 0.587, 1.299]}
+        position={[8.476, 0.587, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -305,7 +305,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[8.716, 0.587, 1.299]}
+        position={[8.716, 0.587, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -316,7 +316,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[8.956, 0.587, 1.299]}
+        position={[8.956, 0.587, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -328,7 +328,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         ref={extraWall}
         geometry={walls.geometry}
         material={walls.materials.player}
-        position={[9.196, 0.587, 1.299]}
+        position={[9.196, 0.587, 1.299 - -0.05]}
         rotation={[0, 0, -Math.PI / 6]}
         scale={[0.1, 0.5, 1.1]}
       />
@@ -339,7 +339,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={containers.geometry}
         material={containers.materials.player}
-        position={[6.029, -0.001, -1.3]}
+        position={[6.029, -0.001, -1.3 - 0.05]}
         scale={[1.6, 0.25, 1.25]}
       />
       <mesh
@@ -348,7 +348,7 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         receiveShadow
         geometry={containers.geometry}
         material={containers.materials.opponent}
-        position={[6.029, -0.001, 1.3]}
+        position={[6.029, -0.001, 1.3 + 0.05]}
         scale={[1.6, 0.25, 1.25]}
       />
     </>

@@ -18,9 +18,10 @@ import { Board } from './board/Board.tsx';
 
 type Props = {
   backToLobby: () => void;
+  lightingMode?: 'day' | 'night';
 };
 
-export function Experience({ backToLobby }: Props) {
+export function Experience({ backToLobby, lightingMode }: Props) {
   const game = useGame();
   const { hidden } = useDebug();
 
@@ -56,14 +57,14 @@ export function Experience({ backToLobby }: Props) {
         <Perf openByDefault showGraph antialias position="bottom-left" />
       </Show>
 
-      <Lights />
+      <Lights mode={lightingMode} />
       <Environment />
       <Background />
       {/*<GridHelper />*/}
 
       <Suspense>
         <Board />
-        <ModalBlocker />
+        {/*<ModalBlocker />*/}
       </Suspense>
     </>
   );
@@ -87,7 +88,7 @@ function CameraControls() {
     };
   }, [states]);
 
-  const shouldEnableControls = currentState === 'play';
+  // const shouldEnableControls = currentState === 'play';
 
   const {
     enableDamping,
@@ -228,7 +229,7 @@ function CameraControls() {
   return (
     <OrbitControls
       ref={controlsRef}
-      enabled={shouldEnableControls}
+      // enabled={shouldEnableControls}
       enableDamping={enableDamping}
       dampingFactor={dampingFactor}
       minDistance={minDistance}
@@ -237,7 +238,7 @@ function CameraControls() {
       maxPolarAngle={maxPolarAngle}
       minAzimuthAngle={minAzimuthAngle}
       maxAzimuthAngle={maxAzimuthAngle}
-      enablePan={enablePan && shouldEnableControls}
+      // enablePan={enablePan && shouldEnableControls}
       panSpeed={panSpeed}
       rotateSpeed={rotateSpeed}
       target={new Vector3(target[0], target[1], target[2])}
