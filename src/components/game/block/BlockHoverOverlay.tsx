@@ -29,7 +29,7 @@ const OVERLAY_SIZE = 1.8;
 const OVERLAY_HEIGHT = 0.02;
 
 export const BlockHoverOverlay = ({ hoveredPosition }: Props) => {
-  const baseTexture = useLoader(TextureLoader, '/textures/block/hovered-block-no-bg.png');
+  const baseTexture = useLoader(TextureLoader, './textures/block/hovered-block-no-bg.png');
   const createMaterial = useCallback(
     (direction: Positions): MeshBasicMaterial => {
       const texture = baseTexture.clone();
