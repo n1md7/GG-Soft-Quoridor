@@ -7,7 +7,7 @@ import {
   ForwardedBlock,
   Positions,
 } from '@src/components/game/block/block.type.ts';
-import { BlockHoverOverlay } from '@src/components/game/block/BlockHoverOverlay.tsx';
+import { Overlay } from '@src/components/game/block/Overlay.tsx';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { BufferGeometry, Color, Material, Mesh, MeshStandardMaterial } from 'three';
@@ -113,7 +113,7 @@ export const Block = forwardRef(
           roughness={0.8}
           envMapIntensity={2.0}
         />
-        <BlockHoverOverlay hoveredPosition={hoveredPosition} />
+        <Overlay hoveredPosition={hoveredPosition} />
       </mesh>
     );
   },
