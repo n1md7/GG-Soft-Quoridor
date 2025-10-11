@@ -1,93 +1,71 @@
 import { Positions } from '@src/components/game/block/block.type.ts';
 import { useLoader } from '@react-three/fiber';
-import { useMemo } from 'react';
-import { DoubleSide, MeshBasicMaterial, PlaneGeometry, TextureLoader } from 'three';
+import { useCallback, useMemo } from 'react';
+import { DoubleSide, MeshBasicMaterial, MeshBasicMaterialParameters, PlaneGeometry, TextureLoader } from 'three';
 
 type Props = {
   hoveredPosition: Positions | null;
 };
 
+// Rotation mapping for each direction
+const DIRECTION_ROTATIONS: Record<Positions, number> = {
+  TOP: 0,
+  RIGHT: -Math.PI / 2,
+  BOTTOM: Math.PI,
+  LEFT: Math.PI / 2,
+} as const;
+
+// Shared material properties for consistency
+const MATERIAL_CONFIG: MeshBasicMaterialParameters = {
+  transparent: true,
+  opacity: 0.8,
+  side: DoubleSide,
+  depthWrite: false,
+  depthTest: false,
+} as const;
+
+// Geometry constants
+const OVERLAY_SIZE = 1.8;
+const OVERLAY_HEIGHT = 0.02;
+
 export const BlockHoverOverlay = ({ hoveredPosition }: Props) => {
-  // Load the base texture
   const baseTexture = useLoader(TextureLoader, '/textures/block/hovered-block-no-bg.png');
+  const createMaterial = useCallback(
+    (direction: Positions): MeshBasicMaterial => {
+      const texture = baseTexture.clone();
 
-  // Create materials with proper rotations
+      // Apply rotation if needed
+      if (DIRECTION_ROTATIONS[direction] !== 0) {
+        texture.center.set(0.5, 0.5);
+        texture.rotation = DIRECTION_ROTATIONS[direction];
+      }
+
+      texture.needsUpdate = true;
+
+      return new MeshBasicMaterial({
+        map: texture,
+        ...MATERIAL_CONFIG,
+      });
+    },
+    [baseTexture],
+  );
+
   const materials = useMemo(() => {
-    const mats: Record<Positions, MeshBasicMaterial> = {} as any;
+    return {
+      TOP: createMaterial('TOP'),
+      RIGHT: createMaterial('RIGHT'),
+      BOTTOM: createMaterial('BOTTOM'),
+      LEFT: createMaterial('LEFT'),
+    };
+  }, [createMaterial]);
 
-    // TOP: Use original texture (arrow pointing up)
-    const topTexture = baseTexture.clone();
-    topTexture.needsUpdate = true;
-    mats.TOP = new MeshBasicMaterial({
-      map: topTexture,
-      transparent: true,
-      opacity: 0.8,
-      side: DoubleSide,
-      depthWrite: false,
-      depthTest: false, // Back to no depth test for visibility
-    });
-
-    // RIGHT: Rotate 270° (arrow pointing right) - SWAPPED
-    const rightTexture = baseTexture.clone();
-    rightTexture.center.set(0.5, 0.5);
-    rightTexture.rotation = -Math.PI / 2; // Was Math.PI / 2
-    rightTexture.needsUpdate = true;
-    mats.RIGHT = new MeshBasicMaterial({
-      map: rightTexture,
-      transparent: true,
-      opacity: 0.8,
-      side: DoubleSide,
-      depthWrite: false,
-      depthTest: false,
-    });
-
-    // BOTTOM: Rotate 180° (arrow pointing down)
-    const bottomTexture = baseTexture.clone();
-    bottomTexture.center.set(0.5, 0.5);
-    bottomTexture.rotation = Math.PI;
-    bottomTexture.needsUpdate = true;
-    mats.BOTTOM = new MeshBasicMaterial({
-      map: bottomTexture,
-      transparent: true,
-      opacity: 0.8,
-      side: DoubleSide,
-      depthWrite: false,
-      depthTest: false,
-    });
-
-    // LEFT: Rotate 90° (arrow pointing left) - SWAPPED
-    const leftTexture = baseTexture.clone();
-    leftTexture.center.set(0.5, 0.5);
-    leftTexture.rotation = Math.PI / 2; // Was -Math.PI / 2
-    leftTexture.needsUpdate = true;
-    mats.LEFT = new MeshBasicMaterial({
-      map: leftTexture,
-      transparent: true,
-      opacity: 0.8,
-      side: DoubleSide,
-      depthWrite: false,
-      depthTest: false,
-    });
-
-    return mats;
-  }, [baseTexture]);
-
-  // Much larger geometry for full visual coverage
   const geometry = useMemo(() => {
-    const geom = new PlaneGeometry(1.8, 1.8); // 80% bigger for full coverage
-    geom.rotateX(-Math.PI / 2); // Rotate to lie flat on XZ plane
+    const geom = new PlaneGeometry(OVERLAY_SIZE, OVERLAY_SIZE);
+    geom.rotateX(-Math.PI / 2); // Flat on XZ plane
     return geom;
   }, []);
 
   if (!hoveredPosition) return null;
 
-  return (
-    <mesh
-      position={[0, 0.02, 0]} // Very close to block surface
-      geometry={geometry}
-      material={materials[hoveredPosition]}
-      renderOrder={0} // Normal render order
-      frustumCulled={false}
-    />
-  );
+  return <mesh position={[0, OVERLAY_HEIGHT, 0]} geometry={geometry} material={materials[hoveredPosition]} />;
 };
