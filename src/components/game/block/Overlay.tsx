@@ -7,26 +7,24 @@ type Props = {
   hoveredPosition: Positions | null;
 };
 
-// Rotation mapping for each direction
-const DIRECTION_ROTATIONS: Record<Positions, number> = {
+const directionRotations: Record<Positions, number> = {
   TOP: 0,
   RIGHT: -Math.PI / 2,
   BOTTOM: Math.PI,
   LEFT: Math.PI / 2,
 } as const;
 
-// Shared material properties for consistency
-const MATERIAL_CONFIG: MeshBasicMaterialParameters = {
+const materialProps: MeshBasicMaterialParameters = {
   transparent: true,
-  opacity: 0.8,
+  opacity: 0.9,
   side: DoubleSide,
   depthWrite: false,
   depthTest: false,
 } as const;
 
 // Geometry constants
-const OVERLAY_SIZE = 1.8;
-const OVERLAY_HEIGHT = 0.02;
+const OVERLAY_SIZE = 2.2;
+const OVERLAY_HEIGHT = 0.64;
 
 export const Overlay = ({ hoveredPosition }: Props) => {
   const baseTexture = useLoader(TextureLoader, './textures/block/hovered-block-no-bg.png');
@@ -34,17 +32,17 @@ export const Overlay = ({ hoveredPosition }: Props) => {
     (direction: Positions): MeshBasicMaterial => {
       const texture = baseTexture.clone();
 
-      // Apply rotation if needed
-      if (DIRECTION_ROTATIONS[direction] !== 0) {
+      if (directionRotations[direction]) {
         texture.center.set(0.5, 0.5);
-        texture.rotation = DIRECTION_ROTATIONS[direction];
+        texture.rotation = directionRotations[direction];
       }
 
+      // Required to update the texture after modifications
       texture.needsUpdate = true;
 
       return new MeshBasicMaterial({
         map: texture,
-        ...MATERIAL_CONFIG,
+        ...materialProps,
       });
     },
     [baseTexture],
@@ -60,9 +58,10 @@ export const Overlay = ({ hoveredPosition }: Props) => {
   }, [createMaterial]);
 
   const geometry = useMemo(() => {
-    const geom = new PlaneGeometry(OVERLAY_SIZE, OVERLAY_SIZE);
-    geom.rotateX(-Math.PI / 2); // Flat on XZ plane
-    return geom;
+    const geometry = new PlaneGeometry(OVERLAY_SIZE, OVERLAY_SIZE);
+    geometry.rotateX(-Math.PI / 2); // Flat on XZ plane
+
+    return geometry;
   }, []);
 
   if (!hoveredPosition) return null;
