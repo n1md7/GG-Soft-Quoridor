@@ -7,8 +7,9 @@ import {
   ForwardedBlock,
   Positions,
 } from '@src/components/game/block/block.type.ts';
+import { BlockHoverOverlay } from '@src/components/game/block/BlockHoverOverlay.tsx';
 import { useGame } from '@src/components/hooks/useGame.ts';
-import { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
+import { ForwardedRef, forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { BufferGeometry, Color, Material, Mesh, MeshStandardMaterial } from 'three';
 
 type Props = {
@@ -36,6 +37,7 @@ export const Block = forwardRef(
       grid: { getCoordsByName },
     } = useGame();
     const { row, col } = useMemo(() => getCoordsByName(name), [getCoordsByName, name]);
+    const [hoveredPosition, setHoveredPosition] = useState<Positions | null>(null);
 
     const colorRef = useRef<MeshStandardMaterial>(null!);
     const faceIdPositionMap = useRef<Record<number, Positions>>({
@@ -88,10 +90,17 @@ export const Block = forwardRef(
 
           if (!pos) return;
 
+          setHoveredPosition(pos);
           handleOver({ row, col, pos });
         }}
-        onPointerOut={handleOut}
-        onPointerMissed={handleOut}
+        onPointerOut={() => {
+          setHoveredPosition(null);
+          handleOut();
+        }}
+        onPointerMissed={() => {
+          setHoveredPosition(null);
+          handleOut();
+        }}
         geometry={geometry}
         position={position}
         scale={scale}
@@ -104,6 +113,7 @@ export const Block = forwardRef(
           roughness={0.8}
           envMapIntensity={2.0}
         />
+        <BlockHoverOverlay hoveredPosition={hoveredPosition} />
       </mesh>
     );
   },
