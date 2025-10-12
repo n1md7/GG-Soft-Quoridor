@@ -83,7 +83,7 @@ export const Pawn = forwardRef(
             moveUpAnimation.current.remove();
             moveUpAnimation.current = null!;
 
-            sounds.pawnMove.play();
+            sounds.move.pawn.play();
 
             moveDownAnimation.current = new Tween(mesh.current.position)
               .to({ y: origin.y })
@@ -101,7 +101,7 @@ export const Pawn = forwardRef(
 
         return coords.current;
       },
-      [getCoordsFromDestination, percentage, sounds.pawnMove],
+      [getCoordsFromDestination, percentage, sounds.move.pawn],
     );
 
     useCursor(hovered /*'pointer', 'auto', document.body*/);

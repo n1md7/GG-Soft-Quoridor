@@ -69,7 +69,7 @@ export class Player extends Character {
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
     if (this.won()) return;
     if (!this.isMyTurn()) {
-      this.game.sounds.playerError.play();
+      this.game.sounds.player.error.play();
       return console.info('Hold on a sec, not your turn yet!');
     }
 
@@ -123,7 +123,11 @@ export class Player extends Character {
 
     // TODO: When Power is equipped, show possible path, else hide
     const shortestPath = this.getShortestPath(this.getCoords());
-    this.game.player.showShortestPath(shortestPath.map((path) => this.getDestinationFromCoords(path).position));
+    this.game.player.showShortestPath(
+      shortestPath.map((path) => {
+        return this.getDestinationFromCoords(path).position;
+      }),
+    );
   }
 
   override won(): boolean {

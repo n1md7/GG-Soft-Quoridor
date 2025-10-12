@@ -5,6 +5,7 @@ export type Settings = {
   playerName: string;
   difficulty: ModeEnum;
   playerAvatar: string;
+  showView: boolean;
 };
 
 export type SetSettings = Dispatch<SetStateAction<Settings>>;

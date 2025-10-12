@@ -5,8 +5,10 @@ import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useModel } from '@src/components/hooks/useModel.ts';
 import { useSettings } from '@src/components/hooks/useSettings.ts';
 import { GameControls } from '@src/components/ui/GameControls.tsx';
+import { ActionButtons, GameSettings } from '@src/components/ui/GameSettings.tsx';
 import { InGamePowerBar } from '@src/components/ui/InGamePowerBar.tsx';
 import { Loading } from '@src/components/ui/Loading.tsx';
+import { Show } from '@src/components/utils/Show.tsx';
 import { GameContext } from '@src/context/game.context.ts';
 import { Game } from '@src/core/game.class.ts';
 import { Leva } from 'leva';
@@ -49,7 +51,9 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
         </Suspense>
         <InGamePowerBar />
         <GameControls onLightingChange={handleLightingChange} initialLighting={lightingMode} />
+        <GameSettings />
         <div className="canvas-overlay">
+          <ActionButtons />
           <div className="action">
             <button
               onClick={backToLobby}

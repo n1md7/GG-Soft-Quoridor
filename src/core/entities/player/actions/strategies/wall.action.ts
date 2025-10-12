@@ -25,7 +25,7 @@ export class WallAction extends Action {
 
     if (!wall) return console.info('Out of walls');
     if (!this.game.grid.canAddWall(coords)) {
-      this.game.sounds.playerError.play();
+      this.game.sounds.player.error.play();
       return console.info('Cannot add wall here');
     }
 
