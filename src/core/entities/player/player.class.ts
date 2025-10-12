@@ -38,7 +38,7 @@ export class Player extends Character {
     this.walls = model.walls;
     this.pawns = model.pawns;
 
-    this.mode = new Mode();
+    this.mode = new Mode(game);
     this.stats = new Statistics();
     this.actions = new Actions(game);
 
