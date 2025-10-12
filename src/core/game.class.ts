@@ -1,5 +1,6 @@
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { Settings } from '@src/context/settings.context.ts';
+import { AdManager } from '@src/core/managers/ad.manager.ts';
 import { PowerManager } from '@src/core/managers/powers.manager.ts';
 import { GAME_SCORE_KEY } from '@src/core/constants/storage.constants.ts';
 import { Computer } from '@src/core/entities/computer/computer.class.ts';
@@ -14,6 +15,7 @@ import { SoundManager } from '@src/core/managers/sound.manager.ts';
 import { StateManager } from '@src/core/managers/state.manager.ts';
 import { StoreManager } from '@src/core/managers/storage.manager.ts';
 import { TimeManager } from '@src/core/managers/time.manager.ts';
+import { PlatformManager } from '@src/core/managers/platform.manager.ts';
 
 export class Game {
   private static instance: Game;
@@ -31,6 +33,8 @@ export class Game {
   readonly performance: PerformanceManager;
   readonly timer: TimeManager;
   readonly powers: PowerManager;
+  readonly platform: PlatformManager;
+  readonly advertisements: AdManager;
 
   private constructor(
     readonly model: ModelType,
@@ -50,6 +54,8 @@ export class Game {
     this.performance = PerformanceManager.getInstance(this);
     this.timer = TimeManager.getInstance();
     this.powers = PowerManager.getInstance(this);
+    this.platform = PlatformManager.getInstance();
+    this.advertisements = AdManager.getInstance(this);
   }
 
   static getInstance(model: ModelType, settings: Settings) {

@@ -11,11 +11,13 @@ export class PlayState extends GameState {
     this.game.start();
     this.game.timer.start();
     this.game.sounds.background.play();
+    this.game.platform.startGame();
   }
 
   override deactivate() {
     this.game.timer.stop();
     this.game.sounds.background.stop();
+    this.game.platform.stopGame();
 
     super.deactivate();
   }

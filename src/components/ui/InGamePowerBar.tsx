@@ -92,7 +92,7 @@ type PowerButtonProps = {
 };
 
 function PowerButton({ power }: PowerButtonProps) {
-  const { inventory, market, powers } = useGame();
+  const { inventory, market, powers, advertisements } = useGame();
 
   const [state, setState] = useState<StateType>(power.state);
 
@@ -103,16 +103,17 @@ function PowerButton({ power }: PowerButtonProps) {
     });
   }, [state]);
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback(async () => {
     switch (state) {
       case 'is-usable':
         powers.use(power.key);
         break;
       case 'ad-available':
+        await advertisements.showAd();
         inventory.unlockViaAd(power.key);
         break;
     }
-  }, [inventory, power.key, powers, state]);
+  }, [inventory, power.key, powers, state, advertisements]);
 
   const onPurchaseAction = useCallback(
     (key: PowerEnum) => {

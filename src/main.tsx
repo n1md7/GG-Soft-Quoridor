@@ -16,7 +16,7 @@ createRoot(documentRoot).render(
 );
 
 console.info(
-  `%c Game version is %c ${import.meta.env.VITE_RELEASE_VERSION}`,
+  `%c Game version is %c ${import.meta.env.VITE_RELEASE_VERSION || 'development'}`,
   'color: white; background: black; padding: 4px 8px;',
   'color: black; background: white; padding: 4px 8px; font-weight: bold;',
 );
