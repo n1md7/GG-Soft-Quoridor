@@ -37,4 +37,12 @@ export class CrazyStrategy extends Platform {
   override async requestAd(fn: AdFn): Promise<void> {
     await this.crazy.ad.requestAd('rewarded', fn);
   }
+
+  override async getUserInfo() {
+    if (this.crazy.user.isUserAccountAvailable) {
+      return this.crazy.user.getUser();
+    }
+
+    return super.getUserInfo();
+  }
 }

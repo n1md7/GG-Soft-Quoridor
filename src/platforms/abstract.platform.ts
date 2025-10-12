@@ -35,4 +35,11 @@ export class Platform {
 
     return Promise.resolve();
   }
+
+  getUserInfo() {
+    return Promise.resolve({
+      username: 'Guest',
+      profilePictureUrl: '',
+    });
+  }
 }

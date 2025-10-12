@@ -8,7 +8,6 @@ import { GameControls } from '@src/components/ui/GameControls.tsx';
 import { ActionButtons, GameSettings } from '@src/components/ui/GameSettings.tsx';
 import { InGamePowerBar } from '@src/components/ui/InGamePowerBar.tsx';
 import { Loading } from '@src/components/ui/Loading.tsx';
-import { Show } from '@src/components/utils/Show.tsx';
 import { GameContext } from '@src/context/game.context.ts';
 import { Game } from '@src/core/game.class.ts';
 import { Leva } from 'leva';

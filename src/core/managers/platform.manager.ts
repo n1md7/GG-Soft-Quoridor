@@ -63,4 +63,8 @@ export class PlatformManager {
   async requestAd(fn: AdFn): Promise<void> {
     await this.platform.requestAd(fn);
   }
+
+  async getUserInfo() {
+    return this.platform.getUserInfo();
+  }
 }
