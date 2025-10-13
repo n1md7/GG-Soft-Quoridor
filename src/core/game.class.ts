@@ -13,6 +13,7 @@ import { PerformanceManager } from '@src/core/managers/performance.manager.ts';
 import { RewardManager } from '@src/core/managers/reward.manager.ts';
 import { SoundManager } from '@src/core/managers/sound.manager.ts';
 import { StateManager } from '@src/core/managers/state.manager.ts';
+import { StatusManager } from '@src/core/managers/status.manager.ts';
 import { StoreManager } from '@src/core/managers/storage.manager.ts';
 import { TimeManager } from '@src/core/managers/time.manager.ts';
 import { PlatformManager } from '@src/core/managers/platform.manager.ts';
@@ -35,6 +36,7 @@ export class Game {
   readonly powers: PowerManager;
   readonly platform: PlatformManager;
   readonly advertisements: AdManager;
+  readonly status: StatusManager;
 
   private constructor(
     readonly model: ModelType,
@@ -56,6 +58,7 @@ export class Game {
     this.powers = PowerManager.getInstance(this);
     this.platform = PlatformManager.getInstance();
     this.advertisements = AdManager.getInstance(this);
+    this.status = StatusManager.getInstance();
   }
 
   static getInstance(model: ModelType, settings: Settings) {

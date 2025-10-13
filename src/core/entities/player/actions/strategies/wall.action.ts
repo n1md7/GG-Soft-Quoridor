@@ -23,10 +23,11 @@ export class WallAction extends Action {
 
     const wall = this.walls.current.player.getWall();
 
-    if (!wall) return console.info('Out of walls');
+    if (!wall) return this.game.status.sendPlayerMessage('You have no walls left');
     if (!this.game.grid.canAddWall(coords)) {
       this.game.sounds.player.error.play();
-      return console.info('Cannot add wall here');
+
+      return this.game.status.sendPlayerMessage('You cannot place a wall here');
     }
 
     this.game.grid.createRestorePoint();
@@ -39,7 +40,9 @@ export class WallAction extends Action {
     this.game.grid.restoreLatest();
     this.game.grid.resetRestorePoints();
 
-    if (gameIsBlocked) return console.info('Cannot place wall here, it blocks the game completely!');
+    if (gameIsBlocked) {
+      return this.game.status.sendPlayerMessage('You cannot place a wall here, it blocks the game completely!');
+    }
 
     this.game.player.stats.addMove();
     this.game.player.stats.addWall();

@@ -5,6 +5,7 @@ import { Environment } from '@src/components/game/Environment.tsx';
 import { GameOver } from '@src/components/game/GameOver.tsx';
 import { Lights } from '@src/components/game/Lights.tsx';
 import { Market } from '@src/components/game/Market.tsx';
+import { Room } from '@src/components/game/Room.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
@@ -63,6 +64,7 @@ export function Experience({ backToLobby, lightingMode }: Props) {
       {/*<GridHelper />*/}
 
       <Suspense>
+        <Room />
         <Board />
         {/*<ModalBlocker />*/}
       </Suspense>
@@ -73,104 +75,6 @@ export function Experience({ backToLobby, lightingMode }: Props) {
 function CameraControls() {
   const { camera } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
-
-  const {
-    enableDamping,
-    dampingFactor,
-    minDistance,
-    maxDistance,
-    minPolarAngle,
-    maxPolarAngle,
-    minAzimuthAngle,
-    maxAzimuthAngle,
-    panSpeed,
-    rotateSpeed,
-    target,
-  } = useControls(
-    'Camera Controls',
-    {
-      target: {
-        value: [0, 0, 0],
-        step: 0.1,
-        label: 'Look At Target',
-      },
-      enableDamping: {
-        value: true,
-        label: 'Enable Damping',
-      },
-      dampingFactor: {
-        value: 0.05,
-        min: 0.01,
-        max: 0.2,
-        step: 0.01,
-        label: 'Damping Factor',
-      },
-      minDistance: {
-        value: 8,
-        min: 6,
-        max: 15,
-        step: 0.5,
-        label: 'Min Zoom Distance',
-      },
-      maxDistance: {
-        value: 18,
-        min: 10,
-        max: 25,
-        step: 1,
-        label: 'Max Zoom Distance',
-      },
-      minPolarAngle: {
-        value: Math.PI / 8,
-        min: 0,
-        max: Math.PI / 4,
-        step: 0.01,
-        label: 'Min Vertical Angle (22.5°)',
-      },
-      maxPolarAngle: {
-        value: Math.PI / 2,
-        min: Math.PI / 3,
-        max: Math.PI * 0.6,
-        step: 0.01,
-        label: 'Max Vertical Angle (90°)',
-      },
-      minAzimuthAngle: {
-        value: -Math.PI / 2,
-        min: -Math.PI,
-        max: 0,
-        step: 0.01,
-        label: 'Min Horizontal Angle (-90°)',
-      },
-      maxAzimuthAngle: {
-        value: Math.PI / 2,
-        min: 0,
-        max: Math.PI,
-        step: 0.01,
-        label: 'Max Horizontal Angle (90°)',
-      },
-      enablePan: {
-        value: true,
-        label: 'Enable Pan',
-      },
-      panSpeed: {
-        value: 1,
-        min: 0.1,
-        max: 5,
-        step: 0.1,
-        label: 'Pan Speed',
-      },
-      rotateSpeed: {
-        value: 1,
-        min: 0.1,
-        max: 5,
-        step: 0.1,
-        label: 'Rotate Speed',
-      },
-    },
-    {
-      collapsed: true,
-      color: '#2d5a87',
-    },
-  );
 
   const setCameraPosition = useCallback(
     (position: [number, number, number], lookAt: [number, number, number]) => {
@@ -213,17 +117,18 @@ function CameraControls() {
     <OrbitControls
       ref={controlsRef}
       // enabled={shouldEnableControls}
-      enableDamping={enableDamping}
-      dampingFactor={dampingFactor}
-      minDistance={minDistance}
-      maxDistance={maxDistance}
-      minPolarAngle={minPolarAngle}
-      maxPolarAngle={maxPolarAngle}
-      minAzimuthAngle={minAzimuthAngle}
-      maxAzimuthAngle={maxAzimuthAngle}
-      panSpeed={panSpeed}
-      rotateSpeed={rotateSpeed}
-      target={new Vector3(target[0], target[1], target[2])}
+      enableDamping={true}
+      dampingFactor={0.1}
+      minDistance={1}
+      maxDistance={10}
+      minPolarAngle={Math.PI / 6}
+      maxPolarAngle={Math.PI / 2.1}
+      minAzimuthAngle={-Math.PI / 4}
+      maxAzimuthAngle={Math.PI / 4}
+      panSpeed={0.5}
+      rotateSpeed={0.5}
+      zoomSpeed={0.5}
+      target={new Vector3(0, 0, 0)}
     />
   );
 }

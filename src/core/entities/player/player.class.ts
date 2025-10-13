@@ -70,13 +70,15 @@ export class Player extends Character {
     if (this.won()) return;
     if (!this.isMyTurn()) {
       this.game.sounds.player.error.play();
-      return console.info('Hold on a sec, not your turn yet!');
+      return this.game.status.sendPlayerMessage('Hold on a sec, it is not your turn yet!');
     }
 
     const finishLineCoords = this.getFinishLineCoords();
     const [notFound] = this.game.grid.findShortestPath(this.getCoords(), finishLineCoords);
 
-    if (notFound) return console.info('You cannot move there, you are blocking the path completely!');
+    if (notFound) {
+      return this.game.status.sendPlayerMessage('You cannot move there, path is blocked!');
+    }
 
     this.blocks.current.hidePossibleMoves();
     this.pawns.current.player.setHighlight(false);

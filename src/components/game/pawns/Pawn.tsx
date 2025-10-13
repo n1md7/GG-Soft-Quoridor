@@ -7,9 +7,20 @@ import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { highlightColor } from '@src/config/highlight.config.ts';
+import { StatusManager } from '@src/core/managers/status.manager.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
-import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import { Float, Text } from '@react-three/drei';
+import {
+  ElementRef,
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { BufferGeometry, Material, Mesh, Vector3 } from 'three';
 
 type Props = {
@@ -18,6 +29,7 @@ type Props = {
   position: [number, number, number];
   scale: [number, number, number];
   name: string;
+  isPlayer?: boolean;
   handleClick?: (coords: CoordsType) => void;
   wireframe?: boolean;
   castShadow?: boolean;
@@ -25,7 +37,7 @@ type Props = {
 };
 
 export const Pawn = forwardRef(
-  ({ geometry, position, name, scale, material, handleClick }: Props, ref: ForwardedRef<ForwardedPawn>) => {
+  ({ geometry, position, name, scale, material, handleClick, isPlayer }: Props, ref: ForwardedRef<ForwardedPawn>) => {
     const [hovered, set] = useState(false);
 
     const percentage = usePercentage();
@@ -39,6 +51,7 @@ export const Pawn = forwardRef(
     const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const moveDownAnimation = useRef<Tween<Vector3>>(null!);
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
+    const text = useRef<ElementRef<typeof Text>>(null!);
 
     const setHighlight = useCallback(
       (show: boolean) => {
@@ -138,6 +151,20 @@ export const Pawn = forwardRef(
       if (moveDownAnimation.current) moveDownAnimation.current.update();
     });
 
+    useEffect(() => {
+      const off = StatusManager.getInstance().onPlayerMessage((message) => {
+        if (!isPlayer) return;
+        if (!text.current) return;
+
+        text.current.text = message;
+        setTimeout(() => {
+          if (text.current) text.current.text = '';
+        }, 4000);
+      });
+
+      return () => off();
+    }, [isPlayer]);
+
     return (
       <mesh
         ref={mesh}
@@ -161,6 +188,24 @@ export const Pawn = forwardRef(
           handleClick?.(coords.current);
         }}
       >
+        <Float>
+          <Text
+            ref={text}
+            font="./fonts/bebas-neue-v9-latin-regular.woff"
+            scale={1.5}
+            maxWidth={20.0}
+            lineHeight={1}
+            letterSpacing={0.05}
+            anchorX="center"
+            anchorY="middle"
+            color="#ffffcc"
+            fontSize={0.5}
+            textAlign="center"
+            position={[0.0, 2.0, 0]}
+          >
+            <meshBasicMaterial toneMapped={false} />
+          </Text>
+        </Float>
         <Outlines visible={showOutline} thickness={4} color={highlightColor} />
       </mesh>
     );
