@@ -10,6 +10,7 @@ export class GridManager {
   private grid: CellType[][] = [];
   private restorePoints: [number, CellType][] = [];
   private saveRestorePoints = false;
+  private overlay = true;
 
   private constructor() {
     this.grid = this.createGrid();
@@ -31,6 +32,18 @@ export class GridManager {
     }
 
     return GridManager.instance;
+  }
+
+  showOverlay() {
+    this.overlay = true;
+  }
+
+  hideOverlay() {
+    this.overlay = false;
+  }
+
+  isOverlayVisible() {
+    return this.overlay;
   }
 
   /**

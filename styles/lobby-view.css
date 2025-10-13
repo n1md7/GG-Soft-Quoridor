@@ -427,10 +427,16 @@
         background-position: left;
       }
 
-      .volume-settings {
+      .volume-up {
         background-image: url('@assets/volume-icons.svg');
         background-size: 200%;
         background-position: right;
+      }
+
+      .volume-mute {
+        background-image: url('@assets/volume-icons.svg');
+        background-size: 200%;
+        background-position: left;
       }
     }
   }

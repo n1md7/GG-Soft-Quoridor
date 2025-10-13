@@ -59,7 +59,7 @@ export const Board = () => {
   }, [game.model.walls]);
 
   return (
-    <group dispose={null}>
+    <group dispose={null} scale={0.35} position={[0, 0.8, 0]}>
       <Path h={0.07} name="Path Opponent" color={opponentPathColor} show={true} ref={game.model.path.opponent} />
       <Path h={0.08} name="Path Player" color={playerPathColor} show={true} ref={game.model.path.player} />
       <Blocks

@@ -20,7 +20,6 @@ export function LeaderBoard() {
                 <div className="player-container">
                   <div className="rank top">1</div>
                   <div className="player-icon top"></div>
-
                   <div className="name-details">
                     <div className="title">Player's Name</div>
                     <div className="player-name">Harry</div>

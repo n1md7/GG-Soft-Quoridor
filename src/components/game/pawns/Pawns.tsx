@@ -66,6 +66,7 @@ export const Pawns = forwardRef(({ geometry, materials, playerClick }: Props, re
         name="Pawn001"
         castShadow
         receiveShadow
+        isPlayer
         geometry={geometry}
         handleClick={playerClick}
         material={materials.player}

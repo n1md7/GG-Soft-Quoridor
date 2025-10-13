@@ -38,7 +38,7 @@ export class Player extends Character {
     this.walls = model.walls;
     this.pawns = model.pawns;
 
-    this.mode = new Mode();
+    this.mode = new Mode(game);
     this.stats = new Statistics();
     this.actions = new Actions(game);
 
@@ -69,14 +69,16 @@ export class Player extends Character {
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
     if (this.won()) return;
     if (!this.isMyTurn()) {
-      this.game.sounds.playerError.play();
-      return console.info('Hold on a sec, not your turn yet!');
+      this.game.sounds.player.error.play();
+      return this.game.status.sendPlayerMessage('Hold on a sec, it is not your turn yet!');
     }
 
     const finishLineCoords = this.getFinishLineCoords();
     const [notFound] = this.game.grid.findShortestPath(this.getCoords(), finishLineCoords);
 
-    if (notFound) return console.info('You cannot move there, you are blocking the path completely!');
+    if (notFound) {
+      return this.game.status.sendPlayerMessage('You cannot move there, path is blocked!');
+    }
 
     this.blocks.current.hidePossibleMoves();
     this.pawns.current.player.setHighlight(false);
@@ -123,7 +125,11 @@ export class Player extends Character {
 
     // TODO: When Power is equipped, show possible path, else hide
     const shortestPath = this.getShortestPath(this.getCoords());
-    this.game.player.showShortestPath(shortestPath.map((path) => this.getDestinationFromCoords(path).position));
+    this.game.player.showShortestPath(
+      shortestPath.map((path) => {
+        return this.getDestinationFromCoords(path).position;
+      }),
+    );
   }
 
   override won(): boolean {

@@ -1,5 +1,6 @@
 import { Positions } from '@src/components/game/block/block.type.ts';
 import { useLoader } from '@react-three/fiber';
+import { useGame } from '@src/components/hooks/useGame.ts';
 import { useCallback, useMemo } from 'react';
 import { DoubleSide, MeshBasicMaterial, MeshBasicMaterialParameters, PlaneGeometry, TextureLoader } from 'three';
 
@@ -27,6 +28,7 @@ const OVERLAY_SIZE = 2.2;
 const OVERLAY_HEIGHT = 0.64;
 
 export const Overlay = ({ hoveredPosition }: Props) => {
+  const { grid } = useGame();
   const baseTexture = useLoader(TextureLoader, './textures/block/hovered-block-no-bg.png');
   const createMaterial = useCallback(
     (direction: Positions): MeshBasicMaterial => {
@@ -64,7 +66,7 @@ export const Overlay = ({ hoveredPosition }: Props) => {
     return geometry;
   }, []);
 
-  if (!hoveredPosition) return null;
+  if (!hoveredPosition || !grid.isOverlayVisible()) return null;
 
   return <mesh position={[0, OVERLAY_HEIGHT, 0]} geometry={geometry} material={materials[hoveredPosition]} />;
 };

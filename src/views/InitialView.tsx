@@ -2,12 +2,26 @@ import LogoImg from '@assets/quoridor-logo.png';
 import { useProgress } from '@react-three/drei';
 import { ProgressBar } from '@src/components/ui/ProgressBar.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
+import { PlatformManager } from '@src/core/managers/platform.manager.ts';
+import { useEffect } from 'react';
+
+const platform = PlatformManager.getInstance();
 
 type Props = {
   next: () => void;
 };
 export function InitialView({ next }: Readonly<Props>) {
   const { loaded, total } = useProgress();
+
+  useEffect(() => {
+    platform.loadingStarted().catch();
+  }, []);
+
+  useEffect(() => {
+    if (loaded === total) {
+      platform.loadingFinished().catch();
+    }
+  }, [loaded, total]);
 
   return (
     <div className="initial-view">
