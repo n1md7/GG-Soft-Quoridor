@@ -51,7 +51,6 @@ export const Pawn = forwardRef(
     const moveUpAnimation = useRef<Tween<Vector3>>(null!);
     const moveDownAnimation = useRef<Tween<Vector3>>(null!);
     const moveToAnimation = useRef<Tween<Vector3>>(null!);
-    const text = useRef<ElementRef<typeof Text>>(null!);
 
     const setHighlight = useCallback(
       (show: boolean) => {
@@ -151,20 +150,6 @@ export const Pawn = forwardRef(
       if (moveDownAnimation.current) moveDownAnimation.current.update();
     });
 
-    useEffect(() => {
-      const off = StatusManager.getInstance().onPlayerMessage((message) => {
-        if (!isPlayer) return;
-        if (!text.current) return;
-
-        text.current.text = message;
-        setTimeout(() => {
-          if (text.current) text.current.text = '';
-        }, 4000);
-      });
-
-      return () => off();
-    }, [isPlayer]);
-
     return (
       <mesh
         ref={mesh}
@@ -188,26 +173,54 @@ export const Pawn = forwardRef(
           handleClick?.(coords.current);
         }}
       >
-        <Float>
-          <Text
-            ref={text}
-            font="./fonts/bebas-neue-v9-latin-regular.woff"
-            scale={1.5}
-            maxWidth={20.0}
-            lineHeight={1}
-            letterSpacing={0.05}
-            anchorX="center"
-            anchorY="middle"
-            color="#ffffcc"
-            fontSize={0.5}
-            textAlign="center"
-            position={[0.0, 2.0, 0]}
-          >
-            <meshBasicMaterial toneMapped={false} />
-          </Text>
-        </Float>
+        <Notification isPlayer={isPlayer} />
         <Outlines visible={showOutline} thickness={4} color={highlightColor} />
       </mesh>
     );
   },
 );
+
+type NotificationProps = {
+  isPlayer?: boolean;
+};
+
+function Notification({ isPlayer }: NotificationProps) {
+  const text = useRef<ElementRef<typeof Text>>(null!);
+  const timeout = useRef<NodeJS.Timeout>(null!);
+
+  useEffect(() => {
+    const off = StatusManager.getInstance().onPlayerMessage((message) => {
+      if (!isPlayer) return;
+      if (!text.current) return;
+
+      clearTimeout(timeout.current);
+      text.current.text = message;
+      timeout.current = setTimeout(() => {
+        if (text.current) text.current.text = '';
+      }, 4000);
+    });
+
+    return () => off();
+  }, [isPlayer]);
+
+  return (
+    <Float>
+      <Text
+        ref={text}
+        font="./fonts/bebas-neue-v9-latin-regular.woff"
+        scale={1.5}
+        maxWidth={20.0}
+        lineHeight={1}
+        letterSpacing={0.05}
+        anchorX="center"
+        anchorY="middle"
+        color="#ffffcc"
+        fontSize={0.5}
+        textAlign="center"
+        position={[-1.0, 3.0, 0]}
+      >
+        <meshBasicMaterial toneMapped={false} />
+      </Text>
+    </Float>
+  );
+}

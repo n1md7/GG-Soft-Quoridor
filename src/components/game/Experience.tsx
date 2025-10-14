@@ -17,6 +17,26 @@ import { Perf } from 'r3f-perf';
 import { Vector3 } from 'three';
 import { Board } from './board/Board.tsx';
 
+const presets = {
+  optimal: {
+    rotation: {
+      isEuler: true,
+      _x: -0.7937642683129335,
+      _y: -0.0018857097026699745,
+      _z: -0.0019175252502213046,
+      _order: 'XYZ',
+    },
+    position: {
+      x: -0.027406773025727603,
+      y: 4.652590366491641,
+      z: 3.718871207924712,
+    },
+    zoom: 1,
+  },
+};
+
+type Preset = typeof presets.optimal;
+
 type Props = {
   backToLobby: () => void;
   lightingMode?: 'day' | 'night';
@@ -77,40 +97,21 @@ function CameraControls() {
   const controlsRef = useRef<OrbitControlsImpl>(null);
 
   const setCameraPosition = useCallback(
-    (position: [number, number, number], lookAt: [number, number, number]) => {
-      camera.position.set(position[0], position[1], position[2]);
+    (preset: Preset) => {
+      camera.position.set(preset.position.x, preset.position.y, preset.position.z);
+      camera.rotation.set(preset.rotation._x, preset.rotation._y, preset.rotation._z);
+      camera.zoom = preset.zoom;
+      camera.updateProjectionMatrix();
       if (controlsRef.current) {
-        controlsRef.current.target.set(lookAt[0], lookAt[1], lookAt[2]);
+        controlsRef.current.target.set(0, 0, 0);
         controlsRef.current.update();
       }
     },
     [camera],
   );
 
-  useControls(
-    'Camera Presets',
-    {
-      'Optimal Gaming View': button(() => {
-        setCameraPosition([0, 8, 12], [0, 0, 0]);
-      }),
-      'Strategic Overview': button(() => {
-        setCameraPosition([0, 12, 4], [0, 0, 0]);
-      }),
-      'Side Analysis': button(() => {
-        setCameraPosition([10, 6, 0], [0, 0, 0]);
-      }),
-      'Player Perspective': button(() => {
-        setCameraPosition([2, 4, 8], [0, 0, 0]);
-      }),
-    },
-    {
-      collapsed: true,
-      color: '#4a90e2',
-    },
-  );
-
   useEffect(() => {
-    setCameraPosition([0, 8, 12], [0, 0, 0]);
+    setCameraPosition(presets.optimal);
   }, [setCameraPosition]);
 
   return (
