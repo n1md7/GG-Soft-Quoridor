@@ -19,16 +19,9 @@ export const useSettings = () => {
     [setSettings, setDifficulty, setName, setAvatar],
   );
 
-  const show = () => update({ showView: true });
-  const hide = () => update({ showView: false });
-  const toggle = () => update({ showView: !settings.showView });
-
   return {
     settings,
     update,
     sounds,
-    show,
-    hide,
-    toggle,
   };
 };

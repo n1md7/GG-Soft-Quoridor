@@ -19,7 +19,6 @@ export function App() {
     playerName: getName('Anonymous'),
     playerAvatar: getAvatar('TODO: default avatar src'),
     difficulty: getDifficulty(ModeEnum.Medium),
-    showView: false,
   });
 
   const backToLobby = () => setGameState('Lobby');
