@@ -1,11 +1,20 @@
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { useSettings } from '@src/components/hooks/useSettings.ts';
 import { PowerButton, PowerProps, StateType } from '@src/components/ui/PowerButton.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
-import { useMemo } from 'react';
+import classNames from 'classnames';
+import { useCallback, useMemo, useState } from 'react';
 import '@styles/power-bar.scss';
 
-export function InGamePowerBar() {
+type LightingMode = 'day' | 'night';
+
+type Props = {
+  onLightingChange: (mode: LightingMode) => void;
+  initialLighting: LightingMode;
+};
+
+export function InGamePowerBar(props: Props) {
   const { inventory } = useGame();
 
   const powers: PowerProps[] = useMemo(
@@ -64,6 +73,10 @@ export function InGamePowerBar() {
         <div className="container">
           <div className="top-line" />
           <div className="bottom-line" />
+
+          <ActionButtons {...props} />
+          <div className="vertical-divider mx-10" />
+
           {powers.map((power, index) => (
             <div key={power.key} className="power-item">
               <PowerButton power={power} />
@@ -75,5 +88,51 @@ export function InGamePowerBar() {
         </div>
       </div>
     </div>
+  );
+}
+
+export function ActionButtons({ initialLighting, onLightingChange }: Props) {
+  const { sounds } = useSettings();
+  const [muted, setMuted] = useState(sounds.isMuted());
+  const [lightingMode, setLightingMode] = useState<LightingMode>(initialLighting);
+
+  const muteClass = useMemo(
+    () =>
+      classNames('icon', {
+        'volume-mute': muted,
+        'volume-up': !muted,
+      }),
+    [muted],
+  );
+
+  const handleMute = useCallback(() => {
+    setMuted(!muted);
+    sounds.toggleSound();
+  }, [muted, sounds]);
+
+  const handleLightingToggle = useCallback(() => {
+    const newMode: LightingMode = lightingMode === 'day' ? 'night' : 'day';
+    setLightingMode(newMode);
+    onLightingChange?.(newMode);
+  }, [lightingMode, onLightingChange]);
+
+  return (
+    <>
+      <div className="settings-item">
+        <div className="settings-container">
+          <div className="button" onClick={handleLightingToggle}>
+            <div className="icon">️{lightingMode === 'day' ? '☀️' : '🌙'}</div>
+          </div>
+        </div>
+      </div>
+      <div className="vertical-divider mx-1" />
+      <div className="settings-item">
+        <div className="settings-container">
+          <div className="button" onClick={handleMute}>
+            <div className={muteClass}>️{muted ? '🔇' : '🔊'}</div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
