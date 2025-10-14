@@ -90,10 +90,10 @@ export function Experience({ backToLobby, lightingMode }: Props) {
         dampingFactor={0.1}
         minDistance={1}
         maxDistance={10}
-        minPolarAngle={Math.PI / 6}
-        maxPolarAngle={Math.PI / 2.1}
-        minAzimuthAngle={-Math.PI / 4}
-        maxAzimuthAngle={Math.PI / 4}
+        minPolarAngle={0}
+        maxPolarAngle={Math.PI / 3}
+        minAzimuthAngle={-Math.PI / 8}
+        maxAzimuthAngle={Math.PI / 8}
         panSpeed={0.5}
         rotateSpeed={0.5}
         zoomSpeed={0.5}
