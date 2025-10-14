@@ -4,7 +4,6 @@ import { Experience } from '@src/components/game/Experience.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useModel } from '@src/components/hooks/useModel.ts';
 import { useSettings } from '@src/components/hooks/useSettings.ts';
-import { GameControls } from '@src/components/ui/GameControls.tsx';
 import { InGamePowerBar } from '@src/components/ui/InGamePowerBar.tsx';
 import { Loading } from '@src/components/ui/Loading.tsx';
 import { GameContext } from '@src/context/game.context.ts';
@@ -47,15 +46,14 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
             <Experience backToLobby={backToLobby} lightingMode={lightingMode} />
           </Canvas>
         </Suspense>
-        <InGamePowerBar />
-        <GameControls onLightingChange={handleLightingChange} initialLighting={lightingMode} />
+        <InGamePowerBar onLightingChange={handleLightingChange} initialLighting={lightingMode} />
         <div className="canvas-overlay">
           <div className="action">
             <button
               onClick={backToLobby}
               className="m-[5px] rounded bg-sky-950 px-4 py-2 font-semibold text-white shadow transition-colors duration-200 hover:cursor-pointer hover:bg-sky-800 focus:ring-2 focus:ring-sky-400 focus:ring-offset-2"
             >
-              Back to lobby
+              🔙
             </button>
           </div>
         </div>

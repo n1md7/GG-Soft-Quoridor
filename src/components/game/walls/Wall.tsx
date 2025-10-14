@@ -63,7 +63,7 @@ export const Wall = forwardRef(
                 moveToAnimation.current.remove();
                 moveToAnimation.current = null!;
 
-                sounds.wallPlacement.play();
+                sounds.move.wall.play();
 
                 moveDownAnimation.current = new Tween(mesh.current.position)
                   .to({ y: position.y })
@@ -80,7 +80,7 @@ export const Wall = forwardRef(
           })
           .start();
       },
-      [percentage, sounds.wallPlacement],
+      [percentage, sounds.move.wall],
     );
 
     const moveTo = useCallback(

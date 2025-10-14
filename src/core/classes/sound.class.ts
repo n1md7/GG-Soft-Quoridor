@@ -101,6 +101,10 @@ export class Sound {
     this.emit('volume');
   }
 
+  getVolume(): number {
+    return this.audio.volume;
+  }
+
   private emit(event: SoundEvent, payload?: unknown): void {
     this.eventListeners.get(event)?.forEach((cb) => cb(payload));
   }

@@ -1,17 +1,18 @@
 import { useStorage } from '@src/components/hooks/useStorage';
 import { Show } from '@src/components/utils/Show';
 import { ModeEnum } from '@src/core/enums/mode.enum';
+import { PlatformManager } from '@src/core/managers/platform.manager.ts';
 import { Gameplay } from '@src/views/GamePlay';
 import { InitialView } from '@src/views/InitialView';
 import { LobbyView } from '@src/views/LobbyView';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Settings, SettingsContext } from './context/settings.context';
 import { Provider } from '@radix-ui/react-tooltip';
 
-type GameState = 'Initial' | 'Lobby' | 'Gameplay';
+type GameState = 'Preload' | 'Initial' | 'Lobby' | 'Gameplay';
 
 export function App() {
-  const [gameState, setGameState] = useState<GameState>('Initial');
+  const [gameState, setGameState] = useState<GameState>('Preload');
   const { getName, getDifficulty, getAvatar } = useStorage();
 
   const [settings, setSettings] = useState<Settings>({
@@ -30,6 +31,19 @@ export function App() {
 
   const isNameValid = () => settings.playerName.trim() !== '';
   const isModeValid = () => settings.difficulty.trim() !== '';
+
+  useEffect(() => {
+    PlatformManager.getInstance()
+      .initialize()
+      .catch((err) => {
+        console.error('Failed to initialize the platform manager.', err);
+      })
+      .finally(() => {
+        setGameState('Initial');
+      });
+  }, []);
+
+  if (gameState === 'Preload') return <div>Loading...</div>;
 
   return (
     <Provider>
