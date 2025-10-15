@@ -63,7 +63,7 @@ export const Winner = forwardRef(({ onMainMenu }: Props, ref: ForwardedRef<Forwa
       show: onShow,
       hide: onHide,
     }),
-    [onHide, onPlayAgain, onShow],
+    [onHide, onShow],
   );
 
   if (!visible) return null;
