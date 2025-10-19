@@ -21,6 +21,7 @@ export function NewLeaderBoard() {
     [ModeEnum.Hard]: [],
   });
   const storage = StoreManager.getInstance();
+  const avatar = '/assets/player-icons.svg';
 
   useEffect(() => {
     const input: Record<ModeEnum, LeaderBoardEntry[]> = {
@@ -29,30 +30,30 @@ export function NewLeaderBoard() {
       [ModeEnum.Hard]: [],
     };
     Object.entries(storage.getStore() || {}).forEach(([name, data]) => {
-      if (data.modes.easy) {
+      if (data.modes.easy.value) {
         input[ModeEnum.Easy].push({
           rank: 0, // Will be set later
           playerName: name,
-          playerAvatar: data.avatar || '/assets/player-icons.svg',
-          score: data.modes.easy.value || -1,
+          playerAvatar: data.avatar || avatar,
+          score: data.modes.easy.value,
           timestamp: data.modes.easy.updatedAt,
         });
       }
-      if (data.modes.medium) {
+      if (data.modes.medium.value) {
         input[ModeEnum.Medium].push({
           rank: 0, // Will be set later
           playerName: name,
-          playerAvatar: data.avatar || '/assets/player-icons.svg',
-          score: data.modes.medium.value || -1,
+          playerAvatar: data.avatar || avatar,
+          score: data.modes.medium.value,
           timestamp: data.modes.medium.updatedAt,
         });
       }
-      if (data.modes.hard) {
+      if (data.modes.hard.value) {
         input[ModeEnum.Hard].push({
           rank: 0, // Will be set later
           playerName: name,
-          playerAvatar: data.avatar || '/assets/player-icons.svg',
-          score: data.modes.hard.value || -1,
+          playerAvatar: data.avatar || avatar,
+          score: data.modes.hard.value,
           timestamp: data.modes.hard.updatedAt,
         });
       }
