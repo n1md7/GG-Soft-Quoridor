@@ -1,4 +1,4 @@
-import { NewLeaderBoard } from '@src/components/ui/NewLeaderBoard';
+import { LeaderBoard } from '@src/components/ui/leaderboard';
 import { SettingsBoard } from '@src/components/ui/PlayerSettingsBoard.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
 import { useState } from 'react';
@@ -18,7 +18,7 @@ export function LobbyView({ next }: Readonly<Props>) {
         </Show>
 
         <Show when={showLeaderboard}>
-          <NewLeaderBoard />
+          <LeaderBoard />
         </Show>
       </div>
       <div className="button-grp">
