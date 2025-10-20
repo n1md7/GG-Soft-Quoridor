@@ -5,7 +5,7 @@ import { PlatformManager } from '@src/core/managers/platform.manager.ts';
 import { Gameplay } from '@src/views/GamePlay';
 import { InitialView } from '@src/views/InitialView';
 import { LobbyView } from '@src/views/LobbyView';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import { Settings, SettingsContext } from './context/settings.context';
 import { Provider } from '@radix-ui/react-tooltip';
 
@@ -13,11 +13,12 @@ type GameState = 'Preload' | 'Initial' | 'Lobby' | 'Gameplay';
 
 export function App() {
   const [gameState, setGameState] = useState<GameState>('Preload');
-  const { getName, getDifficulty, getAvatar } = useStorage();
+  const { getName, getDifficulty, getAvatar, setAvatar, setName, setDifficulty } = useStorage();
+  const platform = useMemo(() => PlatformManager.getInstance(), []);
 
   const [settings, setSettings] = useState<Settings>({
     playerName: getName('Anonymous'),
-    playerAvatar: getAvatar('TODO: default avatar src'),
+    playerAvatar: getAvatar('/assets/player-icons.svg'),
     difficulty: getDifficulty(ModeEnum.Medium),
   });
 
@@ -32,16 +33,29 @@ export function App() {
   const isNameValid = () => settings.playerName.trim() !== '';
   const isModeValid = () => settings.difficulty.trim() !== '';
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     PlatformManager.getInstance()
       .initialize()
+      .then(() => {
+        platform.getUserInfo().then(({ profilePictureUrl, username }) => {
+          setName(username);
+          setAvatar(profilePictureUrl);
+          setDifficulty(getDifficulty(ModeEnum.Medium));
+
+          setSettings({
+            playerName: username,
+            playerAvatar: profilePictureUrl,
+            difficulty: getDifficulty(ModeEnum.Medium),
+          });
+        });
+      })
       .catch((err) => {
         console.error('Failed to initialize the platform manager.', err);
       })
       .finally(() => {
         setGameState('Initial');
       });
-  }, []);
+  }, [platform, getDifficulty, setName, setAvatar, setDifficulty]);
 
   if (gameState === 'Preload') return <div>Loading...</div>;
 

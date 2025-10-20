@@ -84,9 +84,7 @@ export class RewardManager {
         wins: this.totalWins,
       },
       modes: {
-        [this.mode]: {
-          value: this.game.timer.getElapsedTime(),
-        },
+        [this.mode]: this.game.timer.getElapsedTime(),
       },
     });
   }

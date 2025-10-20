@@ -2,7 +2,6 @@ import { ModelType } from '@src/components/hooks/useModel.ts';
 import { Settings } from '@src/context/settings.context.ts';
 import { AdManager } from '@src/core/managers/ad.manager.ts';
 import { PowerManager } from '@src/core/managers/powers.manager.ts';
-import { GAME_SCORE_KEY } from '@src/core/constants/storage.constants.ts';
 import { Computer } from '@src/core/entities/computer/computer.class.ts';
 import { Player } from '@src/core/entities/player/player.class.ts';
 import { EventManager } from '@src/core/managers/event.manager.ts';
@@ -45,7 +44,7 @@ export class Game {
     this.player = Player.getInstance(model, this);
     this.computer = Computer.getInstance(model, this);
 
-    this.storage = StoreManager.getInstance(GAME_SCORE_KEY);
+    this.storage = StoreManager.getInstance();
     this.events = EventManager.getInstance([this.player, this.computer], this);
     this.states = StateManager.getInstance(this);
     this.grid = GridManager.getInstance();
