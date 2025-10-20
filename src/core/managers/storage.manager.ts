@@ -1,5 +1,6 @@
 import { GAME_SCORE_KEY } from '@src/core/constants/storage.constants.ts';
 import { ItemPayload, Store } from '@src/core/interfaces/store.interface.ts';
+import { getItem, setItem } from '@src/utils/storage.ts';
 import avatarUrl from '@assets/player-icons.svg?url';
 
 export class StoreManager {
@@ -65,7 +66,7 @@ export class StoreManager {
   }
 
   private save(store: Store) {
-    localStorage.setItem(this.name, this.serialize(store));
+    setItem(this.name, this.serialize(store));
   }
 
   getStore() {
@@ -77,7 +78,7 @@ export class StoreManager {
   }
 
   private readRawData() {
-    return localStorage.getItem(this.name);
+    return getItem(this.name);
   }
 
   private serialize(data: Store) {
