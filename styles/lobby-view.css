@@ -7,11 +7,14 @@
 
   .main-lobby-container {
     @apply flex flex-col flex-wrap items-center;
+
+    scale: 0.9;
   }
 
   .main-container {
     @apply w-90 justify-center sm:w-[clamp(420px,60vw,600px)];
 
+    scale: 0.9;
     height: 500px;
     position: relative;
     display: flex;
@@ -97,6 +100,7 @@
       inset 0 10px 0 rgb(0 0 0 / 30%),
       0 16px 0 rgb(0 0 0 / 30%);
     height: 100%;
+    overflow-y: auto;
   }
 
   .trapezoid {

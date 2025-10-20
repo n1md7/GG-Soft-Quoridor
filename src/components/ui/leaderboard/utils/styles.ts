@@ -26,7 +26,6 @@ export const getTabsContainerStyle = () => ({
 
 export const getLeaderboardContainerStyle = () => ({
   maxHeight: '360px',
-  overflowY: 'auto' as const,
   scrollbarWidth: 'thin' as const,
   scrollbarColor: '#00e0ea #1f2941',
   paddingRight: '10px',
