@@ -1,8 +1,8 @@
 import { useSettings } from '@src/components/hooks/useSettings.ts';
-import { BoardElements } from '@src/components/ui/BoardElements';
 import { DifficultySelector } from '@src/components/ui/DifficultySelector';
 import { PlayerNameInput } from '@src/components/ui/PlayerNameInput';
 import { Parallelogram } from '@src/components/ui/Parallelogram';
+import { SettingsBoardElements } from '@src/components/ui/SettingsBoardElements';
 import { ModeEnum } from '@src/core/enums/mode.enum.ts';
 import { memo, useCallback } from 'react';
 
@@ -29,9 +29,13 @@ export const SettingsBoard = memo(function SettingsBoard() {
         <div className="trapezoid settings">
           <span className="header">Lobby</span>
         </div>
+        <div className="minis" style={{ top: '-60px' }}>
+          <div className="mini-trapezoid"></div>
+          <div className="mini-trapezoid"></div>
+        </div>
       </div>
       <div className="wrapper-outline">
-        <div className="wrapper">
+        <div className="wrapper" style={{ height: '500px' }}>
           <div className="wrapper-border">
             <div className="input-container">
               <Parallelogram />
@@ -42,7 +46,7 @@ export const SettingsBoard = memo(function SettingsBoard() {
         </div>
       </div>
 
-      <BoardElements />
+      <SettingsBoardElements />
     </div>
   );
 });

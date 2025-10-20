@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BoardElements } from '@src/components/ui/BoardElements';
+import { LeaderBoardElements } from '@src/components/ui/LeaderBoardElements';
 import { ModeEnum } from '@src/core/enums/mode.enum';
 import { useLeaderboardData } from './hooks/useLeaderboardData';
 import { LeaderBoardHeader, DifficultyTabs, LeaderBoardList } from './components';
@@ -17,7 +17,7 @@ export const LeaderBoard = () => {
         <LeaderBoardList data={leaderboardData} activeMode={activeTab} />
       </div>
 
-      <BoardElements />
+      <LeaderBoardElements />
     </div>
   );
 };

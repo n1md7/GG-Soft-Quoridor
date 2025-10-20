@@ -60,12 +60,14 @@ body,
   .button-grp {
     display: flex;
     gap: 30px;
+    position: relative;
+    top: -36px;
   }
 
   .play-button {
     @apply text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
 
-    margin-top: 3rem;
+    margin-top: 0;
     padding: clamp(10px, 1vw, 20px);
     background-color: var(--color-app-red);
     color: #fff;

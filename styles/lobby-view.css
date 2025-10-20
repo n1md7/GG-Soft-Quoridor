@@ -25,7 +25,7 @@
     &.setting-board {
       .input-container:first-of-type {
         position: relative;
-        top: 50px;
+        top: 42px;
       }
 
       .parallelograms:first-of-type {
@@ -81,7 +81,7 @@
     > .wrapper {
       @apply w-90 sm:w-[clamp(420px,60vw,600px)];
 
-      height: 500px;
+      height: 420px;
       border-radius: 10px;
       padding: 40px 40px 75px;
       background-color: #1f2941;
@@ -107,7 +107,7 @@
     &.settings {
       position: relative;
       background: linear-gradient(to right, #bb77fb 1%, #7e4cf5 30%, var(--color-app-blue) 80%);
-      top: 35px;
+      top: -40px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -211,7 +211,7 @@
       overflow: visible;
 
       > .eclipse {
-        bottom: 40px;
+        bottom: 116px;
         min-width: 100%;
         clip-path: ellipse(32% 10% at 50% 50%);
       }
