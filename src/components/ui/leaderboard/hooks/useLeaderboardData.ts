@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useStorage } from '@src/components/hooks/useStorage';
 import { ModeEnum } from '@src/core/enums/mode.enum';
 import { StoreManager } from '@src/core/managers/storage.manager';
-import { LeaderBoardEntry, LeaderBoardData } from '../types';
+import { LeaderBoardData } from '../types';
 import { getDefaultAvatar } from '../utils/formatters';
 
 export const useLeaderboardData = () => {
@@ -23,7 +23,6 @@ export const useLeaderboardData = () => {
     };
 
     Object.entries(storage.getStore() || {}).forEach(([name, data]) => {
-      // Process Easy mode
       if (data.modes.easy.value && data.modes.easy.value !== Infinity) {
         processedData[ModeEnum.Easy].push({
           rank: 0, // Will be set later
@@ -34,7 +33,6 @@ export const useLeaderboardData = () => {
         });
       }
 
-      // Process Medium mode
       if (data.modes.medium.value && data.modes.medium.value !== Infinity) {
         processedData[ModeEnum.Medium].push({
           rank: 0, // Will be set later
@@ -45,7 +43,6 @@ export const useLeaderboardData = () => {
         });
       }
 
-      // Process Hard mode
       if (data.modes.hard.value && data.modes.hard.value !== Infinity) {
         processedData[ModeEnum.Hard].push({
           rank: 0, // Will be set later
