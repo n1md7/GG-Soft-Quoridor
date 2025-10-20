@@ -118,6 +118,7 @@ export class Player extends Character {
   handlePawnPointerClick(coords: CoordsType) {
     if (this.won()) return;
 
+    this.game.status.sendPlayerMessage(''); // Reset
     this.mode.toggle();
 
     this.pawns.current.player.setHighlight(this.mode.isPawn());

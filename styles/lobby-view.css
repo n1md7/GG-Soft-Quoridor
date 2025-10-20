@@ -7,11 +7,14 @@
 
   .main-lobby-container {
     @apply flex flex-col flex-wrap items-center;
+
+    scale: 0.9;
   }
 
   .main-container {
     @apply w-90 justify-center sm:w-[clamp(420px,60vw,600px)];
 
+    scale: 0.9;
     height: 500px;
     position: relative;
     display: flex;
@@ -25,7 +28,7 @@
     &.setting-board {
       .input-container:first-of-type {
         position: relative;
-        top: 50px;
+        top: 42px;
       }
 
       .parallelograms:first-of-type {
@@ -81,7 +84,7 @@
     > .wrapper {
       @apply w-90 sm:w-[clamp(420px,60vw,600px)];
 
-      height: 500px;
+      height: 420px;
       border-radius: 10px;
       padding: 40px 40px 75px;
       background-color: #1f2941;
@@ -97,6 +100,7 @@
       inset 0 10px 0 rgb(0 0 0 / 30%),
       0 16px 0 rgb(0 0 0 / 30%);
     height: 100%;
+    overflow-y: auto;
   }
 
   .trapezoid {
@@ -107,7 +111,7 @@
     &.settings {
       position: relative;
       background: linear-gradient(to right, #bb77fb 1%, #7e4cf5 30%, var(--color-app-blue) 80%);
-      top: 35px;
+      top: -40px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -153,7 +157,7 @@
     display: flex;
     justify-content: space-between;
     position: absolute;
-    bottom: 20px;
+    bottom: -36px;
     width: 100%;
     padding: 5px 30px;
   }
@@ -171,7 +175,7 @@
 
   .parallelograms {
     position: absolute;
-    bottom: 0;
+    bottom: -34px;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -207,11 +211,11 @@
     }
 
     &.bottom {
-      bottom: 0;
+      bottom: -76px;
       overflow: visible;
 
       > .eclipse {
-        bottom: 40px;
+        bottom: 116px;
         min-width: 100%;
         clip-path: ellipse(32% 10% at 50% 50%);
       }

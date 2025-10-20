@@ -38,7 +38,7 @@ export function InitialView({ next }: Readonly<Props>) {
           <ProgressBar />
         </div>
       </div>
-      <div className="button-grp">
+      <div className="button-grp" style={{ top: '25px' }}>
         <Show when={loaded === total}>
           <button onClick={next} className="play-button">
             ENTER

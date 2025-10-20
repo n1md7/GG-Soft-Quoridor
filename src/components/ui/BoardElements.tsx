@@ -1,5 +1,3 @@
-import { Parallelogram } from './Parallelogram';
-
 export function BoardElements() {
   return (
     <>
@@ -12,8 +10,6 @@ export function BoardElements() {
         <div className="side"></div>
         <div className="side flip"></div>
       </div>
-
-      <Parallelogram />
 
       <div className="lens-container bottom">
         <div className="lens flip"></div>

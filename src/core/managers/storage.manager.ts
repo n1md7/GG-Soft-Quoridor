@@ -1,13 +1,16 @@
+import { GAME_SCORE_KEY } from '@src/core/constants/storage.constants.ts';
 import { ItemPayload, Store } from '@src/core/interfaces/store.interface.ts';
+import { getItem, setItem } from '@src/utils/storage.ts';
+import avatarUrl from '@assets/player-icons.svg?url';
 
 export class StoreManager {
   private static instance: StoreManager;
 
   private constructor(private readonly name: string) {}
 
-  static getInstance(name: string) {
+  static getInstance() {
     if (!StoreManager.instance) {
-      StoreManager.instance = new StoreManager(name);
+      StoreManager.instance = new StoreManager(GAME_SCORE_KEY);
     }
 
     return StoreManager.instance;
@@ -29,11 +32,11 @@ export class StoreManager {
     const store = this.getStore() ?? {};
     const item = store[name] ?? {
       name,
-      avatar: avatar ?? '😀', // TODO: This needs rework
+      avatar: avatarUrl,
       modes: {
-        easy: Infinity,
-        medium: Infinity,
-        hard: Infinity,
+        easy: { value: Infinity, updatedAt: 0 },
+        medium: { value: Infinity, updatedAt: 0 },
+        hard: { value: Infinity, updatedAt: 0 },
       },
       coins: 0,
       ownedPowers: [],
@@ -63,10 +66,10 @@ export class StoreManager {
   }
 
   private save(store: Store) {
-    localStorage.setItem(this.name, this.serialize(store));
+    setItem(this.name, this.serialize(store));
   }
 
-  private getStore() {
+  getStore() {
     const data = this.readRawData();
 
     if (!data) return null;
@@ -75,7 +78,7 @@ export class StoreManager {
   }
 
   private readRawData() {
-    return localStorage.getItem(this.name);
+    return getItem(this.name);
   }
 
   private serialize(data: Store) {
