@@ -40,12 +40,12 @@ export function App() {
         platform.getUserInfo().then(({ profilePictureUrl, username }) => {
           setName(username);
           setAvatar(profilePictureUrl);
-          setDifficulty(settings.difficulty);
+          setDifficulty(getDifficulty(ModeEnum.Medium));
 
           setSettings({
             playerName: username,
             playerAvatar: profilePictureUrl,
-            difficulty: settings.difficulty,
+            difficulty: getDifficulty(ModeEnum.Medium),
           });
         });
       })
@@ -55,7 +55,7 @@ export function App() {
       .finally(() => {
         setGameState('Initial');
       });
-  }, [platform, settings.difficulty]);
+  }, [platform, getDifficulty, setName, setAvatar, setDifficulty]);
 
   if (gameState === 'Preload') return <div>Loading...</div>;
 

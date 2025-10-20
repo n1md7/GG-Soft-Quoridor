@@ -1,19 +1,27 @@
 import { useSettings } from '@src/components/hooks/useSettings.ts';
 import { BoardElements } from '@src/components/ui/BoardElements';
+import { DifficultySelector } from '@src/components/ui/DifficultySelector';
+import { PlayerNameInput } from '@src/components/ui/PlayerNameInput';
+import { Parallelogram } from '@src/components/ui/Parallelogram';
 import { ModeEnum } from '@src/core/enums/mode.enum.ts';
-import { ChangeEvent } from 'react';
-import { Parallelogram } from './Parallelogram';
+import { memo, useCallback } from 'react';
 
-export function SettingsBoard() {
+export const SettingsBoard = memo(function SettingsBoard() {
   const { update, settings } = useSettings();
 
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    update({ playerName: e.target.value });
-  };
+  const handleNameChange = useCallback(
+    (name: string) => {
+      update({ playerName: name });
+    },
+    [update],
+  );
 
-  const handleDifficultyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    update({ difficulty: e.target.value as ModeEnum });
-  };
+  const handleDifficultyChange = useCallback(
+    (difficulty: ModeEnum) => {
+      update({ difficulty });
+    },
+    [update],
+  );
 
   return (
     <div className="main-container setting-board">
@@ -27,55 +35,8 @@ export function SettingsBoard() {
           <div className="wrapper-border">
             <div className="input-container">
               <Parallelogram />
-              <label htmlFor="playerName">Your name:</label>
-              <input
-                type="text"
-                id="playerName"
-                value={settings.playerName}
-                onChange={handleNameChange}
-                className="input-name"
-                autoComplete="off"
-              />
-
-              <div className="input-container">
-                <label htmlFor="">Difficulty:</label>
-
-                <label>
-                  <input
-                    type="radio"
-                    name="mode"
-                    value={ModeEnum.Easy}
-                    checked={settings.difficulty === ModeEnum.Easy}
-                    onChange={handleDifficultyChange}
-                    className="radio-mode hidden"
-                  />
-                  <span className="input-mode">Easy</span>
-                </label>
-
-                <label>
-                  <input
-                    type="radio"
-                    name="mode"
-                    value={ModeEnum.Medium}
-                    checked={settings.difficulty === ModeEnum.Medium}
-                    onChange={handleDifficultyChange}
-                    className="radio-mode hidden"
-                  />
-                  <span className="input-mode">Medium</span>
-                </label>
-
-                <label>
-                  <input
-                    type="radio"
-                    name="mode"
-                    value={ModeEnum.Hard}
-                    checked={settings.difficulty === ModeEnum.Hard}
-                    onChange={handleDifficultyChange}
-                    className="radio-mode hidden"
-                  />
-                  <span className="input-mode">Hard</span>
-                </label>
-              </div>
+              <PlayerNameInput value={settings.playerName} onChange={handleNameChange} />
+              <DifficultySelector value={settings.difficulty} onChange={handleDifficultyChange} />
             </div>
           </div>
         </div>
@@ -84,4 +45,4 @@ export function SettingsBoard() {
       <BoardElements />
     </div>
   );
-}
+});
