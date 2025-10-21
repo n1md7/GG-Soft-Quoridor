@@ -1,17 +1,16 @@
 export const getTabButtonStyle = (isActive: boolean) => ({
   padding: '8px 20px',
-  margin: '0 4px',
+  margin: '0 10px',
   borderRadius: '8px',
-  backgroundColor: isActive ? '#00e0ea' : 'rgba(255, 255, 255, 0.1)',
-  color: isActive ? '#1f2941' : '#00e0ea',
+  backgroundColor: isActive ? '#83ff00' : '#272a35',
+  color: isActive ? '#1f2941' : '#fff',
   cursor: 'pointer',
-  fontFamily: 'Corporation-Italic, sans-serif',
-  fontSize: '14px',
+  fontFamily: 'Chelsea-Market, sans-serif',
+  fontSize: 'clamp(15px, 2vw, 17px)',
   fontWeight: 'bold',
-  textTransform: 'uppercase' as const,
+  textTransform: 'capitalize' as const,
   transition: 'all 0.3s ease',
   backdropFilter: 'blur(10px)',
-  border: `1px solid ${isActive ? '#00e0ea' : 'rgba(0, 224, 234, 0.3)'}`,
 });
 
 export const getTabsContainerStyle = () => ({
@@ -33,7 +32,8 @@ export const getLeaderboardContainerStyle = () => ({
 
 export const getEmptyStateStyle = () => ({
   textAlign: 'center' as const,
-  color: '#00e0ea',
+  color: '#c9cafd',
   padding: '40px 20px',
-  fontFamily: 'Corporation-Italic, sans-serif',
+  fontFamily: 'Chelsea-Market, sans-serif',
+  fontSize: 'clamp(15px, 2vw, 17px)',
 });
