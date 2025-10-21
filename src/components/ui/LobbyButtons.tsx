@@ -19,11 +19,11 @@ export const LobbyButtons = memo(function LobbyButtons({ showLeaderboard, onTogg
 
   return (
     <div className="button-grp">
-      <button onClick={onToggleLeaderboard} className="play-button other">
-        Check Scores
-      </button>
       <button onClick={onStartGame} className="play-button">
         Start Game
+      </button>
+      <button onClick={onToggleLeaderboard} className="play-button other">
+        Check Scores
       </button>
     </div>
   );

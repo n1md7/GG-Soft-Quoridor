@@ -101,6 +101,8 @@
       0 16px 0 rgb(0 0 0 / 30%);
     height: 100%;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #20293f #d5d5d500;
   }
 
   .trapezoid {
@@ -111,7 +113,7 @@
     &.settings {
       position: relative;
       background: linear-gradient(to right, #bb77fb 1%, #7e4cf5 30%, var(--color-app-blue) 80%);
-      top: -40px;
+      top: 35px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -157,7 +159,7 @@
     display: flex;
     justify-content: space-between;
     position: absolute;
-    bottom: -36px;
+    bottom: 20px;
     width: 100%;
     padding: 5px 30px;
   }
@@ -175,7 +177,7 @@
 
   .parallelograms {
     position: absolute;
-    bottom: -34px;
+    bottom: 0px;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -211,11 +213,11 @@
     }
 
     &.bottom {
-      bottom: -76px;
+      bottom: 0;
       overflow: visible;
 
       > .eclipse {
-        bottom: 116px;
+        bottom: 40px;
         min-width: 100%;
         clip-path: ellipse(32% 10% at 50% 50%);
       }
@@ -304,7 +306,7 @@
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 3px solid #1f2941;
-    padding: 5px 0;
+    padding: 10px;
 
     div.title {
       color: #00e0ea;
@@ -348,8 +350,9 @@
         > .player-name {
           color: #fff;
           font-weight: 900;
-          font-size: 17px;
-          letter-spacing: 0.5px;
+          font-size: clamp(15px, 2vw, 17px);
+          letter-spacing: 2px;
+          font-family: Chelsea-Market, sans-serif;
         }
       }
     }
@@ -374,9 +377,9 @@
 
         > .player-score {
           color: #fff;
-          font-family: Caprasimo, sans-serif;
-          font-size: 17px;
-          letter-spacing: 0.5px;
+          font-size: clamp(15px, 2vw, 17px);
+          letter-spacing: 2px;
+          font-family: Chelsea-Market, sans-serif;
         }
       }
     }

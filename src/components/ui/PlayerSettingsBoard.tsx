@@ -29,10 +29,6 @@ export const SettingsBoard = memo(function SettingsBoard() {
         <div className="trapezoid settings">
           <span className="header">Lobby</span>
         </div>
-        <div className="minis" style={{ top: '-60px' }}>
-          <div className="mini-trapezoid"></div>
-          <div className="mini-trapezoid"></div>
-        </div>
       </div>
       <div className="wrapper-outline">
         <div className="wrapper" style={{ height: '500px' }}>

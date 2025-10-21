@@ -41,7 +41,7 @@ export function InitialView({ next }: Readonly<Props>) {
       <div className="button-grp" style={{ top: '25px' }}>
         <Show when={loaded === total}>
           <button onClick={next} className="play-button">
-            ENTER
+            Enter
           </button>
         </Show>
       </div>

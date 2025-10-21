@@ -19,7 +19,7 @@ export const DifficultySelector = memo(function DifficultySelector({ value, onCh
 
   return (
     <div className="input-container">
-      <label htmlFor="">Difficulty:</label>
+      <label htmlFor="mode">Difficulty:</label>
       {DIFFICULTY_OPTIONS.map(({ value: optionValue, label }) => (
         <label key={optionValue}>
           <input
