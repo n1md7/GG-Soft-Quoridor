@@ -1,15 +1,17 @@
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { Show } from '@src/components/utils/Show.tsx';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
+
+import PlayAdsIcon from '@assets/icons/play-ads-icon.svg';
 
 export type StateType = 'is-usable' | 'ad-available' | 'disabled';
 export type PowerProps = {
   key: PowerEnum;
   name: string;
   description: string;
-  placeholder: string;
+  placeholder: ReactNode;
   state: StateType;
 };
 export type PowerButtonProps = {
@@ -87,7 +89,9 @@ export function PowerButton({ power }: PowerButtonProps) {
 
       <Show when={state === 'ad-available'}>
         <button onClick={handleClick} className="ad-overlay">
-          <div className="play-icon">▶</div>
+          <div className="play-icon">
+            <img src={PlayAdsIcon} alt="Play ads icon" />
+          </div>
         </button>
       </Show>
 
@@ -98,17 +102,15 @@ export function PowerButton({ power }: PowerButtonProps) {
 
           <Show when={state === 'is-usable'}>
             <div className="horizontal-divider" />
-            <div className="hint-text">You own this power! You can activate it by clicking the button above.</div>
+            <div className="hint-text">You own this power. Activate by clicking the power above.</div>
           </Show>
           <Show when={state === 'ad-available'}>
             <div className="horizontal-divider" />
-            <div className="ad-message">
-              You can unlock this power by watching an ad. Click the play button on the power icon to watch an ad.
-            </div>
+            <div className="ad-message">Unlock by watching an ad. Click the play button to watch an ad.</div>
           </Show>
           <Show when={state === 'disabled'}>
             <div className="horizontal-divider" />
-            <div className="hint-text">You can only use each power once per game.</div>
+            <div className="hint-text">You can only use each power once.</div>
           </Show>
         </div>
       </div>

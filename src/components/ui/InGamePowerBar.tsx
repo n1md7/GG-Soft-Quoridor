@@ -7,6 +7,11 @@ import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import '@styles/power-bar.scss';
 
+import ExtraWallIcon from '@assets/icons/extra-wall-icon.svg?url';
+import PathVisionIcon from '@assets/icons/path-vision-icon.svg?url';
+import BlockMoveIcon from '@assets/icons/block-move-icon.svg?url';
+import UndoMoveIcon from '@assets/icons/undo-move-icon.svg?url';
+
 type LightingMode = 'day' | 'night';
 
 type Props = {
@@ -14,7 +19,7 @@ type Props = {
   initialLighting: LightingMode;
 };
 
-export function InGamePowerBar(props: Props) {
+export function InGamePowerBar() {
   const { inventory } = useGame();
 
   const powers: PowerProps[] = useMemo(
@@ -24,28 +29,28 @@ export function InGamePowerBar(props: Props) {
           key: PowerEnum.ExtraWall,
           name: 'Extra Wall',
           description: 'Get an additional wall to place.',
-          placeholder: '🧱',
+          placeholder: <img src={ExtraWallIcon} alt="Extra wall power icon" />,
           state: 'disabled' as StateType,
         },
         {
           key: PowerEnum.ShortestPath,
-          name: 'Show Path',
+          name: 'Path Vision',
           description: 'Show the shortest path to your goal.',
-          placeholder: '🗺️',
+          placeholder: <img src={PathVisionIcon} alt="Path vision power icon" />,
           state: 'disabled' as StateType,
         },
         {
           key: PowerEnum.BlockMove,
           name: 'Block Move',
           description: 'Block opponent from moving. This makes opponent to skip one move.',
-          placeholder: '🚫',
+          placeholder: <img src={BlockMoveIcon} alt="Block move power icon" />,
           state: 'disabled' as StateType,
         },
         {
           key: PowerEnum.Undo,
-          name: 'Undo',
+          name: 'Undo Move',
           description: 'Undo your last move you and player made.',
-          placeholder: '↶',
+          placeholder: <img src={UndoMoveIcon} alt="Undo move power icon" />,
           state: 'disabled' as StateType,
         },
       ].map((power) => {
@@ -71,11 +76,7 @@ export function InGamePowerBar(props: Props) {
     >
       <div className="relative">
         <div className="container">
-          <div className="top-line" />
-          <div className="bottom-line" />
-
-          <ActionButtons {...props} />
-          <div className="vertical-divider mx-10" />
+          {/*<ActionButtons {...props} />*/}
 
           {powers.map((power, index) => (
             <div key={power.key} className="power-item">
