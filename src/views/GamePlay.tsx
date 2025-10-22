@@ -9,7 +9,7 @@ import { Loading } from '@src/components/ui/Loading.tsx';
 import { GameContext } from '@src/context/game.context.ts';
 import { Game } from '@src/core/game.class.ts';
 import { Leva } from 'leva';
-import { Suspense, useState, useCallback } from 'react';
+import { Suspense } from 'react';
 import { useErrorBoundary } from 'use-error-boundary';
 
 type Props = {
@@ -23,11 +23,6 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
   const { ErrorBoundary } = useErrorBoundary();
   const { hidden } = useDebug();
   const { settings } = useSettings();
-  const [lightingMode, setLightingMode] = useState<'day' | 'night'>('day');
-
-  const handleLightingChange = useCallback((mode: 'day' | 'night') => {
-    setLightingMode(mode);
-  }, []);
 
   return (
     <ErrorBoundary>
@@ -43,18 +38,14 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
               position: [0, 18, 0],
             }}
           >
-            <Experience backToLobby={backToLobby} lightingMode={lightingMode} />
+            <Experience backToLobby={backToLobby} />
           </Canvas>
         </Suspense>
-        <InGamePowerBar onLightingChange={handleLightingChange} initialLighting={lightingMode} />
+
+        <InGamePowerBar />
         <div className="canvas-overlay">
           <div className="action">
-            <button
-              onClick={backToLobby}
-              className="m-[5px] rounded bg-sky-950 px-4 py-2 font-semibold text-white shadow transition-colors duration-200 hover:cursor-pointer hover:bg-sky-800 focus:ring-2 focus:ring-sky-400 focus:ring-offset-2"
-            >
-              🔙
-            </button>
+            <button onClick={backToLobby} className="lobby-button"></button>
           </div>
         </div>
       </GameContext.Provider>
