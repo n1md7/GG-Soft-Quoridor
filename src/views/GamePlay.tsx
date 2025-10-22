@@ -46,15 +46,11 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
             <Experience backToLobby={backToLobby} lightingMode={lightingMode} />
           </Canvas>
         </Suspense>
+
         <InGamePowerBar onLightingChange={handleLightingChange} initialLighting={lightingMode} />
         <div className="canvas-overlay">
           <div className="action">
-            <button
-              onClick={backToLobby}
-              className="m-[5px] rounded bg-sky-950 px-4 py-2 font-semibold text-white shadow transition-colors duration-200 hover:cursor-pointer hover:bg-sky-800 focus:ring-2 focus:ring-sky-400 focus:ring-offset-2"
-            >
-              🔙
-            </button>
+            <button onClick={backToLobby} className="lobby-button"></button>
           </div>
         </div>
       </GameContext.Provider>
