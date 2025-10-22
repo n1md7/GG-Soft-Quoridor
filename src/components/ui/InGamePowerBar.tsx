@@ -7,10 +7,10 @@ import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import '@styles/power-bar.scss';
 
-import ExtraWallIcon from '@assets/icons/extra-wall-icon.svg';
-import PathVisionIcon from '@assets/icons/path-vision-icon.svg';
-import BlockMoveIcon from '@assets/icons/block-move-icon.svg';
-import UndoMoveIcon from '@assets/icons/undo-move-icon.svg';
+import ExtraWallIcon from '@assets/icons/extra-wall-icon.svg?url';
+import PathVisionIcon from '@assets/icons/path-vision-icon.svg?url';
+import BlockMoveIcon from '@assets/icons/block-move-icon.svg?url';
+import UndoMoveIcon from '@assets/icons/undo-move-icon.svg?url';
 
 type LightingMode = 'day' | 'night';
 
@@ -19,7 +19,7 @@ type Props = {
   initialLighting: LightingMode;
 };
 
-export function InGamePowerBar(props: Props) {
+export function InGamePowerBar() {
   const { inventory } = useGame();
 
   const powers: PowerProps[] = useMemo(
