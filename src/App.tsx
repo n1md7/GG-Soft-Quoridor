@@ -8,6 +8,7 @@ import { LobbyView } from '@src/views/LobbyView';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { Settings, SettingsContext } from './context/settings.context';
 import { Provider } from '@radix-ui/react-tooltip';
+import { StoreManager } from '@src/core/managers/storage.manager.ts';
 
 type GameState = 'Preload' | 'Initial' | 'Lobby' | 'Gameplay';
 
@@ -47,6 +48,7 @@ export function App() {
             playerAvatar: profilePictureUrl,
             difficulty: getDifficulty(ModeEnum.Medium),
           });
+          StoreManager.getInstance().updateBy({ name: username });
         });
       })
       .catch((err) => {
