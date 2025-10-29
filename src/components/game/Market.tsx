@@ -1,7 +1,8 @@
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useState } from 'react';
-import GemIcon from '@assets/icons/gem-icon.svg';
+
+import GemIcon from '@assets/icons/gem-icon.svg?url';
 
 export type ForwardedMarket = {
   show: () => void;
@@ -85,13 +86,12 @@ export const Market = forwardRef((_, ref: ForwardedRef<ForwardedMarket>) => {
             </div>
             <div className="market-body">
               {/* Coins Display */}
-              <div className="coin-container">
-                <img src={GemIcon} className="gem-icon" />
-                <span className="gem-count">{playerCoins} Gems</span>
+              <div className="gem-container">
+                <img src={GemIcon} className="gem-icon" alt="gem icon" />
+                <span className="gem-count">{playerCoins}</span>
               </div>
 
-              {/* Market Grid */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="item-container">
                 {market.getItems().map((item) => {
                   const isOwned = inventory.hasItem(item.power.key);
                   const canAfford = item.affordable(playerCoins);
@@ -99,36 +99,27 @@ export const Market = forwardRef((_, ref: ForwardedRef<ForwardedMarket>) => {
                   return (
                     <div
                       key={item.power.key}
-                      className={`rounded-lg border-2 bg-slate-700/80 p-4 transition-all duration-300 ${
-                        isOwned
-                          ? 'border-green-400 bg-green-400/10'
-                          : !canAfford
-                            ? 'border-slate-500 opacity-60'
-                            : 'border-slate-600 hover:-translate-y-1 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-400/30'
-                      } `}
+                      className={`market-item ${isOwned ? 'owned' : !canAfford ? 'unavailable' : 'available'} `}
                     >
-                      {/* Item Header */}
-                      <div className="mb-3 flex items-center justify-between">
-                        <h3 className="m-0 text-base font-bold text-white">{item.power.name}</h3>
-                        <span className="text-sm font-bold text-yellow-400">{item.cost}💰</span>
+                      <div className="item-wrapper">
+                        <div className="item-details">
+                          <div className="item-header">
+                            <h3 className="item-name">{item.power.name}</h3>
+                            {/*<span className="item-cost">{item.cost}💰</span>*/}
+                          </div>
+                          <p className="item-description">{item.power.description}</p>
+                        </div>
+                        <img src={item.power.icon} alt="" className="item-img" />
                       </div>
 
-                      {/* Item Description */}
-                      <p className="mb-4 text-sm leading-snug text-slate-400">{item.power.description}</p>
-
-                      {/* Buy Button */}
                       <button
-                        className={`w-full cursor-pointer rounded-md border-none px-3 py-2 text-sm font-bold transition-all duration-200 ${
-                          isOwned
-                            ? 'cursor-not-allowed bg-green-400 text-green-900'
-                            : canAfford
-                              ? 'bg-gradient-to-br from-emerald-600 to-emerald-500 text-white hover:-translate-y-0.5 hover:from-emerald-700 hover:to-emerald-600'
-                              : 'cursor-not-allowed bg-slate-500 text-slate-200'
-                        } `}
+                        className={`buy-button ${isOwned ? 'owned' : canAfford ? 'available' : 'unavailable'} `}
                         onClick={() => buy(item.power.key)}
                         disabled={isOwned || !canAfford}
                       >
-                        {isOwned ? 'Owned' : canAfford ? 'Buy' : 'Not enough coins'}
+                        {' '}
+                        <img src={GemIcon} alt="" />
+                        {isOwned ? 'Owned' : canAfford ? item.cost : item.cost}
                       </button>
                     </div>
                   );

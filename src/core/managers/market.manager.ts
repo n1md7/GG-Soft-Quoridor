@@ -4,6 +4,11 @@ import { TinyEmitter } from 'tiny-emitter';
 import { MarketItem } from '../classes/market-item.class.ts';
 import { Power } from '../classes/power.class.ts';
 
+import ExtraWallIcon from '@assets/icons/extra-wall-icon.svg?url';
+import PathVisionIcon from '@assets/icons/path-vision-icon.svg?url';
+import BlockMoveIcon from '@assets/icons/block-move-icon.svg?url';
+import UndoMoveIcon from '@assets/icons/undo-move-icon.svg?url';
+
 export class MarketManager {
   private static instance: MarketManager;
 
@@ -13,6 +18,7 @@ export class MarketManager {
         key: PowerEnum.ShortestPath,
         name: 'Path Vision',
         description: 'Show the shortest path to your goal',
+        icon: PathVisionIcon,
       }),
       cost: 30,
     }),
@@ -21,6 +27,7 @@ export class MarketManager {
         key: PowerEnum.ExtraWall,
         name: 'Extra Wall',
         description: 'Get an additional wall to place',
+        icon: ExtraWallIcon,
       }),
       cost: 50,
     }),
@@ -29,11 +36,17 @@ export class MarketManager {
         key: PowerEnum.BlockMove,
         name: 'Block Move',
         description: 'Prevent opponent from moving next turn',
+        icon: BlockMoveIcon,
       }),
       cost: 75,
     }),
     [PowerEnum.Undo]: new MarketItem({
-      power: new Power({ key: PowerEnum.Undo, name: 'Undo Move', description: 'Reverse your last move' }),
+      power: new Power({
+        key: PowerEnum.Undo,
+        name: 'Undo Move',
+        description: 'Reverse your last move',
+        icon: UndoMoveIcon,
+      }),
       cost: 100,
     }),
   };

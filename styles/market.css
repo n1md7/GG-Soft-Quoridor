@@ -69,7 +69,7 @@
           inset 0 10px 0 rgb(0 0 0 / 30%),
           0 16px 0 rgb(0 0 0 / 0%);
 
-        .coin-container {
+        .gem-container {
           @apply flex flex-nowrap items-center justify-center p-3;
 
           .gem-icon {
@@ -77,9 +77,97 @@
           }
 
           .gem-count {
-            color: var(--color-app-cyan);
-            font-size: 25px;
+            color: white;
+            font-size: 35px;
             font-family: Corporation-Italic, sans-serif;
+          }
+        }
+
+        .item-container {
+          @apply grid grid-cols-2 gap-4;
+
+          .market-item {
+            @apply flex flex-col justify-between rounded-lg p-4 transition-all duration-300;
+
+            background-color: #1f263e;
+
+            &.available {
+              border: 2px solid;
+              border-image: linear-gradient(45deg, #00e0ea, #d4c5f1) 1;
+              border-radius: 8px;
+
+              &:hover {
+                @apply translate-y-1 border-cyan-400 shadow-lg shadow-cyan-400/30;
+              }
+            }
+
+            &.unavailable {
+              @apply border-slate-500 opacity-60;
+            }
+
+            &.owned {
+              border: 2px solid;
+              border-image: linear-gradient(45deg, #7e4cf5, #ddd4f2) 1;
+              border-radius: 8px;
+            }
+
+            .item-wrapper {
+              @apply flex flex-row;
+
+              .item-details {
+                @apply flex flex-col;
+
+                .item-header {
+                  @apply mb-3 flex items-center justify-between;
+
+                  .item-name {
+                    @apply m-0 text-base font-bold text-white;
+
+                    color: #00e0ea;
+                  }
+
+                  .item-cost {
+                    @apply text-sm font-bold text-yellow-400;
+                  }
+                }
+
+                .item-description {
+                  @apply mb-4 text-sm leading-snug text-slate-400;
+
+                  font-size: 10px;
+                }
+              }
+
+              .item-img {
+                width: 60px;
+              }
+            }
+
+            .buy-button {
+              @apply flex w-full cursor-pointer flex-row items-center justify-center rounded-md border-none px-3 py-2 text-sm font-bold transition-all duration-200;
+
+              &.available {
+                @apply text-white hover:-translate-y-0.5;
+
+                background-color: var(--color-app-green);
+                color: black;
+              }
+
+              &.unavailable {
+                @apply cursor-not-allowed bg-slate-500 text-slate-200;
+              }
+
+              &.owned {
+                @apply cursor-not-allowed;
+
+                background-color: var(--color-app-purple);
+                color: var(--color-app-light-purple);
+              }
+
+              > img {
+                width: 20px;
+              }
+            }
           }
         }
       }
