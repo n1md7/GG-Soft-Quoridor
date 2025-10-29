@@ -72,8 +72,9 @@ body,
     padding: clamp(10px, 1vw, 20px);
     background-color: var(--color-app-red);
     color: #fff;
-    font-family: Caprasimo, sans-serif;
+    font-family: Chelsea-Market, sans-serif;
     font-optical-sizing: auto;
+    font-weight: bold;
     border-radius: 13px;
     cursor: pointer;
     transition:
