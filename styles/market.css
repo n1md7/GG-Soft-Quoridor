@@ -36,6 +36,10 @@
         @apply absolute top-4 right-4 flex h-12 w-12 items-center justify-center transition-all duration-200;
 
         background-image: url('@assets/icons/close-icon.svg');
+
+        &:hover {
+          opacity: 0.8;
+        }
       }
 
       .market-header {
@@ -73,7 +77,8 @@
           @apply flex flex-nowrap items-center justify-center p-3;
 
           .gem-icon {
-            width: 4rem;
+            width: 2.5rem;
+            margin-right: 20px;
           }
 
           .gem-count {
@@ -151,6 +156,10 @@
 
                 background-color: var(--color-app-green);
                 color: black;
+
+                &:hover {
+                  background-color: #8cff0e;
+                }
               }
 
               &.unavailable {
@@ -166,6 +175,7 @@
 
               > img {
                 width: 20px;
+                margin-right: 10px;
               }
             }
           }
