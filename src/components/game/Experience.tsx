@@ -3,7 +3,6 @@ import { Background } from '@src/components/game/Background.tsx';
 import { Environment } from '@src/components/game/Environment.tsx';
 import { GameOver } from '@src/components/game/GameOver.tsx';
 import { Lights } from '@src/components/game/Lights.tsx';
-import { Market } from '@src/components/game/Market.tsx';
 import { Room } from '@src/components/game/Room.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
@@ -82,7 +81,6 @@ export function Experience({ backToLobby, lightingMode }: Props) {
     <>
       <Winner ref={game.model.modals.winner} onMainMenu={backToLobby} />
       <GameOver ref={game.model.modals.gameOver} onMainMenu={backToLobby} />
-      <Market ref={game.model.modals.market} />
 
       <OrbitControls
         ref={controlsRef}
