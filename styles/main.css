@@ -13,7 +13,7 @@ body,
     --color-app-blue: #3850bc;
     --color-app-cyan: #06c7cf;
     --color-app-red: #db1f48;
-    --color-app-green: #83ff00;
+    --color-app-green: #70ca0c;
     --color-app-yellow: #fdc700;
     --color-app-slate-blue: #2c3c51;
     --color-app-gray: #787878;
@@ -72,8 +72,9 @@ body,
     padding: clamp(10px, 1vw, 20px);
     background-color: var(--color-app-red);
     color: #fff;
-    font-family: Caprasimo, sans-serif;
+    font-family: Chelsea-Market, sans-serif;
     font-optical-sizing: auto;
+    font-weight: bold;
     border-radius: 13px;
     cursor: pointer;
     transition:

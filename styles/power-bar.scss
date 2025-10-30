@@ -4,7 +4,6 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
-  scale: 0.8;
 
   .container {
     position: relative;
@@ -63,13 +62,11 @@
 
         .button {
           position: relative;
-          height: 5rem;
-          width: 5rem;
+          height: 4rem;
+          width: 4rem;
           border-radius: 1rem;
-          //backdrop-filter: blur(2px);
           transition: all 0.3s ease;
           cursor: pointer;
-          //background: linear-gradient(135deg, #0d0e12e3 0%, #444397c9 100%);
 
           &::before {
             content: '';
@@ -89,7 +86,6 @@
 
           &:hover {
             transform: scale(1.1);
-            //box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgb(0 0 0);
           }
 
           &:active {
@@ -165,7 +161,7 @@
           .title {
             margin-bottom: 0.25rem;
             font-weight: 600;
-            color: rgba(103, 232, 249, 1);
+            color: #00e0ea;
           }
 
           .description {

@@ -177,7 +177,7 @@
 
   .parallelograms {
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     display: flex;
     justify-content: space-between;
     width: 100%;

@@ -1,23 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 28.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="b" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 103 100" style="enable-background:new 0 0 103 100;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#F2537C;}
-	.st1{fill:#AF193A;}
-	.st2{fill:#F49AB6;}
-	.st3{fill:#DB1F48;}
-	.st4{fill:#FFFFFF;}
-</style>
-<g>
-	<g>
-		<path class="st0" d="M51,0.8v49.7h49.8C100.8,23,78.5,0.8,51,0.8z"/>
-		<path class="st1" d="M100.7,50.5H51v49.7C78.5,100.2,100.7,78,100.7,50.5z"/>
-		<path class="st0" d="M51,100.2V50.5H1.3C1.3,78,23.5,100.2,51,100.2z"/>
-		<path class="st2" d="M1.3,50.5H51V0.7C23.5,0.7,1.3,23,1.3,50.5z"/>
-		<circle class="st3" cx="51" cy="50.5" r="44.9"/>
-	</g>
-	<path class="st4" d="M35.5,65.3V35.4c0-4.3,5.5-6.8,9.5-4.3l24.4,15c3.4,2.1,3.4,6.5,0,8.6L45,69.6C41,72.1,35.5,69.6,35.5,65.3z"
-		/>
-</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="b" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 103 100">
+  <g>
+    <path d="M51.5.25v49.75h49.75C101.25,22.52,78.98.25,51.5.25Z" style="fill: #f2537c; stroke-width: 0px;"/>
+    <path d="M101.25,50h-49.75v49.75c27.48,0,49.75-22.27,49.75-49.75Z" style="fill: #af193a; stroke-width: 0px;"/>
+    <path d="M51.5,99.75v-49.75H1.75c0,27.48,22.27,49.75,49.75,49.75Z" style="fill: #f2537c; stroke-width: 0px;"/>
+    <path d="M1.75,50h49.75V.25C24.02.25,1.75,22.52,1.75,50Z" style="fill: #f49ab6; stroke-width: 0px;"/>
+    <circle cx="51.5" cy="50" r="44.91" style="fill: #db1f48; stroke-width: 0px;"/>
+  </g>
+  <path d="M36.03,64.81v-29.95c0-4.27,5.5-6.77,9.5-4.32l24.38,14.97c3.42,2.1,3.42,6.53,0,8.64l-24.38,14.97c-4,2.46-9.5-.05-9.5-4.32Z" style="fill: #fff; stroke-width: 0px;"/>
 </svg>

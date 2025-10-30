@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="b" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 103 100">
+  <path d="M92.37,51.12c0,22.54-18.33,40.87-40.87,40.87S10.63,73.65,10.63,51.12v-2.24h81.74v2.24Z" style="fill: #c8d3dd; stroke-width: 0px;"/>
+  <circle cx="51.5" cy="48.88" r="40.87" transform="translate(-14.79 23.43) rotate(-22.5)" style="fill: #9b9b9b; stroke-width: 0px;"/>
+  <circle cx="52.05" cy="50.03" r="37.34" transform="translate(-15.18 23.73) rotate(-22.5)" style="fill: #182235; stroke-width: 0px;"/>
+  <circle cx="52.05" cy="47.67" r="33.67" transform="translate(-14.28 23.55) rotate(-22.5)" style="fill: #1f2941; stroke-width: 0px;"/>
   <g>
-    <path d="M86.17,50.95c0,19.11-15.55,34.67-34.67,34.67s-34.67-15.55-34.67-34.67v-1.9h69.33v1.9Z" style="fill: #c8d3dd; stroke-width: 0px;"/>
-    <circle cx="51.5" cy="49.05" r="34.67" transform="translate(-14.85 23.44) rotate(-22.5)" style="fill: #fff; stroke-width: 0px;"/>
-    <circle cx="51.5" cy="47.5" r="30.4" transform="translate(-14.26 23.32) rotate(-22.5)" style="fill: #6e3dcc; stroke-width: 0px;"/>
-    <circle cx="51.5" cy="45.58" r="27.41" transform="translate(-13.52 23.18) rotate(-22.5)" style="fill: #8a4cff; stroke-width: 0px;"/>
-    <path d="M45.32,23.39c1.81,3.23-2.41,4.27-7.11,8.97s-7.45,9.58-9.64,7.38-.17-7.79,4.53-12.49c4.7-4.7,10.9-6.21,12.22-3.86Z" style="fill: #a27ff7; stroke-width: 0px;"/>
-    <path d="M51.29,24.35c-1.9.22-3.46.34-3.64-1.25-.18-1.59,1.22-3.06,3.12-3.27,1.9-.22,3.6.9,3.78,2.48.18,1.59-1.36,1.82-3.26,2.04Z" style="fill: #a27ff7; stroke-width: 0px;"/>
-  </g>
-  <g>
-    <path d="M60.88,48.71l-9.82-9.92-9.63,9.92c-2.78,0-4.4-2.35-2.8-4.06l9.73-10.41c1.36-1.46,4.24-1.46,5.61,0l9.73,10.41c1.59,1.71-.03,4.06-2.8,4.06Z" style="fill: #fff; stroke-width: 0px;"/>
-    <rect x="56.68" y="34.22" width="4.96" height="9.54" style="fill: #fff; stroke-width: 0px;"/>
-    <path d="M51.06,37.27c-1.39,0-9.44,8.76-9.44,10.15v10.98c0,1.39,1.13,2.52,2.52,2.52h3.97v-11.06h6.1v11.06h3.97c1.39,0,2.52-1.13,2.52-2.52v-10.98l-9.63-10.15Z" style="fill: #fff; stroke-width: 0px;"/>
+    <path d="M63.57,49.54l-12.06-12.18-11.83,12.18c-3.41,0-5.4-2.89-3.44-4.98l11.95-12.79c1.68-1.79,5.21-1.79,6.89,0l11.95,12.79c1.96,2.1-.04,4.98-3.44,4.98Z" style="fill: #fff; stroke-width: 0px;"/>
+    <rect x="58.42" y="31.73" width="6.09" height="11.71" style="fill: #fff; stroke-width: 0px;"/>
+    <path d="M51.51,35.48c-1.71,0-11.6,10.75-11.6,12.46v13.49c0,1.71,1.38,3.09,3.09,3.09h4.87v-13.59h7.5v13.59h4.87c1.71,0,3.09-1.38,3.09-3.09v-13.49l-11.83-12.46Z" style="fill: #fff; stroke-width: 0px;"/>
   </g>
 </svg>

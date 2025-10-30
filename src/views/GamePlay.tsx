@@ -11,6 +11,7 @@ import { Game } from '@src/core/game.class.ts';
 import { Leva } from 'leva';
 import { Suspense } from 'react';
 import { useErrorBoundary } from 'use-error-boundary';
+import { Market } from '@src/components/game/Market.tsx';
 
 type Props = {
   backToLobby: () => void;
@@ -23,10 +24,11 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
   const { ErrorBoundary } = useErrorBoundary();
   const { hidden } = useDebug();
   const { settings } = useSettings();
+  const game = Game.getInstance(model, settings);
 
   return (
     <ErrorBoundary>
-      <GameContext.Provider value={Game.getInstance(model, settings)}>
+      <GameContext.Provider value={game}>
         <Suspense fallback={<Loading />}>
           <Leva collapsed hidden={hidden} />
           <Canvas
@@ -41,6 +43,7 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
             <Experience backToLobby={backToLobby} />
           </Canvas>
         </Suspense>
+        <Market ref={game.model.modals.market} />
 
         <InGamePowerBar />
         <div className="canvas-overlay">

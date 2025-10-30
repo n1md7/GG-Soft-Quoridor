@@ -1,0 +1,186 @@
+.market-view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  .main-container {
+    @apply flex flex-col flex-wrap items-center;
+
+    scale: 0.9;
+    position: relative;
+    align-items: flex-start;
+    animation: pop-in 0.5s ease forwards;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background-color 0.2s;
+
+    .market-wrapper {
+      padding: 10px;
+      border: 1px solid #0e121ee8;
+      border-radius: 10px;
+      backdrop-filter: blur(4px);
+    }
+
+    .inner-container {
+      @apply relative rounded-md px-4 backdrop-blur-md;
+
+      background-color: #0e121ee8;
+      min-width: 300px;
+      width: 500px;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px #00000080;
+
+      .market-close-btn {
+        @apply absolute top-4 right-4 flex h-12 w-12 items-center justify-center transition-all duration-200;
+
+        background-image: url('@assets/icons/close-icon.svg');
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+
+      .market-header {
+        @apply relative flex items-center justify-center p-5;
+
+        .trapezoid {
+          width: 270px;
+          height: 50px;
+          clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
+          position: relative;
+          background: linear-gradient(to right, #bb77fb 1%, #7e4cf5 30%, var(--color-app-blue) 80%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+
+          .header {
+            font-family: Corporation-Italic, sans-serif;
+            font-size: clamp(20px, 2vw, 27px);
+            text-transform: uppercase;
+          }
+        }
+      }
+
+      .market-body {
+        @apply rounded-lg p-8;
+
+        background-color: #121625;
+        padding: 0 30px 30px;
+        box-shadow:
+          inset 0 10px 0 rgb(0 0 0 / 30%),
+          0 16px 0 rgb(0 0 0 / 0%);
+
+        .gem-container {
+          @apply flex flex-nowrap items-center justify-center p-3;
+
+          .gem-icon {
+            width: 2.5rem;
+            margin-right: 20px;
+          }
+
+          .gem-count {
+            color: white;
+            font-size: 35px;
+            font-family: Corporation-Italic, sans-serif;
+          }
+        }
+
+        .item-container {
+          @apply grid grid-cols-2 gap-4;
+
+          .market-item {
+            @apply flex flex-col justify-between rounded-lg p-4 transition-all duration-300;
+
+            background-color: #1f263e;
+
+            &.available {
+              border: 2px solid;
+              border-image: linear-gradient(45deg, #00e0ea, #d4c5f1) 1;
+              border-radius: 8px;
+
+              &:hover {
+                @apply translate-y-1 border-cyan-400 shadow-lg shadow-cyan-400/30;
+              }
+            }
+
+            &.unavailable {
+              @apply border-slate-500 opacity-60;
+            }
+
+            &.owned {
+              border: 2px solid;
+              border-image: linear-gradient(45deg, #7e4cf5, #ddd4f2) 1;
+              border-radius: 8px;
+            }
+
+            .item-wrapper {
+              @apply flex flex-row;
+
+              .item-details {
+                @apply flex flex-col;
+
+                .item-header {
+                  @apply mb-3 flex items-center justify-between;
+
+                  .item-name {
+                    @apply m-0 text-base font-bold text-white;
+
+                    color: #00e0ea;
+                  }
+
+                  .item-cost {
+                    @apply text-sm font-bold text-yellow-400;
+                  }
+                }
+
+                .item-description {
+                  @apply mb-4 text-sm leading-snug text-slate-400;
+
+                  font-size: 10px;
+                }
+              }
+
+              .item-img {
+                width: 60px;
+              }
+            }
+
+            .buy-button {
+              @apply flex w-full cursor-pointer flex-row items-center justify-center rounded-md border-none px-3 py-2 text-sm font-bold transition-all duration-200;
+
+              &.available {
+                @apply text-white hover:-translate-y-0.5;
+
+                background-color: var(--color-app-green);
+                color: black;
+
+                &:hover {
+                  background-color: #8cff0e;
+                }
+              }
+
+              &.unavailable {
+                @apply cursor-not-allowed bg-slate-500 text-slate-200;
+              }
+
+              &.owned {
+                @apply cursor-not-allowed;
+
+                background-color: var(--color-app-purple);
+                color: var(--color-app-light-purple);
+              }
+
+              > img {
+                width: 20px;
+                margin-right: 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
