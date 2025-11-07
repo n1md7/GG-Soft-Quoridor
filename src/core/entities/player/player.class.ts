@@ -62,6 +62,10 @@ export class Player extends Character {
     return false;
   }
 
+  override getShortestPath() {
+    return super.getShortestPath(this.getCoords());
+  }
+
   getMovesMade(): number {
     return this.stats.getMoves();
   }
@@ -125,7 +129,7 @@ export class Player extends Character {
     this.blocks.current.showPossibleMoves(coords, this.mode.isPawn());
 
     // TODO: When Power is equipped, show possible path, else hide
-    const shortestPath = this.getShortestPath(this.getCoords());
+    const shortestPath = this.getShortestPath();
     this.game.player.showShortestPath(
       shortestPath.map((path) => {
         return this.getDestinationFromCoords(path).position;

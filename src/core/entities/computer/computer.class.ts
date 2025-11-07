@@ -64,6 +64,10 @@ export class Computer extends Character {
     this.skip.reset();
   }
 
+  override getShortestPath() {
+    return super.getShortestPath(this.getCoords());
+  }
+
   blockNextMove() {
     this.skip.activate();
   }
