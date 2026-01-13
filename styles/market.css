@@ -154,11 +154,11 @@
               &.available {
                 @apply text-white hover:-translate-y-0.5;
 
-                background-color: var(--color-app-green);
+                background-color: #8cff0e;
                 color: black;
 
                 &:hover {
-                  background-color: #8cff0e;
+                  background-color: var(--color-app-green);
                 }
               }
 

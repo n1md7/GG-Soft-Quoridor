@@ -1,0 +1,174 @@
+.game-status-view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: Chelsea-Market, sans-serif;
+
+  @apply shadow-2xl backdrop-blur-md;
+
+  .main-container {
+    @apply flex flex-col flex-wrap items-center;
+
+    scale: 0.9;
+    position: relative;
+    align-items: flex-start;
+    animation: pop-in 0.5s ease forwards;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background-color 0.2s;
+
+    .game-status-wrapper {
+      padding: 10px;
+      border: 1px solid var(--color-app-dark-border);
+      border-radius: 10px;
+      backdrop-filter: blur(4px);
+    }
+
+    .inner-container {
+      @apply relative rounded-md px-4 backdrop-blur-md;
+
+      background-color: var(--color-app-dark-border);
+      min-width: 300px;
+      width: 500px;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px #00000080;
+    }
+  }
+
+  .game-status-header {
+    @apply relative flex items-center justify-center p-5;
+
+    .trapezoid {
+      width: 100%;
+      height: 70px;
+      clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
+      position: relative;
+      background: linear-gradient(to right, #b80956 1%, var(--color-app-red) 30%, #420fa3 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+
+      &.winner {
+        background: linear-gradient(to right, #7309b8 1%, #0e68ff 30%, #8cff0e 80%);
+      }
+    }
+
+    .title {
+      font-family: Corporation-Italic, sans-serif;
+      font-size: clamp(35px, 4vw, 45px);
+      text-transform: uppercase;
+      color: white;
+    }
+  }
+
+  .game-status-body {
+    @apply rounded-lg p-8;
+
+    background-color: #121625;
+    padding: 0 30px 30px;
+    box-shadow:
+      inset 0 10px 0 rgb(0 0 0 / 30%),
+      0 16px 0 rgb(0 0 0 / 0%);
+
+    .message-container {
+      @apply p-4 text-center;
+
+      .message-title {
+        @apply text-lg font-bold;
+
+        color: var(--color-app-red);
+
+        &.winner {
+          color: var(--color-app-green);
+        }
+      }
+
+      .message-description {
+        @apply text-sm text-slate-400;
+      }
+    }
+
+    .game-status-statistics-container {
+      @apply mb-4 grid grid-cols-2 gap-4;
+
+      .stats-card {
+        @apply space-y-2 rounded-lg p-4;
+
+        border: 2px solid #192130;
+
+        .stats-text {
+          @apply text-slate-400;
+        }
+
+        .stats-value {
+          @apply font-bold text-white;
+        }
+
+        > div,
+        span {
+          font-size: 13px;
+        }
+      }
+    }
+
+    .gem-container {
+      @apply flex justify-center;
+
+      gap: 1rem;
+      color: white;
+      font-size: 25px;
+      align-items: center;
+
+      .gem-text {
+        font-size: 25px;
+        font-family: Corporation-Italic, sans-serif;
+        text-transform: uppercase;
+        color: #a1fbff;
+      }
+
+      .gem-icon {
+        display: flex;
+        width: 2rem;
+      }
+
+      .gem-count {
+        &.total {
+          font-size: 25px;
+          font-family: Corporation-Italic, sans-serif;
+          color: #00e0ea;
+        }
+      }
+    }
+  }
+
+  .button {
+    @apply flex w-full cursor-pointer flex-row items-center justify-center rounded-md border-none px-3 py-2 text-sm font-bold transition-all duration-200;
+
+    &.play-again {
+      background-color: var(--color-app-purple);
+      color: #fff;
+
+      &:hover {
+        background-color: var(--color-app-purple-hover);
+      }
+    }
+
+    &.main-menu {
+      background-color: var(--color-app-purple);
+      color: #fff;
+
+      &:hover {
+        background-color: var(--color-app-purple-hover);
+      }
+    }
+  }
+
+  .bonus {
+    @apply ml-1;
+
+    color: var(--color-app-green);
+  }
+}
