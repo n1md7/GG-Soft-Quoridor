@@ -21,7 +21,7 @@
 
     .game-status-wrapper {
       padding: 10px;
-      border: 1px solid #0e121ee8;
+      border: 1px solid var(--color-app-dark-border);
       border-radius: 10px;
       backdrop-filter: blur(4px);
     }
@@ -29,7 +29,7 @@
     .inner-container {
       @apply relative rounded-md px-4 backdrop-blur-md;
 
-      background-color: #0e121ee8;
+      background-color: var(--color-app-dark-border);
       min-width: 300px;
       width: 500px;
       border-radius: 20px;
@@ -45,11 +45,15 @@
       height: 70px;
       clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
       position: relative;
-      background: linear-gradient(to right, #b80956 1%, #db1f48 30%, #420fa3 80%);
+      background: linear-gradient(to right, #b80956 1%, var(--color-app-red) 30%, #420fa3 80%);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
+
+      &.winner {
+        background: linear-gradient(to right, #7309b8 1%, #0e68ff 30%, #8cff0e 80%);
+      }
     }
 
     .title {
@@ -75,7 +79,11 @@
       .message-title {
         @apply text-lg font-bold;
 
-        color: #db1f48;
+        color: var(--color-app-red);
+
+        &.winner {
+          color: var(--color-app-green);
+        }
       }
 
       .message-description {
@@ -87,16 +95,21 @@
       @apply mb-4 grid grid-cols-2 gap-4;
 
       .stats-card {
-        @apply space-y-2 rounded-lg p-4 text-sm;
+        @apply space-y-2 rounded-lg p-4;
 
         border: 2px solid #192130;
 
         .stats-text {
-          @apply text-sm text-slate-400;
+          @apply text-slate-400;
         }
 
         .stats-value {
-          @apply text-sm font-bold text-white;
+          @apply font-bold text-white;
+        }
+
+        > div,
+        span {
+          font-size: 13px;
         }
       }
     }
@@ -139,7 +152,7 @@
       color: #fff;
 
       &:hover {
-        background-color: #6f23ff;
+        background-color: var(--color-app-purple-hover);
       }
     }
 
@@ -148,8 +161,14 @@
       color: #fff;
 
       &:hover {
-        background-color: #6f23ff;
+        background-color: var(--color-app-purple-hover);
       }
     }
+  }
+
+  .bonus {
+    @apply ml-1;
+
+    color: var(--color-app-green);
   }
 }

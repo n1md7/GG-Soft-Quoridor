@@ -64,6 +64,7 @@ export const GameOver = forwardRef(({ onMainMenu }: GameOverProps, ref: Forwarde
   return (
     <Html
       visible={visible}
+      position={[0, 0, 0]}
       center
       style={{
         pointerEvents: 'auto',
@@ -146,14 +147,14 @@ export const GameOver = forwardRef(({ onMainMenu }: GameOverProps, ref: Forwarde
                   <span className="gem-count total">{reward.totalCoins}</span>
                 </div>
 
-                <div className="flex gap-4">
-                  <button className="button play-again" onClick={onPlayAgain}>
+                <div className="button-grp">
+                  <button className="play-button" onClick={onPlayAgain}>
                     {' '}
-                    Play Again
+                    Play Again{' '}
                   </button>
-                  <button className="button main-menu" onClick={onMainMenu}>
+                  <button className="play-button other" onClick={onMainMenu}>
                     {' '}
-                    Main Menu
+                    Main Menu{' '}
                   </button>
                 </div>
               </div>
