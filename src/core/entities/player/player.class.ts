@@ -72,6 +72,7 @@ export class Player extends Character {
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
     if (this.won()) return;
+    if (this.game.computer.won()) return;
     if (!this.isMyTurn()) {
       this.game.sounds.player.error.play();
       return this.game.status.sendPlayerMessage('Hold on a sec, it is not your turn yet!');
@@ -121,6 +122,7 @@ export class Player extends Character {
 
   handlePawnPointerClick(coords: CoordsType) {
     if (this.won()) return;
+    if (this.game.computer.won()) return;
 
     this.game.status.sendPlayerMessage(''); // Reset
     this.mode.toggle();
