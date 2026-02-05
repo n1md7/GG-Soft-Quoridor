@@ -19,7 +19,7 @@ export class AdManager {
 
     return new Promise((resolve) => {
       const done = () => {
-        this.game.states.changeState('pause');
+        this.game.states.changeState('play');
         resolve();
       };
 

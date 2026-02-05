@@ -32,6 +32,9 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
         <Suspense fallback={<Loading />}>
           <Leva collapsed hidden={hidden} />
           <Canvas
+            style={{
+              position: 'fixed',
+            }}
             shadows
             camera={{
               fov: 45,

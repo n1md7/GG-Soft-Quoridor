@@ -46,6 +46,8 @@ export class Computer extends Character {
 
     this.model.pawns.current.opponent.setHighlight(true);
     delay(upto(computerMaxThinkingTime)).then(() => {
+      if (this.game.player.won()) return;
+
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.skip.isRequested() ? this.skip.reset() : this.modes.makeMove();
 
@@ -62,6 +64,10 @@ export class Computer extends Character {
   override reset() {
     this.coords.reset();
     this.skip.reset();
+  }
+
+  override getShortestPath() {
+    return super.getShortestPath(this.getCoords());
   }
 
   blockNextMove() {

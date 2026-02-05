@@ -62,12 +62,17 @@ export class Player extends Character {
     return false;
   }
 
+  override getShortestPath() {
+    return super.getShortestPath(this.getCoords());
+  }
+
   getMovesMade(): number {
     return this.stats.getMoves();
   }
 
   handleBlockPointerClick(coords: CoordsWithIsHighlightedType) {
     if (this.won()) return;
+    if (this.game.computer.won()) return;
     if (!this.isMyTurn()) {
       this.game.sounds.player.error.play();
       return this.game.status.sendPlayerMessage('Hold on a sec, it is not your turn yet!');
@@ -117,6 +122,7 @@ export class Player extends Character {
 
   handlePawnPointerClick(coords: CoordsType) {
     if (this.won()) return;
+    if (this.game.computer.won()) return;
 
     this.game.status.sendPlayerMessage(''); // Reset
     this.mode.toggle();
@@ -125,7 +131,7 @@ export class Player extends Character {
     this.blocks.current.showPossibleMoves(coords, this.mode.isPawn());
 
     // TODO: When Power is equipped, show possible path, else hide
-    const shortestPath = this.getShortestPath(this.getCoords());
+    const shortestPath = this.getShortestPath();
     this.game.player.showShortestPath(
       shortestPath.map((path) => {
         return this.getDestinationFromCoords(path).position;

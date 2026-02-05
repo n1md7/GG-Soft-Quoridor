@@ -74,7 +74,7 @@ export function Experience({ backToLobby, lightingMode }: Props) {
 
     timeout.current = setTimeout(() => {
       game.states.changeState('market');
-    }, 3000);
+    }, 2000);
   }, [game, game.states]);
 
   return (

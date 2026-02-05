@@ -1,1 +1,1 @@
-export const computerMaxThinkingTime = 2000;
+export const computerMaxThinkingTime = 1000;

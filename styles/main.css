@@ -9,12 +9,14 @@ body,
 @layer base {
   :root {
     --color-app-purple: #8a4cff;
+    --color-app-purple-hover: #6f23ff;
     --color-app-light-purple: #c9cafd;
     --color-app-blue: #3850bc;
     --color-app-cyan: #06c7cf;
     --color-app-red: #db1f48;
-    --color-app-green: #70ca0c;
+    --color-app-green: #8cff0e;
     --color-app-yellow: #fdc700;
+    --color-app-dark-border: #0e121ee8;
     --color-app-slate-blue: #2c3c51;
     --color-app-gray: #787878;
   }
@@ -62,6 +64,7 @@ body,
     gap: 30px;
     position: relative;
     scale: 0.7;
+    justify-content: center;
   }
 
   .play-button {
@@ -100,6 +103,10 @@ body,
 
     &.other {
       background-color: var(--color-app-purple);
+    }
+
+    &.winner {
+      background-color: #0e68ff;
     }
   }
 
