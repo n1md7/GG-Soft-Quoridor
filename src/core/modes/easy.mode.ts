@@ -22,7 +22,9 @@ export class EasyMode extends GameMode {
     const nextDestination = this.game.computer.getDestinationFromCoords(this.game.computer.setCoords(nextCoords));
 
     this.game.computer.animateTo(nextDestination);
-    this.game.computer.showShortestPath(shortestPathPoints);
+    if (this.shortestPathActivated) {
+      this.game.computer.showShortestPath(shortestPathPoints);
+    }
   }
 
   override undo() {}
