@@ -19,7 +19,7 @@ export type PowerButtonProps = {
 };
 
 export function PowerButton({ power }: PowerButtonProps) {
-  const { inventory, market, powers, advertisements } = useGame();
+  const { inventory, market, powers, advertisements, player } = useGame();
 
   const [state, setState] = useState<StateType>(power.state);
 
@@ -31,17 +31,17 @@ export function PowerButton({ power }: PowerButtonProps) {
   }, [state]);
 
   const handleClick = useCallback(async () => {
-    switch (state) {
-      case 'is-usable':
-        powers.use(power.key);
-        break;
-      case 'ad-available':
-        await advertisements.showAd();
-        inventory.unlockViaAd(power.key);
-        powers.use(power.key);
-        break;
+    if (state === 'disabled') return;
+
+    if (state === 'ad-available') {
+      await advertisements.showAd();
+      inventory.unlockViaAd(power.key);
     }
-  }, [inventory, power.key, powers, state, advertisements]);
+
+    powers.use(power.key);
+
+    player.activateShortestPath();
+  }, [state, powers, power.key, player, advertisements, inventory]);
 
   const onPurchaseAction = useCallback(
     (key: PowerEnum) => {

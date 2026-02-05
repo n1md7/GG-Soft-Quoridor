@@ -3,6 +3,7 @@ import { Game } from '@src/core/game.class.ts';
 
 export abstract class GameMode {
   protected probabilityOfGoodMove = 20;
+  protected shortestPathActivated: boolean = false;
 
   constructor(protected readonly game: Game) {}
 
@@ -11,4 +12,12 @@ export abstract class GameMode {
   abstract makeMove(): void;
 
   abstract undo(): void;
+
+  activateShortestPath() {
+    this.shortestPathActivated = true;
+  }
+
+  disableShortestPath() {
+    this.shortestPathActivated = false;
+  }
 }

@@ -51,8 +51,6 @@ export const Blocks = forwardRef(
 
           const color: Colors = show ? highlightColor : 'DEFAULT';
 
-          // TODO: get Pawn reference here and do checks to make they do no step each other
-
           if (!neighbour.wall.top && neighbour.block.top) {
             neighbour.block.top.changeColor(color);
             lastHighlighted.current.push(neighbour.block.top);

@@ -29,6 +29,8 @@ export class Player extends Character {
   private readonly walls: MutableRefObject<ForwardedWalls>;
   private readonly pawns: MutableRefObject<ForwardedPawns>;
 
+  private shortestPathActivated: boolean = false;
+
   private constructor(model: ModelType, game: Game) {
     super(model, game, new Coordinates(getDefaultPlayerPosition));
 
@@ -48,6 +50,11 @@ export class Player extends Character {
     this.handleBlockPointerOver = this.handleBlockPointerOver.bind(this);
     this.handleBlockPointerOut = this.handleBlockPointerOut.bind(this);
     this.handleBlockPointerClick = this.handleBlockPointerClick.bind(this);
+  }
+
+  activateShortestPath() {
+    this.shortestPathActivated = true;
+    this.game.computer.modes.mode.activateShortestPath();
   }
 
   static getInstance(model: ModelType, game: Game) {
@@ -130,13 +137,14 @@ export class Player extends Character {
     this.pawns.current.player.setHighlight(this.mode.isPawn());
     this.blocks.current.showPossibleMoves(coords, this.mode.isPawn());
 
-    // TODO: When Power is equipped, show possible path, else hide
-    const shortestPath = this.getShortestPath();
-    this.game.player.showShortestPath(
-      shortestPath.map((path) => {
-        return this.getDestinationFromCoords(path).position;
-      }),
-    );
+    if (this.shortestPathActivated) {
+      const shortestPath = this.getShortestPath();
+      this.game.player.showShortestPath(
+        shortestPath.map((path) => {
+          return this.getDestinationFromCoords(path).position;
+        }),
+      );
+    }
   }
 
   override won(): boolean {
@@ -146,6 +154,8 @@ export class Player extends Character {
   override reset() {
     this.coords.reset();
     this.stats.reset();
+    this.shortestPathActivated = false;
+    this.game.computer.modes.mode.disableShortestPath();
 
     // We reset CPU here too
     this.pawns.current.reset();
