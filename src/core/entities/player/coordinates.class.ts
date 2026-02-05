@@ -42,6 +42,10 @@ export class Coordinates {
     return ROWS;
   }
 
+  equals(coords: CoordsType) {
+    return this.row === coords.row && this.col === coords.col;
+  }
+
   reset() {
     const { row, col } = this.resetFn();
 
