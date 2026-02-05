@@ -1,4 +1,4 @@
-import { Outlines, useCursor } from '@react-three/drei';
+import { Float, Outlines, Text, useCursor } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { CoordsType } from '@src/components/game/block/block.type.ts';
 import { ForwardedPawn, MoveToParams, PawnName } from '@src/components/game/pawns/pawn.type.ts';
@@ -10,7 +10,6 @@ import { highlightColor } from '@src/config/highlight.config.ts';
 import { StatusManager } from '@src/core/managers/status.manager.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
-import { Float, Text } from '@react-three/drei';
 import {
   ElementRef,
   ForwardedRef,
@@ -65,6 +64,19 @@ export const Pawn = forwardRef(
           mesh.current.position.copy(position);
 
           coords.current = getCoordsFromDestination(position);
+
+          moveToAnimation.current = new Tween(mesh.current.position)
+            .to({
+              x: position.x,
+              z: position.z,
+            })
+            .duration(100)
+            .easing(Easing.Exponential.Out)
+            .onComplete(() => {
+              moveToAnimation.current.remove();
+              moveToAnimation.current = null!;
+            })
+            .start();
 
           return coords.current;
         }
