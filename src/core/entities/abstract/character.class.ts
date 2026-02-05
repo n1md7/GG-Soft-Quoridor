@@ -104,6 +104,10 @@ export abstract class Character extends CharacterState implements Subject {
     return this.coords.set(coords);
   }
 
+  coordsEqualTo(coords: CoordsType): boolean {
+    return this.coords.equals(coords);
+  }
+
   attach(observer: Observer, index: number): void {
     this.observer = observer;
     this.index = index;
