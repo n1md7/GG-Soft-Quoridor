@@ -40,7 +40,9 @@ export function PowerButton({ power }: PowerButtonProps) {
 
     powers.use(power.key);
 
-    player.activateShortestPath();
+    if (power.key === PowerEnum.ShortestPath) {
+      player.activateShortestPath();
+    }
   }, [state, powers, power.key, player, advertisements, inventory]);
 
   const onPurchaseAction = useCallback(
