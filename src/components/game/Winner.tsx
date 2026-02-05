@@ -15,10 +15,7 @@ type Props = {
 };
 
 export const Winner = forwardRef(({ onMainMenu }: Props, ref: ForwardedRef<ForwardedWinner>) => {
-  const { game, difficulty, reward, performance, setReward, setPerformance, getVictoryMessage, getPerformanceRating } =
-    useStatistics();
-
-  const { efficiency } = getPerformanceRating();
+  const { game, difficulty, reward, performance, setReward, setPerformance, getVictoryMessage } = useStatistics();
 
   const [visible, setVisible] = useState(false);
 
