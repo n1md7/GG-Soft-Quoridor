@@ -24,8 +24,8 @@ export class HardMode extends GameMode {
   }
 
   override makeMove() {
-    const playerPath = this.game.player.getShortestPath(this.game.player.getCoords());
-    const computerPath = this.game.computer.getShortestPath(this.game.computer.getCoords());
+    const playerPath = this.game.player.getShortestPath();
+    const computerPath = this.game.computer.getShortestPath();
 
     if (this.isCpuWinning(computerPath, playerPath)) return this.movePawn(computerPath);
 

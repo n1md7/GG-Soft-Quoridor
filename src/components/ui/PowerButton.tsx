@@ -38,6 +38,7 @@ export function PowerButton({ power }: PowerButtonProps) {
       case 'ad-available':
         await advertisements.showAd();
         inventory.unlockViaAd(power.key);
+        powers.use(power.key);
         break;
     }
   }, [inventory, power.key, powers, state, advertisements]);
