@@ -16,8 +16,16 @@ export class Statistics {
     this.moves += 1;
   }
 
+  removeMove() {
+    if (this.moves > 0) this.moves -= 1;
+  }
+
   addWall() {
     this.walls += 1;
+  }
+
+  removeWall() {
+    if (this.walls > 0) this.walls -= 1;
   }
 
   getStats() {
