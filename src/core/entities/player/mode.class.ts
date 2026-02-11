@@ -9,6 +9,7 @@ export class Mode {
     this.toggle = this.toggle.bind(this);
     this.isWall = this.isWall.bind(this);
     this.isPawn = this.isPawn.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   setWallMode() {
@@ -35,5 +36,10 @@ export class Mode {
 
   isPawn() {
     return !this.modeWall;
+  }
+
+  reset() {
+    this.modeWall = true;
+    this.game.grid.showOverlay();
   }
 }

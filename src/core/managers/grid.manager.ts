@@ -62,6 +62,9 @@ export class GridManager {
         return cell;
       });
     });
+
+    this.resetRestorePoints();
+    this.overlay = true;
   }
 
   /**
