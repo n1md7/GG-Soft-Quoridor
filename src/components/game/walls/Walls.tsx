@@ -30,13 +30,6 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
   const opponent = useWalls();
   const extraWall = useRef<ForwardedWall>(null!);
 
-  // Clear wall arrays when component mounts to prevent accumulation
-  useEffect(() => {
-    player.clearWalls();
-    opponent.clearWalls();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run only once on mount
-
   useEffect(() => {
     // Enhance container materials with metallic effects
     const enhanceMaterial = (material: Material) => {
