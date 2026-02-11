@@ -125,17 +125,6 @@ export const Market = forwardRef((_, ref: ForwardedRef<ForwardedMarket>) => {
                   );
                 })}
               </div>
-
-              {/* Bottom Close Button */}
-              <div className="market-footer" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                <button
-                  className="play-button other"
-                  onClick={onClose}
-                  style={{ minWidth: '150px', minHeight: '50px', fontSize: '14px' }}
-                >
-                  Close
-                </button>
-              </div>
             </div>
           </div>
         </div>
