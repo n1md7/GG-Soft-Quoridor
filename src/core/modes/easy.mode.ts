@@ -3,6 +3,8 @@ import { GameMode } from '@src/core/entities/abstract/game.mode.ts';
 import { ModeEnum } from '@src/core/enums/mode.enum.ts';
 
 export class EasyMode extends GameMode {
+  private previousPawnCoords?: CoordsType;
+
   override get name() {
     return ModeEnum.Easy;
   }
@@ -15,6 +17,8 @@ export class EasyMode extends GameMode {
   }
 
   private movePawn(path: CoordsType[]) {
+    this.previousPawnCoords = this.game.computer.getCoords();
+
     const [, ...otherCoords] = path;
     const [nextCoords] = otherCoords;
 
@@ -27,5 +31,13 @@ export class EasyMode extends GameMode {
     }
   }
 
-  override undo() {}
+  override undo() {
+    if (!this.previousPawnCoords) return;
+
+    this.game.computer.setCoords(this.previousPawnCoords);
+    this.game.model.pawns.current.opponent.setHighlight(false);
+    this.game.computer.animateTo(this.game.computer.getDestinationFromCoords(this.previousPawnCoords));
+
+    this.previousPawnCoords = undefined;
+  }
 }

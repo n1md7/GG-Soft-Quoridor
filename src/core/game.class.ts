@@ -68,6 +68,13 @@ export class Game {
     return Game.instance;
   }
 
+  static destroyInstance() {
+    // Also destroy Player and Computer singletons to prevent stale references
+    Player.destroyInstance();
+    Computer.destroyInstance();
+    Game.instance = null!;
+  }
+
   start() {
     this.player.setMyTurn(true); // Player always starts first. 😎?
   }

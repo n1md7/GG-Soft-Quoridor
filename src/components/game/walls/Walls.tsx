@@ -82,6 +82,10 @@ export const Walls = forwardRef(({ walls, containers }: Props, ref: ForwardedRef
         player.resetIndex();
         opponent.resetIndex();
 
+        // Note: We don't clear walls array here as the Wall components
+        // remain mounted and we need to keep their references
+        // The array is only cleared on component mount/remount
+
         if (extraWall.current) {
           extraWall.current.moveToOrigin(() => {
             extraWall.current.hide();

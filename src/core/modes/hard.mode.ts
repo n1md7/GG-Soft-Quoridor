@@ -136,10 +136,11 @@ export class HardMode extends GameMode {
   }
 
   override undo() {
+    if (!this.previousAction) return;
+
     switch (this.previousAction) {
       case 'Wall':
-        if (!this.previousWall) break;
-        if (!this.previousWallCoords) break;
+        if (!this.previousWall || !this.previousWallCoords) break;
 
         this.game.grid.removeWallByCoords(this.previousWallCoords);
         this.walls.current.opponent.undoWallIndex();
@@ -161,5 +162,7 @@ export class HardMode extends GameMode {
 
         break;
     }
+
+    this.previousAction = undefined;
   }
 }
