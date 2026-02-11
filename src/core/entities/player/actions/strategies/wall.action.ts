@@ -58,9 +58,10 @@ export class WallAction extends Action {
   }
 
   undo(): void {
-    if (!this.previousCoords) return;
-    if (!this.previousWall) return;
+    if (!this.previousCoords || !this.previousWall) return;
 
+    this.game.player.stats.removeMove();
+    this.game.player.stats.removeWall();
     this.game.grid.removeWallByCoords(this.previousCoords);
     this.walls.current.player.undoWallIndex();
     this.previousWall.moveToOrigin();

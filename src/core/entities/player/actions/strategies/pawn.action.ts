@@ -34,6 +34,7 @@ export class PawnAction extends Action {
   undo(): void {
     if (!this.previousCoords) return;
 
+    this.game.player.stats.removeMove();
     this.game.player.setCoords(this.previousCoords);
     this.pawns.current.player.setHighlight(false);
     this.pawns.current.player.animateTo(this.game.player.getDestinationFromCoords(this.previousCoords));

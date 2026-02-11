@@ -9,7 +9,7 @@ import { Loading } from '@src/components/ui/Loading.tsx';
 import { GameContext } from '@src/context/game.context.ts';
 import { Game } from '@src/core/game.class.ts';
 import { Leva } from 'leva';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useErrorBoundary } from 'use-error-boundary';
 import { Market } from '@src/components/game/Market.tsx';
 
@@ -25,6 +25,13 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
   const { hidden } = useDebug();
   const { settings } = useSettings();
   const game = Game.getInstance(model, settings);
+
+  // Cleanup: destroy Game singleton when component unmounts
+  useEffect(() => {
+    return () => {
+      Game.destroyInstance();
+    };
+  }, []);
 
   return (
     <ErrorBoundary>

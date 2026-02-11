@@ -65,6 +65,10 @@ export class Player extends Character {
     return Player.instance;
   }
 
+  static destroyInstance() {
+    Player.instance = null!;
+  }
+
   override isBot(): boolean {
     return false;
   }
@@ -154,6 +158,7 @@ export class Player extends Character {
   override reset() {
     this.coords.reset();
     this.stats.reset();
+    this.mode.reset();
     this.shortestPathActivated = false;
     this.game.computer.modes.mode.disableShortestPath();
 

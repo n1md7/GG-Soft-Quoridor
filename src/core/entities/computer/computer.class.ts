@@ -39,6 +39,10 @@ export class Computer extends Character {
     return Computer.instance;
   }
 
+  static destroyInstance() {
+    Computer.instance = null!;
+  }
+
   override setMyTurn(turn: boolean) {
     if (!turn) return;
 
