@@ -65,6 +65,10 @@ export class Player extends Character {
     return Player.instance;
   }
 
+  static destroyInstance() {
+    Player.instance = null!;
+  }
+
   override isBot(): boolean {
     return false;
   }
