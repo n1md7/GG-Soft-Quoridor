@@ -6,9 +6,7 @@ export class MediumMode extends GameMode {
     return ModeEnum.Medium;
   }
 
-  makeMove(): void {
-    throw new Error('Method not implemented.');
+  override get rightChoiceValue(): number {
+    return 65;
   }
-
-  override undo() {}
 }
