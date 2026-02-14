@@ -15,6 +15,10 @@ export class StatusManager extends TinyEmitter {
     return StatusManager.instance;
   }
 
+  static destroyInstance() {
+    StatusManager.instance = null!;
+  }
+
   onOpponentMessage(callback: (message: string) => void) {
     this.on('opponentMessage', callback);
 

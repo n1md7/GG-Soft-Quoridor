@@ -1,6 +1,7 @@
 import { ModelType } from '@src/components/hooks/useModel.ts';
 import { Settings } from '@src/context/settings.context.ts';
 import { AdManager } from '@src/core/managers/ad.manager.ts';
+import { ModeManager } from '@src/core/managers/mode.manager.ts';
 import { PowerManager } from '@src/core/managers/powers.manager.ts';
 import { Computer } from '@src/core/entities/computer/computer.class.ts';
 import { Player } from '@src/core/entities/player/player.class.ts';
@@ -69,9 +70,21 @@ export class Game {
   }
 
   static destroyInstance() {
-    // Also destroy Player and Computer singletons to prevent stale references
+    // Destroy all singletons to prevent stale references on next game
     Player.destroyInstance();
     Computer.destroyInstance();
+    GridManager.destroyInstance();
+    StateManager.destroyInstance();
+    RewardManager.destroyInstance();
+    EventManager.destroyInstance();
+    MarketManager.destroyInstance();
+    InventoryManager.destroyInstance();
+    PerformanceManager.destroyInstance();
+    TimeManager.destroyInstance();
+    PowerManager.destroyInstance();
+    AdManager.destroyInstance();
+    StatusManager.destroyInstance();
+    ModeManager.destroyInstance();
     Game.instance = null!;
   }
 

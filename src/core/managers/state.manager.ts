@@ -39,6 +39,10 @@ export class StateManager extends TinyEmitter {
     return StateManager.instance;
   }
 
+  static destroyInstance() {
+    StateManager.instance = null!;
+  }
+
   override on(event: EventType, callback: CallbackType): this {
     return super.on(event, callback);
   }

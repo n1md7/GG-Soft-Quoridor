@@ -26,6 +26,10 @@ export class EventManager implements Observer {
     return EventManager.instance;
   }
 
+  static destroyInstance() {
+    EventManager.instance = null!;
+  }
+
   notify(character: Character): void {
     const nextIndex = this.turn.getNextBy(character.getIndex());
 

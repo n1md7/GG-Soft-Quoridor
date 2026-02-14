@@ -12,6 +12,10 @@ export class PowerManager {
     return PowerManager.instance;
   }
 
+  static destroyInstance() {
+    PowerManager.instance = null!;
+  }
+
   private constructor(private readonly game: Game) {}
 
   use(power: PowerEnum) {

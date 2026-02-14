@@ -14,6 +14,10 @@ export class AdManager {
     return AdManager.instance;
   }
 
+  static destroyInstance() {
+    AdManager.instance = null!;
+  }
+
   showAd(): Promise<void> {
     this.game.states.changeState('pause');
 

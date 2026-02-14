@@ -30,6 +30,7 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
   useEffect(() => {
     return () => {
       Game.destroyInstance();
+      console.info('Game Unmounted');
     };
   }, []);
 

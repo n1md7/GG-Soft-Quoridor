@@ -34,6 +34,10 @@ export class GridManager {
     return GridManager.instance;
   }
 
+  static destroyInstance() {
+    GridManager.instance = null!;
+  }
+
   showOverlay() {
     this.overlay = true;
   }
