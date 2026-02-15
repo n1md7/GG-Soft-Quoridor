@@ -17,11 +17,11 @@
       box-shadow 0.2s,
       background-color 0.2s;
 
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
       scale: 0.7;
     }
 
-    @media (max-width: 480px) {
+    @media (width <= 480px) {
       scale: 0.55;
     }
 
@@ -36,8 +36,8 @@
       @apply relative rounded-md px-4 backdrop-blur-md;
 
       background-color: #0e121ee8;
-      min-width: 300px;
-      width: clamp(300px, 90vw, 500px);
+      min-width: 600px;
+      width: clamp(300px, 90vw, 600px);
       max-height: 90vh;
       border-radius: 20px;
       box-shadow: 0 25px 50px -12px #00000080;
@@ -93,13 +93,13 @@
           @apply flex flex-nowrap items-center justify-center p-3;
 
           .gem-icon {
-            width: 2.5rem;
+            width: 2rem;
             margin-right: 20px;
           }
 
           .gem-count {
             color: white;
-            font-size: 35px;
+            font-size: 30px;
             font-family: Corporation-Italic, sans-serif;
           }
         }
@@ -109,7 +109,7 @@
 
           grid-template-columns: repeat(2, 1fr);
 
-          @media (max-width: 480px) {
+          @media (width <= 480px) {
             grid-template-columns: 1fr;
           }
 
@@ -139,7 +139,7 @@
             }
 
             .item-wrapper {
-              @apply flex flex-row;
+              @apply flex flex-row justify-around;
 
               .item-details {
                 @apply flex flex-col;
@@ -161,7 +161,7 @@
                 .item-description {
                   @apply mb-4 text-sm leading-snug text-slate-400;
 
-                  font-size: 10px;
+                  font-size: 12px;
                 }
               }
 

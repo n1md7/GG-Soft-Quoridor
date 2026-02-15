@@ -68,9 +68,7 @@ body,
   }
 
   .play-button {
-    @apply text-[clamp(12px,1vw,14px)] sm:text-[clamp(12px,1vw,14px)] md:text-[clamp(15px,1vw,16px)] lg:text-[clamp(15px,1vw,16px)] xl:text-[clamp(15px,2vw,17px)];
-
-    font-size: clamp(15px, 2vw, 23px);
+    font-size: clamp(19px, 2vw, 15px);
     margin-top: 0;
     padding: clamp(10px, 1vw, 20px);
     background-color: var(--color-app-red);
@@ -85,16 +83,18 @@ body,
       box-shadow 0.2s,
       background-color 0.2s;
     outline: 3px solid #e9e9e9;
-    width: clamp(130px, 13vw, 250px);
     background-image: url('@assets/button-bg.svg');
     background-size: cover;
     background-position: center;
     box-shadow: inset 0 0 0 1px #e9e9e9;
-    animation:
-      bounce 1.5s infinite 1.5s,
-      fade-in 1s ease forwards;
-    min-width: 215px;
-    min-height: 70px;
+
+    /* animation: */
+
+    /*  bounce 1.5s infinite 1.5s, */
+
+    /*  fade-in 1s ease forwards; */
+    width: 215px;
+    height: 70px;
 
     &:hover {
       transform: translateY(-2px);
