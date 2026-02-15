@@ -9,7 +9,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 12px;
     border: 1px solid rgba(51, 65, 85, 0.5);
     background-color: #0e121ee8;
     padding: 1rem 1.5rem;
@@ -62,8 +62,8 @@
 
         .button {
           position: relative;
-          height: 4rem;
-          width: 4rem;
+          height: 3.3rem;
+          width: 3.3rem;
           border-radius: 1rem;
           transition: all 0.3s ease;
           cursor: pointer;
@@ -130,9 +130,9 @@
         .ad-overlay {
           position: absolute;
           top: -7px;
-          left: 55px;
-          height: 2rem;
-          width: 2rem;
+          left: 40px;
+          height: 1.5rem;
+          width: 1.5rem;
           transition: all 0.2s ease;
 
           &:hover {
