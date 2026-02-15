@@ -1,8 +1,8 @@
 .credits-overlay {
   position: fixed;
   inset: 0;
-  background: rgb(0 0 0 / 90%);
-  backdrop-filter: blur(10px);
+  background: #0000004d;
+  backdrop-filter: blur(7px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -227,22 +227,18 @@
   font-family: Chelsea-Market, sans-serif;
   font-size: clamp(11px, 1.2vw, 13px);
   color: #c9cafd;
-  background: rgb(31 41 65 / 70%);
   padding: 8px 20px;
-  border-radius: 20px;
-  border: 2px solid rgb(0 224 234 / 40%);
   cursor: pointer;
   transition:
     all 0.3s ease,
     transform 0.2s;
-  z-index: 10;
   backdrop-filter: blur(5px);
   text-decoration: none;
   display: inline-block;
+  border-radius: 5px;
 
   &:hover {
-    background: rgb(138 76 255 / 80%);
-    border-color: #00e0ea;
+    background: rgb(165 151 191 / 35%);
     color: #fff;
     box-shadow: 0 5px 20px rgb(0 224 234 / 40%);
   }

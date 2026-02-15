@@ -10,6 +10,7 @@
   justify-content: center;
   height: 100vh;
   overflow-y: auto;
+  gap: 10px;
 
   .title {
     font-family: Kanit, sans-serif;

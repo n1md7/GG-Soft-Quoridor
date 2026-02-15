@@ -3,7 +3,8 @@ import { useProgress } from '@react-three/drei';
 import { ProgressBar } from '@src/components/ui/ProgressBar.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
 import { PlatformManager } from '@src/core/managers/platform.manager.ts';
-import { useEffect } from 'react';
+import { CreditsModal } from '@src/components/ui/CreditsModal.tsx';
+import { useCallback, useEffect, useState } from 'react';
 
 const platform = PlatformManager.getInstance();
 
@@ -12,6 +13,12 @@ type Props = {
 };
 export function InitialView({ next }: Readonly<Props>) {
   const { loaded, total } = useProgress();
+
+  const [showCredits, setShowCredits] = useState(false);
+
+  const handleToggleCredits = useCallback(() => {
+    setShowCredits((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     platform.loadingStarted().catch();
@@ -38,12 +45,18 @@ export function InitialView({ next }: Readonly<Props>) {
           <ProgressBar />
         </div>
       </div>
-      <div className="button-grp" style={{ top: '25px' }}>
+      <div className="button-grp">
         <Show when={loaded === total}>
           <button onClick={next} className="play-button">
             Enter
           </button>
         </Show>
+      </div>
+      <div className="credits">
+        <button className="lobby-credits-link" onClick={handleToggleCredits}>
+          About the game
+        </button>
+        <CreditsModal isOpen={showCredits} onClose={handleToggleCredits} />
       </div>
     </div>
   );
