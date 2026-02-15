@@ -32,6 +32,10 @@ export class RewardManager {
     return RewardManager.instance;
   }
 
+  static destroyInstance() {
+    RewardManager.instance = null!;
+  }
+
   getMultiplier() {
     return this.multiplier;
   }

@@ -22,6 +22,10 @@ export class PerformanceManager {
     return PerformanceManager.instance;
   }
 
+  static destroyInstance() {
+    PerformanceManager.instance = null!;
+  }
+
   calculate({ time, moves }: { time: number; moves: number }) {
     this.time = time;
     this.moves = moves;

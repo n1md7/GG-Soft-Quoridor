@@ -33,6 +33,10 @@ export class InventoryManager {
 
     return InventoryManager.instance;
   }
+
+  static destroyInstance() {
+    InventoryManager.instance = null!;
+  }
   on(event: 'use', fn: ItemUseFn): void;
   on(event: 'unlock', fn: ItemUnlockFn): void;
   on(event: 'purchase', fn: ItemPurchaseFn): void;

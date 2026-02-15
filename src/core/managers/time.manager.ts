@@ -9,6 +9,10 @@ export class TimeManager {
     return TimeManager.instance;
   }
 
+  static destroyInstance() {
+    TimeManager.instance = null!;
+  }
+
   private readonly intervals: {
     startedAt: Date;
     endedAt?: Date;

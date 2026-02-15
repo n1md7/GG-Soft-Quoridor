@@ -65,6 +65,10 @@ export class MarketManager {
     return MarketManager.instance;
   }
 
+  static destroyInstance() {
+    MarketManager.instance = null!;
+  }
+
   on(event: 'purchase', callback: (power: PowerEnum, remainingCoins: number) => void) {
     this.events.on(event, callback);
   }

@@ -30,6 +30,10 @@ export class ModeManager {
     return ModeManager.instance;
   }
 
+  static destroyInstance() {
+    ModeManager.instance = null!;
+  }
+
   setMode(mode: ModeEnum) {
     this.currentMode = this.modes.get(mode)!;
   }

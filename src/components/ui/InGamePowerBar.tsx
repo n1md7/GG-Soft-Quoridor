@@ -3,8 +3,9 @@ import { useSettings } from '@src/components/hooks/useSettings.ts';
 import { PowerButton, PowerProps, StateType } from '@src/components/ui/PowerButton.tsx';
 import { Show } from '@src/components/utils/Show.tsx';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
+import { Fn } from '@src/core/managers/powers.manager.ts';
 import classNames from 'classnames';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import '@styles/power-bar.scss';
 
 import ExtraWallIcon from '@assets/icons/extra-wall-icon.svg?url';
@@ -20,7 +21,11 @@ type Props = {
 };
 
 export function InGamePowerBar() {
-  const { inventory } = useGame();
+  const {
+    inventory,
+    powers: { events },
+  } = useGame();
+  const [enabled, setEnabled] = useState(false);
 
   const powers: PowerProps[] = useMemo(
     () =>
@@ -66,12 +71,20 @@ export function InGamePowerBar() {
     [inventory],
   );
 
+  useEffect(() => {
+    const fn: Fn = ({ disable }) => setEnabled(!disable);
+    events.on('disable', fn);
+
+    return () => events.off('disable', fn);
+  }, [events]);
+
   return (
     <div
       className="power-bar"
       style={{
         pointerEvents: 'auto',
         userSelect: 'none',
+        ...(!enabled && { display: 'none' }),
       }}
     >
       <div className="relative">
