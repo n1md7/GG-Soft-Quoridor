@@ -18,11 +18,11 @@
       background-color 0.2s;
 
     @media (width <= 768px) {
-      scale: 0.7;
+      scale: 0.9;
     }
 
     @media (width <= 480px) {
-      scale: 0.55;
+      scale: 0.8;
     }
 
     .market-wrapper {
@@ -36,7 +36,6 @@
       @apply relative rounded-md px-4 backdrop-blur-md;
 
       background-color: #0e121ee8;
-      min-width: 600px;
       width: clamp(300px, 90vw, 600px);
       max-height: 90vh;
       border-radius: 20px;
@@ -44,16 +43,6 @@
       padding-bottom: 16px;
       display: flex;
       flex-direction: column;
-
-      .market-close-btn {
-        @apply absolute top-4 right-4 flex h-12 w-12 items-center justify-center transition-all duration-200;
-
-        background-image: url('@assets/icons/close-icon.svg');
-
-        &:hover {
-          opacity: 0.8;
-        }
-      }
 
       .market-header {
         @apply relative flex items-center justify-center p-5;
@@ -71,7 +60,7 @@
 
           .header {
             font-family: Corporation-Italic, sans-serif;
-            font-size: clamp(20px, 2vw, 27px);
+            font-size: clamp(22px, 2vw, 23px);
             text-transform: uppercase;
           }
         }
@@ -140,6 +129,7 @@
 
             .item-wrapper {
               @apply flex flex-row justify-around;
+              font-family: Chelsea-Market, sans-serif;
 
               .item-details {
                 @apply flex flex-col;
@@ -148,9 +138,10 @@
                   @apply mb-3 flex items-center justify-between;
 
                   .item-name {
-                    @apply m-0 text-base font-bold text-white;
+                    @apply m-0 font-bold text-white;
 
                     color: #00e0ea;
+                    font-size: 16px;
                   }
 
                   .item-cost {

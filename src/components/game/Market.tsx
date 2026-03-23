@@ -82,7 +82,7 @@ export const Market = forwardRef((_, ref: ForwardedRef<ForwardedMarket>) => {
               </div>
 
               {/* Close Button - Always visible */}
-              <button className="market-close-btn" onClick={onClose} aria-label="Close market"></button>
+              <button className="close-btn" onClick={onClose} aria-label="Close market"></button>
             </div>
             <div className="market-body">
               {/* Coins Display */}
@@ -104,7 +104,7 @@ export const Market = forwardRef((_, ref: ForwardedRef<ForwardedMarket>) => {
                       <div className="item-wrapper">
                         <div className="item-details">
                           <div className="item-header">
-                            <h3 className="item-name">{item.power.name}</h3>
+                            <p className="item-name">{item.power.name}</p>
                             {/*<span className="item-cost">{item.cost}💰</span>*/}
                           </div>
                           <p className="item-description">{item.power.description}</p>
