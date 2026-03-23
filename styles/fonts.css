@@ -1,9 +1,4 @@
 @font-face {
-  font-family: Caprasimo;
-  src: url('@assets/fonts/caprasimo-regular.ttf') format('truetype');
-}
-
-@font-face {
   font-family: Bebas;
   src: url('@assets/fonts/bebasneue-regular.ttf') format('truetype');
 }
@@ -28,4 +23,12 @@
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+}
+
+.google-sans-regular {
+  font-family: 'Google Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: 'GRAD' 0;
 }

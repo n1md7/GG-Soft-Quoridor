@@ -12,83 +12,39 @@ export const CreditsModal = memo(function CreditsModal({ isOpen, onClose }: Prop
     <div className="credits-overlay" onClick={onClose}>
       <div className="credits-modal" onClick={(e) => e.stopPropagation()}>
         <div className="credits-header">
-          <h2>Credits</h2>
-          <button className="credits-close-btn" onClick={onClose}>
-            ✕
-          </button>
+          <span className="header">Credits</span>
+          <button className="close-btn" onClick={onClose} aria-label="Close market"></button>
         </div>
 
         <div className="credits-content">
           <section className="credits-section">
-            <h3>🎨 Visual Assets</h3>
+            <h3 className="header">Developers: </h3>
             <div className="credits-item">
-              <strong>3D Models</strong>
               <ul>
-                <li>Game Board Models (v1.0 - v1.4)</li>
-                <li>Environment Room Model</li>
-                <li>Fox Character Model</li>
+                <li>Lead developer: Harry Kodua</li>
+                <li>Frontend developer: Kathleen Povadora</li>
               </ul>
             </div>
+          </section>
+          <section className="credits-section">
+            <h3 className="header">Designers</h3>
             <div className="credits-item">
-              <strong>Textures & UI</strong>
               <ul>
-                <li>Block & Wall Textures</li>
-                <li>Player, Rank, Volume Icons</li>
-                <li>Quoridor Logo</li>
+                <li>3D assets: Harry Kodua</li>
+                <li>UI/UX: Kathleen Povadora</li>
               </ul>
             </div>
           </section>
 
           <section className="credits-section">
-            <h3>🔊 Audio</h3>
             <div className="credits-item">
-              <ul>
-                <li>Background Music</li>
-                <li>Pawn Movement & Wall Placement Sounds</li>
-                <li>Win & Error Sound Effects</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="credits-section">
-            <h3>🔤 Fonts</h3>
-            <div className="credits-item">
-              <ul>
-                <li>
-                  <strong>Bebas Neue</strong> - Vernon Adams
-                </li>
-                <li>
-                  <strong>Caprasimo</strong> - Google Fonts
-                </li>
-                <li>
-                  <strong>Chelsea Market</strong> - Font Squirrel
-                </li>
-                <li>
-                  <strong>Corporation Games</strong> - Typodermic Fonts
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="credits-section">
-            <h3>⚙️ Technologies</h3>
-            <div className="credits-item">
-              <ul>
-                <li>
-                  <strong>React</strong> & <strong>TypeScript</strong>
-                </li>
-                <li>
-                  <strong>Three.js</strong> & <strong>React Three Fiber</strong>
-                </li>
-                <li>
-                  <strong>Vite</strong> & <strong>Tailwind CSS</strong>
-                </li>
-              </ul>
+              All audios, music and 3D background's credits goes to their respective owners. Quoridor 3D is inspired by
+              Mirko Marchesi's Quoridor.
             </div>
           </section>
 
           <section className="credits-section credits-footer">
-            <p>Thank you for playing Quoridor 3D!</p>
+            <span className="header">Thank you for playing Quoridor 3D!</span>
           </section>
         </div>
       </div>
