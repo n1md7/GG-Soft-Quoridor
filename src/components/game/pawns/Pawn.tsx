@@ -7,7 +7,6 @@ import { usePawnPosition } from '@src/components/hooks/usePawnPosition.ts';
 import { usePercentage } from '@src/components/hooks/usePercentage.ts';
 import { animationTime } from '@src/config/animation.config.ts';
 import { highlightColor } from '@src/config/highlight.config.ts';
-import { StatusManager } from '@src/core/managers/status.manager.ts';
 import { Easing, Tween } from '@tweenjs/tween.js';
 import { useControls } from 'leva';
 import {
@@ -199,9 +198,10 @@ type NotificationProps = {
 function Notification({ isPlayer }: NotificationProps) {
   const text = useRef<ElementRef<typeof Text>>(null!);
   const timeout = useRef<NodeJS.Timeout>(null!);
+  const { status } = useGame();
 
   useEffect(() => {
-    const off = StatusManager.getInstance().onPlayerMessage((message) => {
+    const off = status.onPlayerMessage((message) => {
       if (!isPlayer) return;
       if (!text.current) return;
 
@@ -213,7 +213,7 @@ function Notification({ isPlayer }: NotificationProps) {
     });
 
     return () => off();
-  }, [isPlayer]);
+  }, [isPlayer, status]);
 
   return (
     <Float>
