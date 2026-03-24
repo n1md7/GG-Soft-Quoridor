@@ -34,7 +34,19 @@
   }
 
   .container {
-    @apply /* mobile */ /* tablet */ /* regular monitor */ w-[clamp(250px,80vw,400px)] sm:w-[clamp(300px,80vw,600px)] md:w-[clamp(400px,70vw,800px)] lg:w-[clamp(700px,40vw,1000px)]; /* large screen */
+    width: clamp(250px, 80vw, 400px);
+
+    @media (min-width: 640px) {
+      width: clamp(300px, 80vw, 600px);
+    }
+
+    @media (min-width: 768px) {
+      width: clamp(400px, 70vw, 800px);
+    }
+
+    @media (min-width: 1024px) {
+      width: clamp(700px, 40vw, 1000px);
+    }
 
     display: flex;
     flex-direction: column;

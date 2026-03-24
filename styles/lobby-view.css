@@ -12,7 +12,12 @@
   }
 
   .main-container {
-    @apply w-90 justify-center sm:w-[clamp(420px,60vw,600px)];
+    width: calc(var(--spacing) * 90);
+    justify-content: center;
+
+    @media (min-width: 640px) {
+      width: clamp(420px, 60vw, 600px);
+    }
 
     scale: 0.9;
     height: 500px;
@@ -32,7 +37,11 @@
       }
 
       .parallelograms:first-of-type {
-        @apply w-90 sm:w-[clamp(420px,100vw,600px)];
+        width: calc(var(--spacing) * 90);
+
+        @media (min-width: 640px) {
+          width: clamp(420px, 100vw, 600px);
+        }
 
         display: none;
         position: absolute;
@@ -82,7 +91,11 @@
     border-radius: 10px;
 
     > .wrapper {
-      @apply w-90 sm:w-[clamp(420px,60vw,600px)];
+      width: calc(var(--spacing) * 90);
+
+      @media (min-width: 640px) {
+        width: clamp(420px, 60vw, 600px);
+      }
 
       height: 420px;
       border-radius: 10px;
