@@ -59,6 +59,23 @@ export const CreditsModal = memo(function CreditsModal({ isOpen, onClose }: Prop
               </ul>
             </div>
           </section>
+          <section className="credits-section">
+            <h3 className="header">Sounds</h3>
+            <div className="credits-item">
+              <ul>
+                <li>
+                  Sound Effect by{' '}
+                  <a href="https://pixabay.com/users/sergequadrado-24990007/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=275527">
+                    Sergei Chetvertnykh
+                  </a>{' '}
+                  from{' '}
+                  <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=275527">
+                    Pixabay
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </section>
 
           <section className="credits-section">
             <div className="credits-item">
