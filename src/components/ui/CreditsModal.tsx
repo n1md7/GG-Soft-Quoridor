@@ -21,8 +21,20 @@ export const CreditsModal = memo(function CreditsModal({ isOpen, onClose }: Prop
             <h3 className="header">Developers: </h3>
             <div className="credits-item">
               <ul>
-                <li>Lead developer: Harry Kodua</li>
-                <li>Frontend developer: Kathleen Povadora</li>
+                <li>
+                  Lead developer:{' '}
+                  <a href="https://github.com/n1md7" target="_blank">
+                    {' '}
+                    Harry Kodua{' '}
+                  </a>
+                </li>
+                <li>
+                  Frontend developer:{' '}
+                  <a href="https://kaeri-gg.github.io/" target="_blank">
+                    {' '}
+                    Kathleen Povadora{' '}
+                  </a>
+                </li>
               </ul>
             </div>
           </section>
@@ -30,8 +42,20 @@ export const CreditsModal = memo(function CreditsModal({ isOpen, onClose }: Prop
             <h3 className="header">Designers</h3>
             <div className="credits-item">
               <ul>
-                <li>3D assets: Harry Kodua</li>
-                <li>UI/UX: Kathleen Povadora</li>
+                <li>
+                  3D assets:{' '}
+                  <a href="https://github.com/n1md7" target="_blank">
+                    {' '}
+                    Harry Kodua{' '}
+                  </a>
+                </li>
+                <li>
+                  UI/UX:{' '}
+                  <a href="https://kaeri-gg.github.io/" target="_blank">
+                    {' '}
+                    Kathleen Povadora{' '}
+                  </a>
+                </li>
               </ul>
             </div>
           </section>

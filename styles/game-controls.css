@@ -1,6 +1,6 @@
 .game-controls {
   position: fixed;
-  top: 6.5rem; // Position below the power bar
+  top: 6.5rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 45;

@@ -38,9 +38,13 @@ body,
   p:not([class^='leva']),
   span:not([class^='leva']),
   input[type='text']:not([class^='leva']) {
-    @apply text-[clamp(15px,1vw,17px)] sm:text-[clamp(15px,1vw,17px)] md:text-[clamp(15px,1vw,17px)] lg:text-[clamp(15px,1vw,17px)] xl:text-[clamp(15px,2vw,17px)];
+    font-size: clamp(15px, 1vw, 17px);
 
     font-family: Chelsea-Market, sans-serif;
+
+    @media (min-width: 1280px) {
+      font-size: clamp(15px, 2vw, 17px);
+    }
   }
 
   .radio-label {
@@ -141,7 +145,17 @@ body,
     }
 
     .input-wrapper {
-      @apply my-10 flex h-full flex-col justify-center px-5 sm:my-[clamp(40px,2vw,40px)] sm:px-[clamp(20px,2vw,40px)];
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      margin-block: calc(var(--spacing) * 10);
+      padding-inline: calc(var(--spacing) * 5);
+
+      @media (min-width: 640px) {
+        margin-block: clamp(40px, 2vw, 40px);
+        padding-inline: clamp(20px, 2vw, 40px);
+      }
     }
 
     .input-mode {
@@ -291,22 +305,34 @@ body,
     display: flex;
     background-repeat: no-repeat;
 
-    @media (width <= 768px) {
+    @media (max-width: 768px) {
       scale: 0.9;
     }
 
-    @media (width <= 480px) {
+    @media (max-width: 480px) {
       scale: 0.8;
     }
   }
 
   .close-btn {
-    @apply absolute top-5 right-5 flex h-12 w-12 items-center justify-center transition-all duration-200;
+    @apply flex h-12 w-12 items-center justify-center transition-all duration-200;
 
+    margin-left: auto;
     background-image: url('@assets/icons/close-icon.svg');
+    background-repeat: no-repeat;
 
     &:hover {
       opacity: 0.8;
     }
+  }
+
+  .header-left,
+  .header-right {
+    flex: 1;
+  }
+
+  .header-center {
+    text-align: center;
+    margin: 0 auto;
   }
 }

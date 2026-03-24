@@ -76,13 +76,16 @@ export const Market = forwardRef((_, ref: ForwardedRef<ForwardedMarket>) => {
         <div className="market-wrapper">
           <div className="inner-container">
             <div className="market-header">
+              <div className="header-left"></div>
               {/* Trapezoid Header */}
-              <div className="trapezoid">
+              <div className="trapezoid header-center">
                 <span className="header">Market</span>
               </div>
 
               {/* Close Button - Always visible */}
-              <button className="close-btn" onClick={onClose} aria-label="Close market"></button>
+              <div className="header-right">
+                <button className="close-btn" onClick={onClose} aria-label="Close market"></button>
+              </div>
             </div>
             <div className="market-body">
               {/* Coins Display */}

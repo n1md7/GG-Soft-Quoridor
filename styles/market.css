@@ -17,11 +17,11 @@
       box-shadow 0.2s,
       background-color 0.2s;
 
-    @media (width <= 768px) {
+    @media (max-width: 768px) {
       scale: 0.9;
     }
 
-    @media (width <= 480px) {
+    @media (max-width: 480px) {
       scale: 0.8;
     }
 
@@ -98,7 +98,7 @@
 
           grid-template-columns: repeat(2, 1fr);
 
-          @media (width <= 480px) {
+          @media (max-width: 480px) {
             grid-template-columns: 1fr;
           }
 
