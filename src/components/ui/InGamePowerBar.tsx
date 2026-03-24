@@ -6,7 +6,7 @@ import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { Fn } from '@src/core/managers/powers.manager.ts';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import '@styles/power-bar.scss';
+import '@styles/power-bar.css';
 
 import ExtraWallIcon from '@assets/icons/extra-wall-icon.svg?url';
 import PathVisionIcon from '@assets/icons/path-vision-icon.svg?url';

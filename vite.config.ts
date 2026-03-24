@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
+import { browserslistToTargets } from 'lightningcss';
 import { cwd, env } from 'node:process';
 
 export default defineConfig(({ mode }) => {
@@ -14,6 +15,14 @@ export default defineConfig(({ mode }) => {
     envPrefix: 'VITE_',
     outDir: 'dist',
     envDir: cwd(),
+    css: {
+      transformer: 'lightningcss',
+      lightningcss: {
+        // Convert modern CSS syntax (for example media range queries)
+        // to syntax supported by older Safari/iPad browsers.
+        targets: browserslistToTargets(['>= 0.5%', 'last 2 versions', 'not dead', 'safari >= 13', 'ios_saf >= 13']),
+      },
+    },
     server: {
       port: 4096,
       host: '0.0.0.0',
