@@ -3,7 +3,7 @@ import { Sound } from '@src/core/classes/sound.class.ts';
 export class SoundManager {
   private static instance: SoundManager;
 
-  private readonly background = new Sound({ src: './sounds/background.mp3', loop: true, volume: 0.01 });
+  private readonly background = new Sound({ src: './sounds/background.mp3', loop: true, volume: 0.07 });
   private readonly pawnMove = new Sound({ src: './sounds/pawn-move.mp3', volume: 0.5, endAt: 600 });
   private readonly playerWin = new Sound({ src: './sounds/player-win.mp3', volume: 0.5 });
   private readonly playerError = new Sound({ src: './sounds/player-error.mp3', volume: 0.3 });
