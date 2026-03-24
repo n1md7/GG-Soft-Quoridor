@@ -301,12 +301,24 @@ body,
   }
 
   .close-btn {
-    @apply absolute top-5 right-5 flex h-12 w-12 items-center justify-center transition-all duration-200;
+    @apply flex h-12 w-12 items-center justify-center transition-all duration-200;
 
+    margin-left: auto;
     background-image: url('@assets/icons/close-icon.svg');
+    background-repeat: no-repeat;
 
     &:hover {
       opacity: 0.8;
     }
+  }
+
+  .header-left,
+  .header-right {
+    flex: 1;
+  }
+
+  .header-center {
+    text-align: center;
+    margin: 0 auto;
   }
 }

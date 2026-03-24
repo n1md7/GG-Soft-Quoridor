@@ -24,7 +24,7 @@
 }
 
 .credits-modal {
-  background: linear-gradient(135deg, #1a1f35 0%, #252d45 100%);
+  background: linear-gradient(135deg, #1a1f35 0%, #1f2941 100%);
   border-radius: 16px;
   border: 1px solid #1e2829;
   box-shadow:
@@ -142,8 +142,8 @@
     &::after {
       content: '';
       flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, rgb(0 224 234 / 50%), transparent);
+      height: 2px;
+      background: linear-gradient(to right, #8bc34a, transparent);
     }
   }
 
@@ -164,10 +164,13 @@
     margin: 0;
 
     li {
-      color: rgb(255 255 255 / 85%);
       padding: 4px 0 4px 20px;
       position: relative;
       line-height: 1.6;
+
+      a {
+        color: rgb(152, 100, 241);
+      }
 
       &::before {
         content: '▸';

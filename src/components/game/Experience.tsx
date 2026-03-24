@@ -1,10 +1,8 @@
 import { OrbitControls } from '@react-three/drei';
 import { Background } from '@src/components/game/Background.tsx';
 import { Environment } from '@src/components/game/Environment.tsx';
-import { GameOver } from '@src/components/game/GameOver.tsx';
 import { Lights } from '@src/components/game/Lights.tsx';
 import { Room } from '@src/components/game/Room.tsx';
-import { Winner } from '@src/components/game/Winner.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { useCameraControls, CameraPresets } from '@src/components/hooks/camera';
@@ -43,7 +41,7 @@ type Props = {
   lightingMode?: 'day' | 'night';
 };
 
-export function Experience({ backToLobby, lightingMode }: Props) {
+export function Experience({ lightingMode }: Props) {
   const game = useGame();
   const { hidden } = useDebug();
   const { controlsRef } = useCameraControls({
@@ -79,8 +77,8 @@ export function Experience({ backToLobby, lightingMode }: Props) {
 
   return (
     <>
-      <Winner ref={game.model.modals.winner} onMainMenu={backToLobby} />
-      <GameOver ref={game.model.modals.gameOver} onMainMenu={backToLobby} />
+      {/*<Winner ref={game.model.modals.winner} onMainMenu={backToLobby} />*/}
+      {/*<GameOver ref={game.model.modals.gameOver} onMainMenu={backToLobby} />*/}
 
       <OrbitControls
         ref={controlsRef}
