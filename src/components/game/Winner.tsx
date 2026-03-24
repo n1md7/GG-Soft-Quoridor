@@ -23,6 +23,7 @@ export const Winner = forwardRef(({ onMainMenu }: Props, ref: ForwardedRef<Forwa
     const time = game.timer.getElapsedTime();
     const moves = game.player.getMovesMade();
 
+    game.platform.triggerHappyTime();
     game.reward.calculate({ won: true, time });
     game.performance.calculate({ time, moves });
 
@@ -46,7 +47,7 @@ export const Winner = forwardRef(({ onMainMenu }: Props, ref: ForwardedRef<Forwa
     });
 
     setVisible(true);
-  }, [game.reward, setReward, game.performance, setPerformance, difficulty, game.timer, game.player]);
+  }, [game.timer, game.player, game.platform, game.reward, game.performance, setReward, setPerformance, difficulty]);
 
   const onHide = useCallback(() => {
     setVisible(false);
