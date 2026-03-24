@@ -8,6 +8,10 @@ export const useWalls = () => {
   const callback = useCallback((wall: ForwardedWall) => {
     if (!wall) return;
 
+    if (walls.current.some(({ name }) => name === wall.name)) {
+      return; // Stop adding duplicated walls
+    }
+
     walls.current.push(wall);
   }, []);
 
