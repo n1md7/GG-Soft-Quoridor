@@ -77,9 +77,6 @@ export function Experience({ lightingMode }: Props) {
 
   return (
     <>
-      {/*<Winner ref={game.model.modals.winner} onMainMenu={backToLobby} />*/}
-      {/*<GameOver ref={game.model.modals.gameOver} onMainMenu={backToLobby} />*/}
-
       <OrbitControls
         ref={controlsRef}
         enableDamping={true}
