@@ -1,5 +1,7 @@
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { TUTORIAL_SEEN_KEY } from '@src/core/constants/storage.constants.ts';
 import { PowerEnum } from '@src/core/enums/power.enum.ts';
+import { getItem } from '@src/utils/storage.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 
 import GemIcon from '@assets/icons/gem-icon.svg?url';
@@ -46,7 +48,8 @@ export const Market = forwardRef((_, ref: ForwardedRef<ForwardedMarket>) => {
   }, [player, storage]);
 
   const onClose = useCallback(() => {
-    states.changeState('play');
+    const tutorialSeen = getItem(TUTORIAL_SEEN_KEY);
+    states.changeState(tutorialSeen ? 'play' : 'tutorial');
   }, [states]);
 
   const onShow = useCallback(() => {
