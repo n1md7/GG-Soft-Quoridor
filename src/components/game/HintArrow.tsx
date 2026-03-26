@@ -2,7 +2,7 @@ import { Html, Text } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { HINTS_SEEN_KEY } from '@src/core/constants/storage.constants.ts';
-import { setItem } from '@src/utils/storage.ts';
+import { getItem, setItem } from '@src/utils/storage.ts';
 import { useCallback, useEffect, useRef, useState, CSSProperties } from 'react';
 import { Group, MeshStandardMaterial } from 'three';
 
@@ -82,7 +82,7 @@ function Arrow({ groupRef, matRef, position, color, label }: ArrowProps) {
   return (
     <group ref={groupRef} position={position}>
       <mesh rotation={[Math.PI, 0, 0]} position={[0, -0.4, 0]}>
-        <coneGeometry args={[0.35, 0.6, 16]} />
+        <coneGeometry args={[0.2, 0.6, 16]} />
         <meshStandardMaterial
           ref={matRef}
           color={color}
@@ -137,7 +137,7 @@ function SmallArrow({
   return (
     <group ref={groupRef} position={position}>
       <mesh rotation={[Math.PI, 0, 0]} position={[0, -0.3, 0]}>
-        <coneGeometry args={[0.22, 0.4, 12]} />
+        <coneGeometry args={[0.13, 0.4, 12]} />
         <meshStandardMaterial
           ref={matRef}
           color={color}
@@ -236,9 +236,8 @@ export function HintArrow() {
 
   // Listen for play state to start the tour
   useEffect(() => {
-    // TODO: restore this check after testing
-    // const alreadySeen = getItem(HINTS_SEEN_KEY) === '1';
-    // if (alreadySeen) return;
+    const alreadySeen = getItem(HINTS_SEEN_KEY) === '1';
+    if (alreadySeen) return;
 
     const onStateChange = (state: string) => {
       if (state === 'play' && !hasShownRef.current) {
