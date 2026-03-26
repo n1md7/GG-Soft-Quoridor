@@ -10,6 +10,7 @@ export class WinState extends GameState {
     super.activate();
 
     this.celebrate();
+    this.game.sounds.player.win.play();
     this.game.model.modals.winner.current.show();
   }
 

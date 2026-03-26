@@ -10,6 +10,7 @@ export class LoseState extends GameState {
     super.activate();
 
     this.commiserate();
+    this.game.sounds.player.lose.play();
     this.game.model.modals.gameOver.current.show();
   }
 
@@ -20,7 +21,7 @@ export class LoseState extends GameState {
   }
 
   private commiserate() {
-    const end = Date.now() + 8 * 350;
+    const end = Date.now() + 350;
     const colors = ['#180542', '#2c0735', '#4e0d3a', '#5e103b', '#7f1941'];
 
     (function frame() {

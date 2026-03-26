@@ -5,6 +5,8 @@ import { Lights } from '@src/components/game/Lights.tsx';
 import { Room } from '@src/components/game/Room.tsx';
 import { useDebug } from '@src/components/hooks/useDebug.ts';
 import { useGame } from '@src/components/hooks/useGame.ts';
+import { TUTORIAL_SEEN_KEY } from '@src/core/constants/storage.constants.ts';
+import { getItem } from '@src/utils/storage.ts';
 import { useCameraControls, CameraPresets } from '@src/components/hooks/camera';
 import { Show } from '@src/components/utils/Show.tsx';
 import { Suspense, useEffect, useRef } from 'react';
@@ -60,6 +62,7 @@ export function Experience({ lightingMode }: Props) {
       'Play Game': button(() => game.states.changeState('play')),
       'Pause Game': button(() => game.states.changeState('pause')),
       'Open Market': button(() => game.states.changeState('market')),
+      'Open Tutorial': button(() => game.states.changeState('tutorial')),
     }),
     {
       collapsed: true,
@@ -71,7 +74,8 @@ export function Experience({ lightingMode }: Props) {
     if (timeout.current) clearTimeout(timeout.current);
 
     timeout.current = setTimeout(() => {
-      game.states.changeState('market');
+      const tutorialSeen = getItem(TUTORIAL_SEEN_KEY);
+      game.states.changeState(tutorialSeen ? 'market' : 'tutorial');
     }, 1000);
   }, [game, game.states]);
 
