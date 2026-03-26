@@ -33,6 +33,41 @@
     }
   }
 
+  /* Mobile landscape */
+  @media (max-height: 500px) and (orientation: landscape) {
+    gap: 4px;
+    justify-content: flex-start;
+    padding-top: 8px;
+
+    div.logo {
+      margin: 0.5rem 0;
+
+      img {
+        width: 35vw;
+      }
+    }
+
+    .description {
+      font-size: 12px;
+      margin: 0;
+    }
+
+    .progress-container {
+      height: 2.5rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .button-grp {
+      scale: 0.6;
+      margin: 0;
+    }
+
+    .credits {
+      margin-top: 0;
+    }
+  }
+
   .container {
     width: clamp(250px, 80vw, 400px);
 
