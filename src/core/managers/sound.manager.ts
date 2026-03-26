@@ -5,9 +5,10 @@ export class SoundManager {
 
   private readonly background = new Sound({ src: './sounds/background.mp3', loop: true, volume: 0.07 });
   private readonly pawnMove = new Sound({ src: './sounds/pawn-move.mp3', volume: 0.5, endAt: 600 });
-  private readonly playerWin = new Sound({ src: './sounds/player-win.mp3', volume: 0.5 });
+  private readonly playerWin = new Sound({ src: './sounds/winning-sound.mp3', volume: 0.5 });
   private readonly playerError = new Sound({ src: './sounds/player-error.mp3', volume: 0.3 });
   private readonly wallPlacement = new Sound({ src: './sounds/wall-place.mp3', volume: 0.5 });
+  private readonly playerLose = new Sound({ src: './sounds/wrong-answer.mp3', volume: 0.5 });
 
   private isOn = true;
 
@@ -45,6 +46,7 @@ export class SoundManager {
   get player() {
     return {
       win: this.playerWin,
+      lose: this.playerLose,
       error: this.playerError,
     };
   }
@@ -54,6 +56,7 @@ export class SoundManager {
       setVolume: (volume: number) => {
         this.pawnMove.setVolume(volume);
         this.playerWin.setVolume(volume);
+        this.playerLose.setVolume(volume);
         this.playerError.setVolume(volume);
         this.wallPlacement.setVolume(volume);
       },
@@ -66,6 +69,7 @@ export class SoundManager {
     this.background.mute();
     this.pawnMove.mute();
     this.playerWin.mute();
+    this.playerLose.mute();
     this.playerError.mute();
     this.wallPlacement.mute();
 
@@ -76,6 +80,7 @@ export class SoundManager {
     this.background.unmute();
     this.pawnMove.unmute();
     this.playerWin.unmute();
+    this.playerLose.unmute();
     this.playerError.unmute();
     this.wallPlacement.unmute();
 
