@@ -12,4 +12,6 @@
 @import './game-settings.css';
 @import './market.css';
 @import './game-status.css';
+@import './tutorial.css';
+@import './gameplay-hints.css';
 @import './credits.css';
