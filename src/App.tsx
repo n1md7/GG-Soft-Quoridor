@@ -2,6 +2,7 @@ import { useStorage } from '@src/components/hooks/useStorage';
 import { Show } from '@src/components/utils/Show';
 import { ModeEnum } from '@src/core/enums/mode.enum';
 import { PlatformManager } from '@src/core/managers/platform.manager.ts';
+import { SoundManager } from '@src/core/managers/sound.manager.ts';
 import { Gameplay } from '@src/views/GamePlay';
 import { InitialView } from '@src/views/InitialView';
 import { LobbyView } from '@src/views/LobbyView';
@@ -38,6 +39,16 @@ export function App() {
     PlatformManager.getInstance()
       .initialize()
       .then(() => {
+        // Apply platform audio settings
+        const sounds = SoundManager.getInstance();
+        const { muteAudio } = platform.getSettings();
+        if (muteAudio) sounds.muteAll();
+
+        platform.onSettingsChange((newSettings) => {
+          if (newSettings.muteAudio) sounds.muteAll();
+          else sounds.unmuteAll();
+        });
+
         platform.getUserInfo().then(({ profilePictureUrl, username }) => {
           setName(username);
           setAvatar(profilePictureUrl);

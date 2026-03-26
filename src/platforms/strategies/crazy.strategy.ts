@@ -1,4 +1,4 @@
-import { AdFn, Platform } from '@src/platforms/abstract.platform.ts';
+import { AdFn, GameSettings, Platform, SettingsChangeListener } from '@src/platforms/abstract.platform.ts';
 
 type CrazySDK = typeof window.CrazyGames.SDK.sdk;
 
@@ -44,5 +44,15 @@ export class CrazyStrategy extends Platform {
     }
 
     return super.getUserInfo();
+  }
+
+  override getSettings(): GameSettings {
+    return this.crazy.game.settings;
+  }
+
+  override onSettingsChange(listener: SettingsChangeListener): () => void {
+    this.crazy.game.addSettingsChangeListener(listener);
+
+    return () => this.crazy.game.removeSettingsChangeListener(listener);
   }
 }

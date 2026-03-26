@@ -20,12 +20,28 @@ type Props = {
   initialLighting: LightingMode;
 };
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  return isMobile;
+}
+
 export function InGamePowerBar() {
   const {
     inventory,
     powers: { events },
   } = useGame();
   const [enabled, setEnabled] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const isMobile = useIsMobile();
 
   const powers: PowerProps[] = useMemo(
     () =>
@@ -78,6 +94,8 @@ export function InGamePowerBar() {
     return () => events.off('disable', fn);
   }, [events]);
 
+  const showBar = !isMobile || expanded;
+
   return (
     <div
       className="power-bar"
@@ -87,20 +105,54 @@ export function InGamePowerBar() {
         ...(!enabled && { display: 'none' }),
       }}
     >
-      <div className="relative">
-        <div className="container">
-          {/*<ActionButtons {...props} />*/}
+      {/* Mobile toggle button */}
+      {isMobile && !expanded && (
+        <button className="power-bar-toggle" onClick={() => setExpanded(true)} aria-label="Open powers">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+      )}
 
-          {powers.map((power, index) => (
-            <div key={power.key} className="power-item">
-              <PowerButton power={power} />
-              <Show when={index < powers.length - 1}>
-                <div className="vertical-divider" />
-              </Show>
-            </div>
-          ))}
+      {showBar && (
+        <div className="relative">
+          <div className="container">
+            {powers.map((power, index) => (
+              <div key={power.key} className="power-item">
+                <PowerButton power={power} />
+                <Show when={index < powers.length - 1}>
+                  <div className="vertical-divider" />
+                </Show>
+              </div>
+            ))}
+          </div>
+
+          {isMobile && (
+            <button className="power-bar-close" onClick={() => setExpanded(false)} aria-label="Close powers">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              >
+                <path d="M18 6L6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
