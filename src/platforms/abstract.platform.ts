@@ -4,6 +4,13 @@ export type AdFn = {
   adError: (error: { code: 'unfilled' | 'adblock' | 'other'; message: string }) => void;
 };
 
+export type GameSettings = {
+  disableChat: boolean;
+  muteAudio: boolean;
+};
+
+export type SettingsChangeListener = (settings: GameSettings) => void;
+
 export class Platform {
   initialize(): Promise<void> {
     return Promise.resolve();
@@ -41,5 +48,13 @@ export class Platform {
       username: 'Guest',
       profilePictureUrl: '',
     });
+  }
+
+  getSettings(): GameSettings {
+    return { disableChat: false, muteAudio: false };
+  }
+
+  onSettingsChange(_listener: SettingsChangeListener): () => void {
+    return () => {};
   }
 }

@@ -82,6 +82,25 @@ export declare global {
              * The loadingStop() function has to be called when the loading is complete and eventually the gameplay starts.
              */
             loadingStop: () => Promise<void>;
+            /**
+             * Current game settings provided by the platform.
+             */
+            settings: {
+              disableChat: boolean;
+              muteAudio: boolean;
+            };
+            /**
+             * Register a listener called each time game settings change.
+             */
+            addSettingsChangeListener: (
+              listener: (settings: { disableChat: boolean; muteAudio: boolean }) => void,
+            ) => void;
+            /**
+             * Remove a previously registered settings change listener.
+             */
+            removeSettingsChangeListener: (
+              listener: (settings: { disableChat: boolean; muteAudio: boolean }) => void,
+            ) => void;
           };
         };
       };

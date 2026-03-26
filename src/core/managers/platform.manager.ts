@@ -1,4 +1,4 @@
-import { AdFn, Platform } from '@src/platforms/abstract.platform.ts';
+import { AdFn, GameSettings, Platform, SettingsChangeListener } from '@src/platforms/abstract.platform.ts';
 import { CrazyStrategy } from '@src/platforms/strategies/crazy.strategy.ts';
 
 export class PlatformManager {
@@ -66,5 +66,13 @@ export class PlatformManager {
 
   async getUserInfo() {
     return this.platform.getUserInfo();
+  }
+
+  getSettings(): GameSettings {
+    return this.platform.getSettings();
+  }
+
+  onSettingsChange(listener: SettingsChangeListener): () => void {
+    return this.platform.onSettingsChange(listener);
   }
 }
