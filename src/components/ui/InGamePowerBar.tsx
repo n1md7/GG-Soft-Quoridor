@@ -6,6 +6,7 @@ import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { Fn } from '@src/core/managers/powers.manager.ts';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import '@styles/power-bar.css';
 
 import ExtraWallIcon from '@assets/icons/extra-wall-icon.svg?url';
@@ -20,20 +21,6 @@ type Props = {
   initialLighting: LightingMode;
 };
 
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener('change', handler);
-
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  return isMobile;
-}
-
 export function InGamePowerBar() {
   const {
     inventory,
@@ -41,7 +28,6 @@ export function InGamePowerBar() {
   } = useGame();
   const [enabled, setEnabled] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const isMobile = useIsMobile();
 
   const powers: PowerProps[] = useMemo(
     () =>
