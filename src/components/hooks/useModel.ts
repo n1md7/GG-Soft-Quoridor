@@ -6,6 +6,7 @@ import { ForwardedMarket } from '@src/components/game/Market.tsx';
 import { ForwardedPath } from '@src/components/game/path/Path.tsx';
 import { ForwardedPawns } from '@src/components/game/pawns/pawn.type.ts';
 import { ForwardedWalls } from '@src/components/game/walls/wall.type.ts';
+import { ForwardedTutorial } from '@src/components/game/Tutorial.tsx';
 import { ForwardedWinner } from '@src/components/game/Winner.tsx';
 import { setWireframe } from '@src/components/utils/material.util.ts';
 import { useCallback, useRef } from 'react';
@@ -25,6 +26,7 @@ export const useModel = (options: Options) => {
   const market = useRef({} as ForwardedMarket);
   const gameOver = useRef({} as ForwardedGameOver);
   const winner = useRef({} as ForwardedWinner);
+  const tutorial = useRef({} as ForwardedTutorial);
 
   const showWireframes = useCallback(
     (show: boolean) => {
@@ -53,6 +55,7 @@ export const useModel = (options: Options) => {
       winner,
       market,
       gameOver,
+      tutorial,
     },
     nodes,
     materials,

@@ -1,9 +1,7 @@
 import { GameState } from '@src/core/entities/abstract/game.state.ts';
-import Confetti from 'js-confetti';
+import confetti from 'canvas-confetti';
 
 export class LoseState extends GameState {
-  private readonly celebration = new Confetti();
-
   override get name() {
     return 'Lose';
   }
@@ -12,6 +10,7 @@ export class LoseState extends GameState {
     super.activate();
 
     this.commiserate();
+    this.game.sounds.player.lose.play();
     this.game.model.modals.gameOver.current.show();
   }
 
@@ -22,11 +21,31 @@ export class LoseState extends GameState {
   }
 
   private commiserate() {
-    this.celebration
-      .addConfetti({
-        emojis: ['😞', '😔', '😟', '😢', '😭', '💔', '☹️', '😿', '🖤', '🥀', '🌧️', '🌪️', '🕳️'],
-        confettiColors: ['#180542', '#2c0735', '#3e0a39', '#4e0d3a', '#5e103b', '#7f1941'],
-      })
-      .catch(console.trace);
+    const end = Date.now() + 350;
+    const colors = ['#180542', '#2c0735', '#4e0d3a', '#5e103b', '#7f1941'];
+
+    (function frame() {
+      confetti({
+        particleCount: 1,
+        angle: 60,
+        spread: 45,
+        origin: { x: 0, y: 0.6 },
+        colors,
+        gravity: 1.5,
+      });
+
+      confetti({
+        particleCount: 1,
+        angle: 120,
+        spread: 45,
+        origin: { x: 1, y: 0.6 },
+        colors,
+        gravity: 1.5,
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
   }
 }
