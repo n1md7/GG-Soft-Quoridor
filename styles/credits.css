@@ -192,26 +192,24 @@
 
 /* Footer link in lobby */
 .lobby-credits-link {
-  font-size: clamp(15px, 1.2vw, 16px);
+  font-size: clamp(12px, 1vw, 14px);
   font-weight: normal;
   font-family: Chelsea-Market, sans-serif;
-  color: #76808f;
-  padding: 8px 20px;
+  color: #5a6478;
+  padding: 0;
   cursor: pointer;
-  transition:
-    all 0.3s ease,
-    transform 0.2s;
-  backdrop-filter: blur(5px);
+  transition: color 0.2s ease;
   text-decoration: none;
   display: inline-block;
-  border-radius: 13px;
-  margin-top: 2rem;
+  background: none;
+  border: none;
+  margin-top: 1.5rem;
+  letter-spacing: 0.02em;
+  border-bottom: 1px dashed #5a647844;
 
   &:hover {
-    backdrop-filter: blur(5px);
-    color: #fff;
-    box-shadow: 0 5px 20px rgb(85 85 85 / 40%);
-    border-radius: 13px;
+    color: #94a3b8;
+    border-bottom-color: #94a3b888;
   }
 }
 
