@@ -78,6 +78,24 @@ export const CreditsModal = memo(function CreditsModal({ isOpen, onClose }: Prop
           </section>
 
           <section className="credits-section">
+            <h3 className="header">3D Models</h3>
+            <div className="credits-item">
+              <ul>
+                <li>
+                  Room model by{' '}
+                  <a href="https://sketchfab.com/anex" target="_blank">
+                    Anex
+                  </a>{' '}
+                  — Licensed under{' '}
+                  <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">
+                    CC-BY-4.0
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <section className="credits-section">
             <div className="credits-item">
               All audios, music and 3D background's credits goes to their respective owners. Quoridor 3D is inspired by
               Mirko Marchesi's Quoridor.

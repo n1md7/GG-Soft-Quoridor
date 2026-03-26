@@ -1,0 +1,226 @@
+.tutorial-view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  font-family: Chelsea-Market, sans-serif;
+
+  .main-container {
+    @apply flex flex-col flex-wrap items-center;
+
+    scale: 0.9;
+    position: relative;
+    align-items: flex-start;
+    animation: pop-in 0.5s ease forwards;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      background-color 0.2s;
+
+    @media (max-width: 768px) {
+      scale: 0.85;
+    }
+
+    @media (max-width: 480px) {
+      scale: 0.75;
+    }
+
+    .tutorial-wrapper {
+      padding: 10px;
+      border: 1px solid var(--color-app-dark-border);
+      border-radius: 10px;
+      backdrop-filter: blur(4px);
+    }
+
+    .inner-container {
+      @apply relative rounded-md px-4 backdrop-blur-md;
+
+      background-color: var(--color-app-dark-border);
+      width: clamp(300px, 90vw, 440px);
+      max-height: 90vh;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px #00000080;
+      padding-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .tutorial-header {
+    @apply relative flex items-center justify-center p-5;
+
+    .trapezoid {
+      width: 270px;
+      height: 50px;
+      clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
+      position: relative;
+      background: linear-gradient(to right, #06c7cf 1%, #3850bc 50%, #8a4cff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+
+      .header {
+        font-family: Corporation-Italic, sans-serif;
+        font-size: clamp(20px, 2vw, 23px);
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .tutorial-body {
+    @apply rounded-lg;
+
+    background-color: #121625;
+    padding: 16px 20px 20px;
+    box-shadow:
+      inset 0 0 20px 20px rgb(0 0 0 / 30%),
+      0 16px 0 rgb(0 0 0 / 0%);
+    overflow-y: auto;
+    flex: 1;
+    max-height: calc(90vh - 120px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Slide */
+  .tutorial-slide {
+    animation: slide-fade-in 0.3s ease forwards;
+
+    .slide-gif-container {
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #0a0e1a;
+      border: 1px solid #2a3350;
+      margin-bottom: 14px;
+
+      .slide-gif {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 11px;
+      }
+    }
+
+    &.move .slide-gif-container {
+      border-color: #06c7cf44;
+      box-shadow: 0 0 16px #06c7cf18;
+    }
+
+    &.wall .slide-gif-container {
+      border-color: #8a4cff44;
+      box-shadow: 0 0 16px #8a4cff18;
+    }
+
+    &.win .slide-gif-container {
+      border-color: #8cff0e44;
+      box-shadow: 0 0 16px #8cff0e18;
+    }
+
+    .slide-text {
+      text-align: center;
+    }
+
+    .slide-title {
+      @apply m-0 mb-2 font-bold;
+
+      color: #00e0ea;
+      font-size: 17px;
+    }
+
+    .slide-description {
+      @apply m-0 leading-snug;
+
+      color: #94a3b8;
+      font-size: 13px;
+
+      strong {
+        color: #e2e8f0;
+      }
+    }
+  }
+
+  /* Dots */
+  .slide-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+    .slide-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      background-color: #2a3350;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.25s ease;
+
+      &.active {
+        background-color: #06c7cf;
+        box-shadow: 0 0 8px #06c7cf88;
+        transform: scale(1.3);
+      }
+
+      &:hover:not(.active) {
+        background-color: #3a4a70;
+      }
+    }
+  }
+
+  /* Navigation */
+  .slide-nav {
+    display: flex;
+    gap: 10px;
+
+    .nav-button {
+      @apply cursor-pointer rounded-lg border-none py-2.5 text-center font-bold transition-all duration-200;
+
+      flex: 1;
+      font-family: Corporation-Italic, sans-serif;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+
+      &.next {
+        background: linear-gradient(135deg, #06c7cf, #3850bc);
+        color: #fff;
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 16px rgb(6 199 207 / 35%);
+        }
+      }
+
+      &.prev,
+      &.skip {
+        background: #1a2035;
+        color: #94a3b8;
+        border: 1px solid #2a3350;
+
+        &:hover {
+          color: #e2e8f0;
+          border-color: #3a4a70;
+        }
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+@keyframes slide-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
