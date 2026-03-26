@@ -1,9 +1,7 @@
 import { GameState } from '@src/core/entities/abstract/game.state.ts';
-import Confetti from 'js-confetti';
+import confetti from 'canvas-confetti';
 
 export class WinState extends GameState {
-  private readonly celebration = new Confetti();
-
   override get name() {
     return 'Win';
   }
@@ -12,6 +10,7 @@ export class WinState extends GameState {
     super.activate();
 
     this.celebrate();
+    this.game.sounds.player.win.play();
     this.game.model.modals.winner.current.show();
   }
 
@@ -22,11 +21,29 @@ export class WinState extends GameState {
   }
 
   private celebrate() {
-    this.celebration
-      .addConfetti({
-        emojis: ['⚡️', '💥', '✨', '💫', '🌟', '🎉', '🎊', '🏆', '🥇', '🥳', '🚀'],
-        confettiColors: ['#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7'],
-      })
-      .catch(console.trace);
+    const end = Date.now() + 15 * 350;
+    const colors = ['#29cdff', '#78ff44', '#a864fd', '#ff0a54', '#ff477e', '#fbb1bd'];
+
+    (function frame() {
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors,
+      });
+
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors,
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
   }
 }

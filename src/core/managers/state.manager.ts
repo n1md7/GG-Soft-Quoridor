@@ -5,11 +5,12 @@ import { MarketState } from '@src/core/states/market.state.ts';
 import { PauseState } from '@src/core/states/pause.state.ts';
 import { PlayState } from '@src/core/states/play.state.ts';
 import { ResetState } from '@src/core/states/reset.state.ts';
+import { TutorialState } from '@src/core/states/tutorial.state.ts';
 import { WinState } from '@src/core/states/win.state.ts';
 import { TinyEmitter } from 'tiny-emitter';
 
 export type EventType = 'state';
-export type StateType = 'lose' | 'win' | 'play' | 'pause' | 'market' | 'reset';
+export type StateType = 'lose' | 'win' | 'play' | 'pause' | 'market' | 'reset' | 'tutorial';
 export type CallbackType = (state: StateType) => void;
 
 export class StateManager extends TinyEmitter {
@@ -27,6 +28,7 @@ export class StateManager extends TinyEmitter {
     this.states.set('pause', new PauseState(game));
     this.states.set('market', new MarketState(game));
     this.states.set('reset', new ResetState(game));
+    this.states.set('tutorial', new TutorialState(game));
 
     this.currentState = this.states.get('play')!;
   }

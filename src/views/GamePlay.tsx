@@ -12,6 +12,7 @@ import { Leva } from 'leva';
 import { Suspense, useEffect } from 'react';
 import { useErrorBoundary } from 'use-error-boundary';
 import { Market } from '@src/components/game/Market.tsx';
+import { Tutorial } from '@src/components/game/Tutorial.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
 import { GameOver } from '@src/components/game/GameOver.tsx';
 
@@ -57,6 +58,7 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
           </Canvas>
         </Suspense>
         <Market ref={game.model.modals.market} />
+        <Tutorial ref={game.model.modals.tutorial} />
         <Winner ref={game.model.modals.winner} onMainMenu={backToLobby} />
         <GameOver ref={game.model.modals.gameOver} onMainMenu={backToLobby} />
 
