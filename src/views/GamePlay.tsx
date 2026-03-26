@@ -11,7 +11,6 @@ import { Game } from '@src/core/game.class.ts';
 import { Leva } from 'leva';
 import { Suspense, useEffect } from 'react';
 import { useErrorBoundary } from 'use-error-boundary';
-import { GameplayHints } from '@src/components/game/GameplayHints.tsx';
 import { Market } from '@src/components/game/Market.tsx';
 import { Tutorial } from '@src/components/game/Tutorial.tsx';
 import { Winner } from '@src/components/game/Winner.tsx';
@@ -64,7 +63,6 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
         <GameOver ref={game.model.modals.gameOver} onMainMenu={backToLobby} />
 
         <InGamePowerBar />
-        <GameplayHints />
         <div className="canvas-overlay">
           <div className="action">
             <button onClick={backToLobby} className="lobby-button"></button>

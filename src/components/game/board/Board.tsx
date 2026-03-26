@@ -1,4 +1,5 @@
 import { Blocks } from '@src/components/game/block/Blocks.tsx';
+import { HintArrow } from '@src/components/game/HintArrow.tsx';
 import { Path } from '@src/components/game/path/Path.tsx';
 import { Pawns } from '@src/components/game/pawns/Pawns.tsx';
 import { Walls } from '@src/components/game/walls/Walls.tsx';
@@ -96,6 +97,7 @@ export const Board = () => {
         }}
         playerClick={game.player.handlePawnPointerClick}
       />
+      <HintArrow />
       <mesh
         name="Platform"
         castShadow
