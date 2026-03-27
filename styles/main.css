@@ -302,12 +302,13 @@ body,
     }
   }
 
-  .lobby-button {
-    background-image: url('@assets/icons/home-icon.svg');
+  .lobby-button,
+  .help-button {
     height: 5rem;
     width: 5rem;
     display: flex;
     background-repeat: no-repeat;
+    cursor: pointer;
 
     @media (width <= 768px) {
       scale: 0.9;
@@ -316,6 +317,14 @@ body,
     @media (width <= 480px) {
       scale: 0.8;
     }
+  }
+
+  .lobby-button {
+    background-image: url('@assets/icons/home-icon.svg');
+  }
+
+  .help-button {
+    background-image: url('@assets/icons/help-icon.svg');
   }
 
   .close-btn {

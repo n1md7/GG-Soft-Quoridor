@@ -1,7 +1,7 @@
 import { useGame } from '@src/components/hooks/useGame.ts';
 import { TUTORIAL_SEEN_KEY } from '@src/core/constants/storage.constants.ts';
 import { setItem } from '@src/utils/storage.ts';
-import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useState } from 'react';
+import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 
 function GifWithLoader({ src, alt }: { src: string; alt: string }) {
   const [loaded, setLoaded] = useState(false);
@@ -25,7 +25,7 @@ function GifWithLoader({ src, alt }: { src: string; alt: string }) {
 }
 
 export type ForwardedTutorial = {
-  show: () => void;
+  show: (options?: { changeStateOnClose?: boolean }) => void;
   hide: () => void;
 };
 
@@ -68,11 +68,13 @@ export const Tutorial = forwardRef((_, ref: ForwardedRef<ForwardedTutorial>) => 
   const { states } = useGame();
   const [visible, setVisible] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
+  const shouldChangeStateRef = useRef(true);
 
   const slide = slides[slideIndex];
   const isLast = slideIndex === slides.length - 1;
 
-  const onShow = useCallback(() => {
+  const onShow = useCallback((options?: { changeStateOnClose?: boolean }) => {
+    shouldChangeStateRef.current = options?.changeStateOnClose ?? true;
     setSlideIndex(0);
     setVisible(true);
   }, []);
@@ -83,7 +85,11 @@ export const Tutorial = forwardRef((_, ref: ForwardedRef<ForwardedTutorial>) => 
 
   const onClose = useCallback(() => {
     setItem(TUTORIAL_SEEN_KEY, '1');
-    states.changeState('play');
+    if (shouldChangeStateRef.current) {
+      states.changeState('play');
+    } else {
+      setVisible(false);
+    }
   }, [states]);
 
   const onNext = useCallback(() => {
