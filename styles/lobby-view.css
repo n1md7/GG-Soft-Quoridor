@@ -6,7 +6,7 @@
   height: 100vh;
 
   /* Mobile landscape */
-  @media (max-height: 500px) and (orientation: landscape) {
+  @media (height <= 500px) and (orientation: landscape) {
     justify-content: flex-start;
     padding-top: 8px;
     gap: 0;
@@ -15,11 +15,21 @@
       scale: 0.6;
       transform-origin: top center;
       margin-bottom: -110px;
+
+      /* Hide "Your name:" and "Difficulty:" labels */
+      label[for='playerName'],
+      label[for='mode'] {
+        display: none;
+      }
+
+      .input-name {
+        margin-bottom: 12px;
+      }
     }
 
     .button-grp {
       scale: 0.5;
-      margin-top: -30px;
+      margin-top: -84px;
     }
 
     .game-settings-container {
@@ -39,7 +49,7 @@
     width: calc(var(--spacing) * 90);
     justify-content: center;
 
-    @media (min-width: 640px) {
+    @media (width >= 640px) {
       width: clamp(420px, 60vw, 600px);
     }
 
@@ -63,7 +73,7 @@
       .parallelograms:first-of-type {
         width: calc(var(--spacing) * 90);
 
-        @media (min-width: 640px) {
+        @media (width >= 640px) {
           width: clamp(420px, 100vw, 600px);
         }
 
@@ -117,7 +127,7 @@
     > .wrapper {
       width: calc(var(--spacing) * 90);
 
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         width: clamp(420px, 60vw, 600px);
       }
 
