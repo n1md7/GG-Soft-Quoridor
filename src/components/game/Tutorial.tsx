@@ -3,6 +3,27 @@ import { TUTORIAL_SEEN_KEY } from '@src/core/constants/storage.constants.ts';
 import { setItem } from '@src/utils/storage.ts';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 
+function GifWithLoader({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className="slide-gif-container">
+      {!loaded && (
+        <div className="slide-gif-spinner">
+          <div className="spinner" />
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        className="slide-gif"
+        style={{ opacity: loaded ? 1 : 0 }}
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+}
+
 export type ForwardedTutorial = {
   show: () => void;
   hide: () => void;
@@ -108,9 +129,7 @@ export const Tutorial = forwardRef((_, ref: ForwardedRef<ForwardedTutorial>) => 
             <div className="tutorial-body">
               {/* Slide */}
               <div className={`tutorial-slide ${slide.color}`} key={slideIndex}>
-                <div className="slide-gif-container">
-                  <img src={slide.gif} alt={slide.title} className="slide-gif" />
-                </div>
+                <GifWithLoader src={slide.gif} alt={slide.title} />
 
                 <div className="slide-text">
                   <h3 className="slide-title">{slide.title}</h3>

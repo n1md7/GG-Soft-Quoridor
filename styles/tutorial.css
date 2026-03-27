@@ -95,12 +95,32 @@
       background-color: #0a0e1a;
       border: 1px solid #2a3350;
       margin-bottom: 14px;
+      position: relative;
+      min-height: 120px;
 
       .slide-gif {
         width: 100%;
         height: auto;
         display: block;
         border-radius: 11px;
+        transition: opacity 0.3s ease;
+      }
+
+      .slide-gif-spinner {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .spinner {
+          width: 28px;
+          height: 28px;
+          border: 3px solid #2a3350;
+          border-top-color: #06c7cf;
+          border-radius: 50%;
+          animation: tutorial-spin 0.7s linear infinite;
+        }
       }
     }
 
@@ -222,5 +242,11 @@
   100% {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes tutorial-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
