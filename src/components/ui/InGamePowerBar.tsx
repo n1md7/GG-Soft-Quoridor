@@ -6,6 +6,7 @@ import { PowerEnum } from '@src/core/enums/power.enum.ts';
 import { Fn } from '@src/core/managers/powers.manager.ts';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import '@styles/power-bar.css';
 
 import ExtraWallIcon from '@assets/icons/extra-wall-icon.svg?url';
@@ -26,6 +27,7 @@ export function InGamePowerBar() {
     powers: { events },
   } = useGame();
   const [enabled, setEnabled] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const powers: PowerProps[] = useMemo(
     () =>
@@ -78,6 +80,8 @@ export function InGamePowerBar() {
     return () => events.off('disable', fn);
   }, [events]);
 
+  const showBar = !isMobile || expanded;
+
   return (
     <div
       className="power-bar"
@@ -87,20 +91,54 @@ export function InGamePowerBar() {
         ...(!enabled && { display: 'none' }),
       }}
     >
-      <div className="relative">
-        <div className="container">
-          {/*<ActionButtons {...props} />*/}
+      {/* Mobile toggle button */}
+      {isMobile && !expanded && (
+        <button className="power-bar-toggle" onClick={() => setExpanded(true)} aria-label="Open powers">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+      )}
 
-          {powers.map((power, index) => (
-            <div key={power.key} className="power-item">
-              <PowerButton power={power} />
-              <Show when={index < powers.length - 1}>
-                <div className="vertical-divider" />
-              </Show>
-            </div>
-          ))}
+      {showBar && (
+        <div className="relative">
+          <div className="container">
+            {powers.map((power, index) => (
+              <div key={power.key} className="power-item">
+                <PowerButton power={power} />
+                <Show when={index < powers.length - 1}>
+                  <div className="vertical-divider" />
+                </Show>
+              </div>
+            ))}
+          </div>
+
+          {isMobile && (
+            <button className="power-bar-close" onClick={() => setExpanded(false)} aria-label="Close powers">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              >
+                <path d="M18 6L6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
