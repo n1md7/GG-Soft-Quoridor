@@ -403,6 +403,14 @@
           font-size: clamp(15px, 2vw, 17px);
           letter-spacing: 2px;
           font-family: Chelsea-Market, sans-serif;
+          max-width: 250px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          @media (width <= 768px) {
+            max-width: 80px;
+          }
         }
       }
     }
