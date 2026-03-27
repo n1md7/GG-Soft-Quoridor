@@ -39,10 +39,9 @@ body,
   span:not([class^='leva']),
   input[type='text']:not([class^='leva']) {
     font-size: clamp(15px, 1vw, 17px);
-
     font-family: Chelsea-Market, sans-serif;
 
-    @media (min-width: 1280px) {
+    @media (width >= 1280px) {
       font-size: clamp(15px, 2vw, 17px);
     }
   }
@@ -61,6 +60,11 @@ body,
 
   ::selection {
     background-color: transparent;
+  }
+
+  .input-name::selection {
+    background-color: var(--color-app-purple);
+    color: #fff;
   }
 
   .button-grp {
@@ -152,7 +156,7 @@ body,
       margin-block: calc(var(--spacing) * 10);
       padding-inline: calc(var(--spacing) * 5);
 
-      @media (min-width: 640px) {
+      @media (width >= 640px) {
         margin-block: clamp(40px, 2vw, 40px);
         padding-inline: clamp(20px, 2vw, 40px);
       }
@@ -298,20 +302,29 @@ body,
     }
   }
 
-  .lobby-button {
-    background-image: url('@assets/icons/home-icon.svg');
+  .lobby-button,
+  .help-button {
     height: 5rem;
     width: 5rem;
     display: flex;
     background-repeat: no-repeat;
+    cursor: pointer;
 
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
       scale: 0.9;
     }
 
-    @media (max-width: 480px) {
+    @media (width <= 480px) {
       scale: 0.8;
     }
+  }
+
+  .lobby-button {
+    background-image: url('@assets/icons/home-icon.svg');
+  }
+
+  .help-button {
+    background-image: url('@assets/icons/help-icon.svg');
   }
 
   .close-btn {

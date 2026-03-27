@@ -64,9 +64,11 @@ export function Gameplay({ backToLobby }: Readonly<Props>) {
 
         <InGamePowerBar />
         <div className="canvas-overlay">
-          <div className="action">
-            <button onClick={backToLobby} className="lobby-button"></button>
-          </div>
+          <button onClick={backToLobby} className="lobby-button"></button>
+          <button
+            onClick={() => game.model.modals.tutorial.current?.show({ changeStateOnClose: false })}
+            className="help-button"
+          ></button>
         </div>
       </GameContext.Provider>
     </ErrorBoundary>

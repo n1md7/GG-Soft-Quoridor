@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 103 100">
+  <path d="M92.37,51.12c0,22.54-18.33,40.87-40.87,40.87S10.63,73.65,10.63,51.12v-2.24h81.74v2.24Z" style="fill: #c8d3dd; stroke-width: 0px;"/>
+  <circle cx="51.5" cy="48.88" r="40.87" transform="translate(-14.79 23.43) rotate(-22.5)" style="fill: #9b9b9b; stroke-width: 0px;"/>
+  <circle cx="52.05" cy="50.03" r="37.34" transform="translate(-15.18 23.73) rotate(-22.5)" style="fill: #182235; stroke-width: 0px;"/>
+  <circle cx="52.05" cy="47.67" r="33.67" transform="translate(-14.28 23.55) rotate(-22.5)" style="fill: #1f2941; stroke-width: 0px;"/>
+  <text x="52" y="64" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="42" fill="#fff">?</text>
+</svg>

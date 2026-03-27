@@ -23,7 +23,7 @@ export class CrazyStrategy extends Platform {
   }
 
   override async loadingStarted(): Promise<void> {
-    await this.crazy.game.loadingStart();
+    // await this.crazy.game.loadingStart();
   }
 
   override async loadingFinished(): Promise<void> {

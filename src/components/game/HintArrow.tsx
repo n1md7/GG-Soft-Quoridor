@@ -35,7 +35,7 @@ export function HintArrow() {
       if (state === 'play' && !hasShownRef.current) {
         timerRef.current = setTimeout(() => {
           setVisible(true);
-        }, 3000);
+        }, 1000);
       }
 
       if (state !== 'play') {
