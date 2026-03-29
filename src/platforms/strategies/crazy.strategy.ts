@@ -7,7 +7,7 @@ export class CrazyStrategy extends Platform {
 
   override async initialize(): Promise<void> {
     if (!window.CrazyGames || !window.CrazyGames.SDK) {
-      throw new Error('CrazyGames SDK is not available');
+      return console.error('CrazyGames SDK is not available');
     }
 
     await window.CrazyGames.SDK.init();
@@ -35,7 +35,14 @@ export class CrazyStrategy extends Platform {
   }
 
   override async requestAd(fn: AdFn): Promise<void> {
-    await this.crazy.ad.requestAd('rewarded', fn);
+    try {
+      await this.crazy.ad.requestAd('rewarded', fn);
+    } catch (error) {
+      console.error('CrazyGames SDK requestAd failed:', error);
+      if (fn && fn.adError) {
+        fn.adError({ code: 'adblock', message: 'Ad request failed due to SDK error or adblocker.' });
+      }
+    }
   }
 
   override async getUserInfo() {
@@ -47,12 +54,23 @@ export class CrazyStrategy extends Platform {
   }
 
   override getSettings(): GameSettings {
-    return this.crazy.game.settings;
+    try {
+      return this.crazy.game.settings;
+    } catch (error) {
+      console.error('CrazyGames SDK getSettings failed:', error);
+      return super.getSettings();
+    }
   }
 
   override onSettingsChange(listener: SettingsChangeListener): () => void {
     this.crazy.game.addSettingsChangeListener(listener);
 
-    return () => this.crazy.game.removeSettingsChangeListener(listener);
+    return () => {
+      try {
+        this.crazy.game.removeSettingsChangeListener(listener);
+      } catch (error) {
+        console.error('CrazyGames SDK removeSettingsChangeListener failed:', error);
+      }
+    };
   }
 }
