@@ -6,55 +6,32 @@ export class CrazyStrategy extends Platform {
   private crazy: CrazySDK = {} as CrazySDK;
 
   override async initialize(): Promise<void> {
-    try {
-      if (!window.CrazyGames || !window.CrazyGames.SDK) {
-        return console.error('CrazyGames SDK is not available');
-      }
-      await window.CrazyGames.SDK.init();
-      this.crazy = window.CrazyGames.SDK.sdk;
-    } catch (error) {
-      console.error('CrazyGames SDK failed to initialize:', error);
+    if (!window.CrazyGames || !window.CrazyGames.SDK) {
+      return console.error('CrazyGames SDK is not available');
     }
+
+    await window.CrazyGames.SDK.init();
+    this.crazy = window.CrazyGames.SDK.sdk;
   }
 
   override async startGame(): Promise<void> {
-    try {
-      await this.crazy.game.gameplayStart();
-    } catch (error) {
-      console.error('CrazyGames SDK startGame failed:', error);
-    }
+    await this.crazy.game.gameplayStart();
   }
 
   override async stopGame(): Promise<void> {
-    try {
-      await this.crazy.game.gameplayStop();
-    } catch (error) {
-      console.error('CrazyGames SDK stopGame failed:', error);
-    }
+    await this.crazy.game.gameplayStop();
   }
 
   override async loadingStarted(): Promise<void> {
-    try {
-      // await this.crazy.game.loadingStart();
-    } catch (error) {
-      console.error('CrazyGames SDK loadingStarted failed:', error);
-    }
+    // await this.crazy.game.loadingStart();
   }
 
   override async loadingFinished(): Promise<void> {
-    try {
-      await this.crazy.game.loadingStop();
-    } catch (error) {
-      console.error('CrazyGames SDK loadingFinished failed:', error);
-    }
+    await this.crazy.game.loadingStop();
   }
 
   override async triggerHappyTime(): Promise<void> {
-    try {
-      await this.crazy.game.happytime();
-    } catch (error) {
-      console.error('CrazyGames SDK triggerHappyTime failed:', error);
-    }
+    await this.crazy.game.happytime();
   }
 
   override async requestAd(fn: AdFn): Promise<void> {
@@ -69,13 +46,10 @@ export class CrazyStrategy extends Platform {
   }
 
   override async getUserInfo() {
-    try {
-      if (this.crazy.user.isUserAccountAvailable) {
-        return this.crazy.user.getUser();
-      }
-    } catch (error) {
-      console.error('CrazyGames SDK getUserInfo failed:', error);
+    if (this.crazy.user.isUserAccountAvailable) {
+      return this.crazy.user.getUser();
     }
+
     return super.getUserInfo();
   }
 
@@ -89,18 +63,14 @@ export class CrazyStrategy extends Platform {
   }
 
   override onSettingsChange(listener: SettingsChangeListener): () => void {
-    try {
-      this.crazy.game.addSettingsChangeListener(listener);
-      return () => {
-        try {
-          this.crazy.game.removeSettingsChangeListener(listener);
-        } catch (error) {
-          console.error('CrazyGames SDK removeSettingsChangeListener failed:', error);
-        }
-      };
-    } catch (error) {
-      console.error('CrazyGames SDK onSettingsChange failed:', error);
-      return () => {};
-    }
+    this.crazy.game.addSettingsChangeListener(listener);
+
+    return () => {
+      try {
+        this.crazy.game.removeSettingsChangeListener(listener);
+      } catch (error) {
+        console.error('CrazyGames SDK removeSettingsChangeListener failed:', error);
+      }
+    };
   }
 }
