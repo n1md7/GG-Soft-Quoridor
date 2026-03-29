@@ -107,5 +107,3 @@ export declare global {
     };
   }
 }
-
-export {};
