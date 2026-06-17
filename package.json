@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build --mode development",
     "build:github": "tsc -b && vite build --mode github",
     "build:crazy": "tsc -b && vite build --mode crazy",
+    "build:itch": "tsc -b && vite build --mode itch",
     "lint": "eslint .",
     "test": "vitest --mode=test --no-watch",
     "test:cov": "vitest --mode=test --no-watch --coverage",
