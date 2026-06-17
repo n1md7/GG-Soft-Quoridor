@@ -6,7 +6,7 @@ interface ImportMetaEnv {
   VITE_DESCRIPTION: string;
   VITE_RELEASE_VERSION: string;
   VITE_INCLUDE_SDK: 'YES' | 'NO';
-  VITE_PLATFORM: 'development' | 'github' | 'crazy';
+  VITE_PLATFORM: 'development' | 'github' | 'crazy' | 'itch';
 }
 
 // declare global {
