@@ -3,7 +3,7 @@ import { CrazyStrategy } from '@src/platforms/strategies/crazy.strategy.ts';
 
 export class PlatformManager {
   private static instance: PlatformManager;
-  private readonly platforms: Record<'development' | 'github' | 'crazy', Platform>;
+  private readonly platforms: Record<'development' | 'github' | 'crazy' | 'itch', Platform>;
   private readonly platform: Platform;
 
   private constructor() {
@@ -11,6 +11,7 @@ export class PlatformManager {
       development: new Platform(),
       github: new Platform(),
       crazy: new CrazyStrategy(),
+      itch: new Platform(),
     };
 
     switch (import.meta.env.VITE_PLATFORM) {
@@ -22,6 +23,9 @@ export class PlatformManager {
         break;
       case 'crazy':
         this.platform = this.platforms.crazy;
+        break;
+      case 'itch':
+        this.platform = this.platforms.itch;
         break;
       default:
         throw new Error(`Unknown platform mode: ${import.meta.env.VITE_PLATFORM}`);
