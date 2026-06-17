@@ -84,7 +84,7 @@ jobs:
       - name: Build for itch.io
         run: bun run build:itch
       - name: Publish to itch.io
-        uses: Ayowel/butler-to-itch@v1.1.1
+        uses: Ayowel/butler-to-itch@v1.2.0
         with:
           butler_key: ${{ secrets.ITCH_IO_API_KEY }}
           itch_user: ${{ secrets.ITCH_IO_USERNAME }}
