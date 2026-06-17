@@ -1,6 +1,9 @@
 name: Publish to GitHub with Versioning
 
 on:
+  push:
+    tags:
+      - 'v*'
   release:
     types: [created]
   pull_request:
@@ -68,7 +71,7 @@ jobs:
           publish_branch: github-static-files
 
   itch-publish:
-    if: ${{ github.event_name == 'release' }}
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -86,7 +89,7 @@ jobs:
           butler_key: ${{ secrets.ITCH_IO_API_KEY }}
           itch_user: ${{ secrets.ITCH_IO_USERNAME }}
           itch_game: quoridor-3d
-          version: ${{ github.event.release.tag_name }}
+          version: ${{ github.ref_name }}
           files: |
             html5 dist/
 
